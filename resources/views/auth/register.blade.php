@@ -40,6 +40,62 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Age') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="age" type="number" class="form-control{{ $errors->has('age') ? ' is-invalid' : '' }}" name="age" value="{{ old('age') }}" required>
+
+                                @if ($errors->has('age'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('age') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="lattitude" class="col-md-4 col-form-label text-md-right">{{ __('Lat') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="lattitude" type="number" step="any" class="form-control{{ $errors->has('lattitude') ? ' is-invalid' : '' }}" name="lattitude" value="{{ old('lattitude') }}" required>
+
+                                @if ($errors->has('lattitude'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('lattitude') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="longitude" class="col-md-4 col-form-label text-md-right">{{ __('Lng') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="longitude" type="number" step="any" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" name="longitude" value="{{ old('longitude') }}" required>
+
+                                @if ($errors->has('longitude'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('longitude') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Desc') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="description" type="text" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" name="description" value="{{ old('description') }}">
+
+                                @if ($errors->has('description'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
