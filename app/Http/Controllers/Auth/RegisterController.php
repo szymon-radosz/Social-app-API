@@ -55,7 +55,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:6'],
         ]);
     }
 
@@ -84,6 +84,7 @@ class RegisterController extends Controller
     */
     public function verify($token)
     {
+        //var_dump($token);
         $user = User::where('email_token',$token)->first();
 
         $user->verified = 1;
@@ -101,15 +102,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'age' => $data['age'],
-            'lattitude' => $data['lattitude'],
-            'longitude' => $data['longitude'],
-            'description' => $data['description'],
-            'email_token' => base64_encode($data['email'])
-        ]);
+        try{
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'age' => 0,
+                'lattitude' => 0,
+                'longitude' => 0,
+                'description' => '',
+                'email_token' => base64_encode($data['email'])
+            ]);
+
+            return response()->json([
+                'user' => $user,
+                'message' => 'OK',
+                'status' => 200
+            ]);
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
     }
 }

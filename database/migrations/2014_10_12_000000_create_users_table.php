@@ -21,11 +21,12 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('verified')->default(0);
             $table->string('email_token')->nullable();
             $table->string('password');
-            $table->integer('age')->default(30);
+            $table->integer('age')->nullable();
             //default coordinates of warsaw
-            $table->double('lattitude')->default(52.229676);
-            $table->double('longitude')->default(21.012229);
+            $table->double('lattitude')->nullable();
+            $table->double('longitude')->nullable();
             $table->text('description')->nullable();
+            $table->longText('api_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

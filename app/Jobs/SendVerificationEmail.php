@@ -32,7 +32,12 @@ class SendVerificationEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email = new EmailVerification($this->user);
-        Mail::to($this->user->email)->send($email);
+
+        $userJson = $this->user->getData()->user;
+
+        //var_dump($userJson);
+
+        $email = new EmailVerification($userJson);
+        Mail::to($userJson->email)->send($email);
     }
 }
