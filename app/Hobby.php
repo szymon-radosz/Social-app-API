@@ -12,7 +12,4 @@ class Hobby extends Model
 
     protected $table = 'hobbies';
 
-    public function users(){
-        return $this->belongsToMany('App\User', 'hobby_user', 'hobby_id', 'user_id');
-    }
 }

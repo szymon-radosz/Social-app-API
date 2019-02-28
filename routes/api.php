@@ -21,6 +21,10 @@ Route::post('/kids', 'KidController@store');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 
+Route::post('saveKid', 'KidController@store');
+Route::post('saveHobbyUser', 'HobbyController@store');
+
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
 });
+

@@ -3,24 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Kid;
+use App\Hobby;
 use App\User;
 use Illuminate\Support\Facades\Auth; 
 use DB;
 
-class KidController extends Controller
+class HobbyController extends Controller
 {
     public function store(Request $request){
         try{
-            $kid = new Kid();
+            $hobby = new Hobby();
 
-            $user = DB::table('users')->where('email', $request->user_email)->get(['id']);
+            $user = DB::table('users')->where('email', $request->user_email)->get();
 
-            $kid->user_id = $user[0]->id;
-            $kid->name = $request->name;
-            $kid->date_of_birth = $request->date_of_birth;
+            $findUser = User::find($user[0]->id);
+
+            $findUser->hobbies()->attach($request->hobby_id);
+
+            /*$hobby->user_id = $user[0]->id;
+            $hobby->hobby_id = $request->hobby_id;
     
-            $kid->save();
+            $hobby->save();*/
         }catch(\Exception $e){
             return $e->getMessage();
         }
