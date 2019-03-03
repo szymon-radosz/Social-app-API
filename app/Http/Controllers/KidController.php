@@ -14,11 +14,11 @@ class KidController extends Controller
         try{
             $kid = new Kid();
 
-            $user = DB::table('users')->where('email', $request->user_email)->get(['id']);
+            $user = DB::table('users')->where('email', $request->userEmail)->get(['id']);
 
             $kid->user_id = $user[0]->id;
             $kid->name = $request->name;
-            $kid->date_of_birth = $request->date_of_birth;
+            $kid->date_of_birth = $request->dateOfBirth;
     
             $kid->save();
         }catch(\Exception $e){

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
 use App\Jobs\SendVerificationEmail;
+use DB;
 
 class UserController extends Controller 
 {
@@ -125,4 +126,73 @@ class UserController extends Controller
 
         return response()->json(['user' => $userData], $this->successStatus); 
     } 
+
+    public function updatePhoto(Request $request)
+    {
+        try{
+            $path = $request->file;
+            $userEmail = $request->userEmail;
+            $filename = time() . '-' . $request->fileName . ".jpg";
+            
+            \Image::make($path)->save(public_path('userPhotos/' . $filename));
+
+            $updateUserPhoto = DB::table('users')
+                    ->where('email', $userEmail)
+                    ->update(['photo_path' => $filename]);
+
+            $user = DB::table('users')
+                    ->where('email', $userEmail)->get();
+
+            return response()->json(['user' => $user]); 
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function updateUserInfo(Request $request)
+    {
+        try{
+            $userEmail = $request->userEmail;
+            $age = $request->age;
+            $desc = $request->desc;
+            $lat = $request->lat;
+            $lng = $request->lng;
+
+            $updateUserInfo = DB::table('users')
+                    ->where('email', $userEmail)
+                    ->update(
+                        ['age' => $age,
+                        'description' => $desc,
+                        'lattitude' => (double)$lat,
+                        'longitude' => (double)$lng]
+                    );
+
+            $user = DB::table('users')
+                    ->where('email', $userEmail)->get();
+
+            return response()->json(['user' => $user]); 
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function setUserFilledInfo(Request $request){
+        try{
+            $userEmail = $request->userEmail;
+
+            $updateUserInfo = DB::table('users')
+                    ->where('email', $userEmail)
+                    ->update(
+                        ['user_filled_info' => 1]
+                    );
+
+            $user = DB::table('users')
+                    ->where('email', $userEmail)->get();
+
+            return response()->json(['user' => $user]); 
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+    
 }

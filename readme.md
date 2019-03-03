@@ -5,3 +5,4 @@ api with passport
 3. php artisan key:generate
 4. php artisan migrate
 5. php artisan passport:install
+6. php artisan vendor:publish --provider="Intervention\Image\ImageServiceProviderLaravel5"
