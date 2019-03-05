@@ -7,7 +7,7 @@ Route::post('register', 'UserController@register');
 Route::post('uploadUserPhoto', 'UserController@updatePhoto');
 Route::post('updateUserInfo', 'UserController@updateUserInfo');
 Route::post('setUserFilledInfo', 'UserController@setUserFilledInfo');
-
+Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 
 Route::post('saveKid', 'KidController@store');
 

@@ -167,8 +167,9 @@ class UserController extends Controller
                         'longitude' => (double)$lng]
                     );
 
-            $user = DB::table('users')
-                    ->where('email', $userEmail)->get();
+            $user = DB::table('users')::
+                    where('email', $userEmail)
+                    ->with('kids')->with('hobbies')->get();
 
             return response()->json(['user' => $user]); 
         }catch(\Exception $e){
@@ -186,10 +187,37 @@ class UserController extends Controller
                         ['user_filled_info' => 1]
                     );
 
-            $user = DB::table('users')
-                    ->where('email', $userEmail)->get();
+            $user = User::
+                    where('email', $userEmail)
+                    ->with('kids')->with('hobbies')->get();
 
             return response()->json(['user' => $user]); 
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function loadUsersNearCoords(Request $request){
+        $lat = $request->lat;
+        $lng = $request->lng;
+
+        $minLat = $lat - 1;
+        $minLng = $lng - 1;
+
+        $maxLat = $lat + 1;
+        $maxLng = $lng + 1;
+
+        try{
+            $userList = User::
+                    where([
+                        ['lattitude', '<', $maxLat], 
+                        ['longitude', '<', $maxLng],
+                        ['lattitude', '>', $minLat], 
+                        ['longitude', '>', $minLng]
+                    ])
+                    ->with('kids')->with('hobbies')->get();
+
+            return response()->json(['userList' => $userList]); 
         }catch(\Exception $e){
             return $e->getMessage();
         }
