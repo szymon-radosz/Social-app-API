@@ -23,7 +23,7 @@ class UserController extends Controller
     public function login(){ 
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->accessToken; 
+            $success['token'] =  $user->createToken('myapp')->accessToken; 
             $user->api_token = $success['token'];
             $user->save();
             return response()->json(['user' => $success], $this->successStatus); 
@@ -103,7 +103,7 @@ class UserController extends Controller
                 'email_token' => base64_encode($data['email'])
             ]);
 
-            $success['token'] =  $user->createToken('MyApp')->accessToken; 
+            $success['token'] =  $user->createToken('myapp')->accessToken; 
             $success['name'] =  $user->name;
 
             return response()->json([
@@ -118,11 +118,14 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response 
      */ 
-    public function details() 
+    public function details(Request $request) 
     { 
-        //$user = Auth::user(); 
 
-        $userData = User::find(Auth::id())->with('kids')->with('hobbies')->get();
+        $userData = User::where('id', Auth::user()->id)->with('kids')->with('hobbies')->with('conversations')->firstOrFail();        
+
+        /*foreach($userData->convarsations as){
+
+        }*/
 
         return response()->json(['user' => $userData], $this->successStatus); 
     } 

@@ -28,4 +28,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Hobby', 'hobby_user', 'user_id', 'hobby_id' );
     }
+
+    public function conversations()
+    {
+        return $this->belongsToMany('App\Conversation');
+    }
 }
