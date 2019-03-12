@@ -77,9 +77,11 @@ class UserController extends Controller
         $user->verified = 1;
 
         if($user->save()){
-            return response()->json([
+            /*return response()->json([
                 'user' => $user
-            ]);
+            ]);*/
+
+            return view('emailconfirm');
         }
     }
 

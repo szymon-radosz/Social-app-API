@@ -90,7 +90,8 @@ class RegisterController extends Controller
         $user->verified = 1;
 
         if($user->save()){
-            return view('emailconfirm',['user'=>$user]);
+            //return view('emailconfirm',['user'=>$user]);
+            return view('emailconfirm');
         }
     }
 
