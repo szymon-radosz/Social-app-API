@@ -11,6 +11,10 @@ Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 
 Route::post('saveKid', 'KidController@store');
 
+Route::post('saveConversation', 'ConversationsController@store');
+
+Route::post('saveMessage', 'MessageController@store');
+
 Route::post('saveHobbyUser', 'HobbyController@store');
 Route::get('hobbiesList', 'HobbyController@index');
 

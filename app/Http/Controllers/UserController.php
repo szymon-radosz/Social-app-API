@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request; 
 use App\User; 
+use App\Message;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 use Illuminate\Support\Facades\Hash;
@@ -125,9 +126,17 @@ class UserController extends Controller
 
         $userData = User::where('id', Auth::user()->id)->with('kids')->with('hobbies')->with('conversations')->firstOrFail();        
 
-        /*foreach($userData->convarsations as){
+        $unreadedMessage = false;
+        $unreadedMessageAmount = 0;
+       
+        $unreadedMessageAmount = Message::where([['receiver_id', Auth::user()->id], ['status', 0]])->count();
 
-        }*/
+        if($unreadedMessageAmount > 0){
+            $unreadedMessage = true;
+        }
+
+        $userData->setAttribute('unreadedConversationMessage', $unreadedMessage);
+        $userData->setAttribute('unreadedConversationMessageAmount', $unreadedMessageAmount);
 
         return response()->json(['user' => $userData], $this->successStatus); 
     } 
