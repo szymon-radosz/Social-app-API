@@ -12,6 +12,8 @@ Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 Route::post('saveKid', 'KidController@store');
 
 Route::post('saveConversation', 'ConversationsController@store');
+Route::post('showUserConversations', 'ConversationsController@showUserConversations');
+
 
 Route::post('saveMessage', 'MessageController@store');
 

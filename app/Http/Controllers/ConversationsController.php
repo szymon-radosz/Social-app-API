@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Conversation;
 use App\User;
 use App\Message;
+use DB;
 
 class ConversationsController extends Controller
 {
@@ -45,5 +46,58 @@ class ConversationsController extends Controller
         }
     
         return response()->json(['conversation' => $conversation]); 
+    }
+
+    public function showUserConversations(Request $request){
+        $user_id = $request->user_id;
+
+        $userData = User::where('id', $user_id)->with('conversations')->get();
+
+        $conversationData = array();
+
+        
+
+        //var_dump($userData[0]->conversations);
+
+        foreach($userData[0]->conversations as $singleConversation){
+            $conversationMessages = Conversation::where('id', $singleConversation->id)->with('messages')->get();
+
+            foreach($conversationMessages as $singleMessage){
+                //var_dump($singleMessage->messages[0]->receiver_id);
+                $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['name', 'email', 'photo_path']);
+
+                $receiverName = $receiverInfo[0]->name;
+                $receiverEmail = $receiverInfo[0]->email;
+                $receiverPhotoPath = $receiverInfo[0]->photo_path;
+
+                $singleMessage->setAttribute('receiverName', $receiverName);
+                $singleMessage->setAttribute('receiverEmail', $receiverEmail);
+                $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
+            }
+
+
+            /*$conversationMessages = Message::where('conversation_id', $singleConversation->id)->get();
+            //var_dump($singleConv);
+
+            $convMessages = array();
+
+            foreach($conversationMessages as $singleMessage){
+                var_dump($singleMessage);
+            }
+
+            /*$receiverInfo = User::where('id', $singleConv[0]->receiver_id)->get(['name', 'email', 'photo_path']);
+
+            $receiverName = $receiverInfo[0]->name;
+            $receiverEmail = $receiverInfo[0]->email;
+            $receiverPhotoPath = $receiverInfo[0]->photo_path;*/
+
+            /*$singleConv->setAttribute('receiverName', $receiverName);
+            $singleConv->setAttribute('receiverEmail', $receiverEmail);
+            $singleConv->setAttribute('receiverPhotoPath', $receiverPhotoPath);*/
+
+            //array_push($conversationData, $singleConv);
+        }
+
+        return response()->json(['conversation_list' => $userData[0]->conversations, 'conversationData' => $conversationMessages]); 
     }
 }
