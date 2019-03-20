@@ -55,8 +55,6 @@ class ConversationsController extends Controller
 
         $conversationData = array();
 
-        
-
         //var_dump($userData[0]->conversations);
 
         foreach($userData[0]->conversations as $singleConversation){
@@ -74,30 +72,38 @@ class ConversationsController extends Controller
                 $singleMessage->setAttribute('receiverEmail', $receiverEmail);
                 $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
             }
-
-
-            /*$conversationMessages = Message::where('conversation_id', $singleConversation->id)->get();
-            //var_dump($singleConv);
-
-            $convMessages = array();
-
-            foreach($conversationMessages as $singleMessage){
-                var_dump($singleMessage);
-            }
-
-            /*$receiverInfo = User::where('id', $singleConv[0]->receiver_id)->get(['name', 'email', 'photo_path']);
-
-            $receiverName = $receiverInfo[0]->name;
-            $receiverEmail = $receiverInfo[0]->email;
-            $receiverPhotoPath = $receiverInfo[0]->photo_path;*/
-
-            /*$singleConv->setAttribute('receiverName', $receiverName);
-            $singleConv->setAttribute('receiverEmail', $receiverEmail);
-            $singleConv->setAttribute('receiverPhotoPath', $receiverPhotoPath);*/
-
-            //array_push($conversationData, $singleConv);
         }
 
         return response()->json(['conversation_list' => $userData[0]->conversations, 'conversationData' => $conversationMessages]); 
+    }
+
+    public function showConversationDetails(Request $request){
+        $conversation_id = $request->conversation_id;
+
+        //$userData = User::where('id', $user_id)->with('conversations')->get();
+        $conversation = Conversation::where('id', $conversation_id)->with('messages')->get();
+
+        //$conversationData = array();
+
+        //var_dump($userData[0]->conversations);
+
+        /*foreach($userData[0]->conversations as $singleConversation){
+            $conversationMessages = Conversation::where('id', $singleConversation->id)->with('messages')->get();
+
+            foreach($conversationMessages as $singleMessage){
+                //var_dump($singleMessage->messages[0]->receiver_id);
+                $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['name', 'email', 'photo_path']);
+
+                $receiverName = $receiverInfo[0]->name;
+                $receiverEmail = $receiverInfo[0]->email;
+                $receiverPhotoPath = $receiverInfo[0]->photo_path;
+
+                $singleMessage->setAttribute('receiverName', $receiverName);
+                $singleMessage->setAttribute('receiverEmail', $receiverEmail);
+                $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
+            }
+        }*/
+
+        return response()->json(['conversationData' => $conversation]);
     }
 }
