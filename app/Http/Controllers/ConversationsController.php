@@ -62,12 +62,14 @@ class ConversationsController extends Controller
 
             foreach($conversationMessages as $singleMessage){
                 //var_dump($singleMessage->messages[0]->receiver_id);
-                $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['name', 'email', 'photo_path']);
+                $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['id', 'name', 'email', 'photo_path']);
 
+                $receiverId = $receiverInfo[0]->id;
                 $receiverName = $receiverInfo[0]->name;
                 $receiverEmail = $receiverInfo[0]->email;
                 $receiverPhotoPath = $receiverInfo[0]->photo_path;
 
+                $singleMessage->setAttribute('receiverId', $receiverId);
                 $singleMessage->setAttribute('receiverName', $receiverName);
                 $singleMessage->setAttribute('receiverEmail', $receiverEmail);
                 $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
