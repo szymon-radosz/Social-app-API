@@ -7,6 +7,7 @@ use App\Conversation;
 use App\User;
 use App\Message;
 use DB;
+use Illuminate\Support\Collection;
 
 class ConversationsController extends Controller
 {
@@ -51,19 +52,30 @@ class ConversationsController extends Controller
     public function showUserConversations(Request $request){
         $user_id = $request->user_id;
 
-        $userData = User::where('id', $user_id)->with('conversations')->get();
+        $userData = User::where('id', $user_id)->with('conversations')->first();
 
-        $conversationData = array();
+        $conversationData = new Collection();
 
-        //var_dump($userData[0]->conversations);
+        //loop through all user conversation where user take part
+        foreach($userData->conversations as $singleConversation){
 
-        foreach($userData[0]->conversations as $singleConversation){
+            //get all messages for specific conversation
             $conversationMessages = Conversation::where('id', $singleConversation->id)->with('messages')->get();
 
+            //for each message in conversation check if current user
+            //first sent a message or he/she was receiver
             foreach($conversationMessages as $singleMessage){
-                //var_dump($singleMessage->messages[0]->receiver_id);
-                $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['id', 'name', 'email', 'photo_path']);
+               
+                //user was not the conversation author
+                if($singleMessage->messages[0]->receiver_id != $user_id){
+                    $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['id', 'name', 'email', 'photo_path']);
+                }
+                //user was conversation author
+                else{
+                    $receiverInfo = User::where('id', $singleMessage->messages[0]->sender_id)->get(['id', 'name', 'email', 'photo_path']);
+                }
 
+                //get info about user when you open conversation with that user
                 $receiverId = $receiverInfo[0]->id;
                 $receiverName = $receiverInfo[0]->name;
                 $receiverEmail = $receiverInfo[0]->email;
@@ -74,9 +86,10 @@ class ConversationsController extends Controller
                 $singleMessage->setAttribute('receiverEmail', $receiverEmail);
                 $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
             }
-        }
 
-        return response()->json(['conversation_list' => $userData[0]->conversations, 'conversationData' => $conversationMessages]); 
+            $conversationData->push($conversationMessages);
+        }
+        return response()->json(['userData' => $userData->conversations, 'conversationData' => $conversationData]);  
     }
 
     public function showConversationDetails(Request $request){
