@@ -65,6 +65,17 @@ class ConversationsController extends Controller
             //for each message in conversation check if current user
             //first sent a message or he/she was receiver
             foreach($conversationMessages as $singleMessage){
+
+                //check the last message in conversation, if receiver_id == user_id
+                //and status == 0 it means user didnt read that and you have to bold that
+
+                $userHadUnreadedMessages = false;
+                //var_dump($singleMessage->messages->count());
+                $lastMessageIndex = $singleMessage->messages->count() - 1;
+
+                if($singleMessage->messages[$lastMessageIndex]->receiver_id == $user_id && $singleMessage->messages[$lastMessageIndex]->status === 0){
+                    $userHadUnreadedMessages = true;
+                }
                
                 //user was not the conversation author
                 if($singleMessage->messages[0]->receiver_id != $user_id){
@@ -85,6 +96,8 @@ class ConversationsController extends Controller
                 $singleMessage->setAttribute('receiverName', $receiverName);
                 $singleMessage->setAttribute('receiverEmail', $receiverEmail);
                 $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
+                $singleMessage->setAttribute('userHadUnreadedMessages', $userHadUnreadedMessages);
+                
             }
 
             $conversationData->push($conversationMessages);
