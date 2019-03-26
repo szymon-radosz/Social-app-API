@@ -237,4 +237,32 @@ class UserController extends Controller
         }
     }
     
+    public function setUserMessagesStatus(Request $request){
+        $userId = $request->userId;
+        $conversationId = $request->conversationId;
+
+        $userMessagesUpdate = Message::where([
+                                        ['conversation_id', $conversationId],
+                                        ['receiver_id', $userId]
+                                        ])
+                                        ->update(['status' => 1]);
+
+        $userUnreadedMessagesCount = Message::where([
+                                            ['receiver_id', $userId],
+                                            ['status', 0]
+                                        ])
+                                        ->count();
+
+        $userUnreadedMessages = false;
+
+        if($userUnreadedMessagesCount > 0){
+            $userUnreadedMessages = true;
+        }
+
+        return response()
+                ->json(
+                    ['userUnreadedMessages' => $userUnreadedMessages,
+                    'userUnreadedMessagesCount'  => $userUnreadedMessagesCount]
+                ); 
+    }
 }
