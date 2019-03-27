@@ -15,38 +15,57 @@ class ConversationsController extends Controller
         $sender_id = $request->sender_id;
         $receiver_id = $request->receiver_id;
         $message = $request->message;
-        
-        try{
-            $conversation = new Conversation();
-            $conversation->save();
-        }catch(\Exception $e){
-            return $e->getMessage();
+
+        $senderConversations = DB::table('conversation_user')->where('user_id', $sender_id)->get();
+
+        $usersAreInTheSameConversation = false;
+
+        foreach($senderConversations as $singleLoggedInUserConversation){
+            $checkIfConvationIdMatched = DB::table('conversation_user')->where(
+                                                        [
+                                                            ['conversation_id', $singleLoggedInUserConversation->conversation_id],
+                                                            ['user_id', $receiver_id]
+                                                        ])->count();
+
+            if($checkIfConvationIdMatched > 0){
+                $usersAreInTheSameConversation = true;
+            }
         }
 
-        if($conversation->id){
+        if($usersAreInTheSameConversation === false){
             try{
-                $findSender = User::find($sender_id);
-                $createdConversation = Conversation::find($conversation->id);
-                $createdConversation->users()->attach($findSender->id);
-
-                $findReceiver = User::find($receiver_id);
-                $createdConversation = Conversation::find($conversation->id);
-                $createdConversation->users()->attach($findReceiver->id);
-
-                $newMessage = new Message();
-                $newMessage->conversation_id = $conversation->id;
-                $newMessage->sender_id = $sender_id;
-                $newMessage->receiver_id = $receiver_id;
-                $newMessage->message = $message;
-                $newMessage->status = 0;
-        
-                $newMessage->save();
+                $conversation = new Conversation();
+                $conversation->save();
             }catch(\Exception $e){
                 return $e->getMessage();
             }
-        }
     
-        return response()->json(['conversation' => $conversation]); 
+            if($conversation->id){
+                try{
+                    $findSender = User::find($sender_id);
+                    $createdConversation = Conversation::find($conversation->id);
+                    $createdConversation->users()->attach($findSender->id);
+    
+                    $findReceiver = User::find($receiver_id);
+                    $createdConversation = Conversation::find($conversation->id);
+                    $createdConversation->users()->attach($findReceiver->id);
+    
+                    $newMessage = new Message();
+                    $newMessage->conversation_id = $conversation->id;
+                    $newMessage->sender_id = $sender_id;
+                    $newMessage->receiver_id = $receiver_id;
+                    $newMessage->message = $message;
+                    $newMessage->status = 0;
+            
+                    $newMessage->save();
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+            }
+        
+            return response()->json(['conversation' => $conversation]); 
+        }
+        return response()->json(['error' => 'Użytkownicy są już ze sobą w konwersacji']); 
     }
 
     public function showUserConversations(Request $request){
@@ -133,5 +152,28 @@ class ConversationsController extends Controller
         }*/
 
         return response()->json(['conversationData' => $conversation]);
+    }
+
+    public function checkIfUsersBelongsToConversation(Request $request){
+        $loggedInUser = $request->loggedInUser;
+        $searchedUser = $request->searchedUser;
+
+        $loggedInUserConversations = DB::table('conversation_user')->where('user_id', $loggedInUser)->get();
+
+        $usersAreInTheSameConversation = false;
+
+        foreach($loggedInUserConversations as $singleLoggedInUserConversation){
+            $checkIfConvationIdMatched = DB::table('conversation_user')->where(
+                                                        [
+                                                            ['conversation_id', $singleLoggedInUserConversation->conversation_id],
+                                                            ['user_id', $searchedUser]
+                                                        ])->count();
+
+            if($checkIfConvationIdMatched > 0){
+                $usersAreInTheSameConversation = true;
+            }
+        }
+
+        return response()->json(['usersAreInTheSameConversation' => $usersAreInTheSameConversation]);
     }
 }

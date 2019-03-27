@@ -15,6 +15,7 @@ Route::post('saveKid', 'KidController@store');
 Route::post('saveConversation', 'ConversationsController@store');
 Route::post('showUserConversations', 'ConversationsController@showUserConversations');
 Route::post('showConversationDetails', 'ConversationsController@showConversationDetails');
+Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkIfUsersBelongsToConversation');
 
 
 Route::post('saveMessage', 'MessageController@store');
