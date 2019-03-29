@@ -19,6 +19,7 @@ Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkI
 
 Route::post('saveProduct', 'ProductController@store');
 Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoords');
+Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 
 
 Route::post('saveMessage', 'MessageController@store');

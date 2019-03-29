@@ -74,8 +74,26 @@ class ProductController extends Controller
             $singleProduct->setAttribute('categoryName', $productCategoryName);
         }
 
-        
-
         return response()->json(['productList' => $productList]);
+    }
+
+    public function loadProductBasedOnId(Request $request){
+        $productId = $request->productId;
+
+        $productList = Product::where([
+                                        ['id', $productId]
+                                    ])
+                                    ->with('productPhotos')
+                                    ->with('categories')
+                                    ->get();
+                    
+        foreach($productList as $singleProduct){
+            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->id)
+                                                    ->get(['name']);
+
+            $singleProduct->setAttribute('categoryName', $productCategoryName);
+        }
+
+        return response()->json(['productDetails' => $productList]);
     }
 }
