@@ -8,6 +8,11 @@ class Message extends Model
 {
     public function conversations()
     {
-    return $this->belongsTo('App\Conversation', 'conversation_id');
+        return $this->belongsTo('App\Conversation', 'conversation_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
     }
 }

@@ -4,8 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Conversation extends Model
+class ConversationProduct extends Model
 {
+    protected $table = 'conversations_product';
+
     public function users()
     {
         return $this->belongsToMany('App\User');
@@ -13,6 +15,6 @@ class Conversation extends Model
 
     public function messages()
     {
-        return $this->hasMany('App\Message');
+        return $this->hasMany('App\MessageProduct');
     }
 }

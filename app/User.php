@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Conversation', 'conversation_user');
     }
 
+    public function conversationsProduct()
+    {
+        return $this->belongsToMany('App\ConversationProduct', 'conversation_product_user', 'user_id', 'product_id');
+    }
+
     public function products()
     {
         return $this->hasMany('App\Product', 'user_id');
