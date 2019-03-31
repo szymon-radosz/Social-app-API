@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConversationsProductTable extends Migration
+class AddProductIdToConversations extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateConversationsProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('conversations_product', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::table('conversations', function (Blueprint $table) {
+            $table->integer('product_id')->default(0);
         });
     }
 
@@ -26,6 +25,8 @@ class CreateConversationsProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conversations_product');
+        Schema::table('conversations', function (Blueprint $table) {
+            $table->dropColumn('product_id');
+        });
     }
 }

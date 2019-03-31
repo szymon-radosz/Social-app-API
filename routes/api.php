@@ -17,11 +17,6 @@ Route::post('showUserConversations', 'ConversationsController@showUserConversati
 Route::post('showConversationDetails', 'ConversationsController@showConversationDetails');
 Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkIfUsersBelongsToConversation');
 
-Route::post('saveConversationProduct', 'ConversationsProductController@store');
-Route::post('showUserConversationsProduct', 'ConversationsProductController@showUserConversationsProduct');
-Route::post('showConversationProductDetails', 'ConversationsProductController@showConversationProductDetails');
-Route::post('checkIfUsersBelongsToConversationProduct', 'ConversationsProductController@checkIfUsersBelongsToConversationProduct');
-
 Route::post('saveProduct', 'ProductController@store');
 Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoords');
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');

@@ -71,19 +71,41 @@ class ConversationsController extends Controller
     public function showUserConversations(Request $request){
         $user_id = $request->user_id;
 
-        $userData = User::where('id', $user_id)->with('conversations')->first();
+        if($request->has('showProductsConversations')){
+            $userData = User::where('id', $user_id)
+                                ->with(['conversations' => function ($query) {
+                                    $query->where('product_id', '!=', 0);
+                                }])->first();
+        }else{
+            $userData = User::where('id', $user_id)
+                                ->with(['conversations' => function ($query) {
+                                    $query->where('product_id', '==', 0);
+                                }])->first();
+        }
+        
+        //$userData = User::where('id', $user_id)->with('conversations')->first();
 
         $conversationData = new Collection();
 
         //loop through all user conversation where user take part
         foreach($userData->conversations as $singleConversation){
 
+            //var_dump($singleConversation->product_id);
+
             //get all messages for specific conversation
-            $conversationMessages = Conversation::where('id', $singleConversation->id)->with('messages')->get();
+            if($request->has('showProductsConversations')){
+                $conversationMessages = Conversation::where([['id', $singleConversation->id], ['product_id', '!=', 0]])->with('messages')->get();
+            }else{
+                $conversationMessages = Conversation::where([['id', $singleConversation->id], ['product_id', 0]])->with('messages')->get();
+            }
+
+            //var_dump($singleMessage->product_id);
 
             //for each message in conversation check if current user
             //first sent a message or he/she was receiver
             foreach($conversationMessages as $singleMessage){
+
+                //var_dump($singleMessage->product_id);
 
                 //check the last message in conversation, if receiver_id == user_id
                 //and status == 0 it means user didnt read that and you have to bold that
@@ -162,16 +184,48 @@ class ConversationsController extends Controller
 
         $usersAreInTheSameConversation = false;
 
+        //var_dump($loggedInUserConversations);
+
         foreach($loggedInUserConversations as $singleLoggedInUserConversation){
-            $checkIfConvationIdMatched = DB::table('conversation_user')->where(
+            $conversationUserList = DB::table('conversation_user')->where(
                                                         [
                                                             ['conversation_id', $singleLoggedInUserConversation->conversation_id],
                                                             ['user_id', $searchedUser]
-                                                        ])->count();
+                                                        ])->get();
 
-            if($checkIfConvationIdMatched > 0){
-                $usersAreInTheSameConversation = true;
+            //var_dump($conversationUserList);
+
+            foreach($conversationUserList as $singleConversationUser){
+                if($request->has('productId')){
+                    //var_dump("product");
+                    $conversationProduct = Conversation::where([['id', $singleConversationUser->conversation_id], ['product_id', '=', (int)$request->productId]])->count();
+                
+                    //var_dump($singleConversationUser->conversation_id);
+                    //var_dump($conversationProduct);
+                    //var_dump((int)$request->productId);
+
+                    if($conversationProduct > 0){
+                        $usersAreInTheSameConversation = true;
+                    }
+                }else{
+                    //var_dump("private");
+                    $conversationPrivate = Conversation::where([['id', $singleConversationUser->conversation_id], ['product_id', '==', 0]])->count();
+                
+                    if($conversationPrivate > 0){
+                        $usersAreInTheSameConversation = true;
+                    }
+                    //var_dump($conversationPrivate);
+                }
             }
+
+           
+                //var_dump($conversations);
+            
+            
+
+            /*if($checkIfConvationIdMatched > 0){
+                $usersAreInTheSameConversation = true;
+            }*/
         }
 
         return response()->json(['usersAreInTheSameConversation' => $usersAreInTheSameConversation]);
