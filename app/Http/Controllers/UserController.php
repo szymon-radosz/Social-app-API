@@ -265,4 +265,18 @@ class UserController extends Controller
                     'userUnreadedMessagesCount'  => $userUnreadedMessagesCount]
                 ); 
     }
+
+    public function loadUserByName(Request $request){
+        $name = $request->name;
+
+        try{
+            $userList = User::
+                    where('name', 'like', '%' . $name . '%')
+                    ->with('kids')->with('hobbies')->get();
+
+            return response()->json(['userList' => $userList]); 
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
 }

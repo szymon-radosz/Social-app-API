@@ -35,7 +35,7 @@ class ConversationsProductController extends Controller
                 $isConversationWithProductId = Conversation::where('id', $IfConvationIdMatched->conversation_id)->first();
                 
 
-                if($isConversationWithProductId->product_id != 0){
+                if($isConversationWithProductId->product_id == $product_id){
                     $usersAreInTheSameConversation = true;
                 }
 
