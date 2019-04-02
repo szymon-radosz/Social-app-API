@@ -96,4 +96,17 @@ class ProductController extends Controller
 
         return response()->json(['productDetails' => $productList]);
     }
+
+    public function closeProduct(Request $request){
+        $productId = $request->productId;
+
+        try{
+            $closedProduct = Product::where('id', $productId)
+                                        ->update(['status' => 1]);
+
+            return response()->json(['closedProduct' => $closedProduct]);  
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+    }
 }

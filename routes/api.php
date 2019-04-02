@@ -20,10 +20,12 @@ Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkI
 
 Route::post('saveConversationProduct', 'ConversationsProductController@store');
 
+Route::post('saveVote', 'VotesController@store');
+
 Route::post('saveProduct', 'ProductController@store');
 Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoords');
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
-
+Route::post('closeProduct', 'ProductController@closeProduct');
 
 Route::post('saveMessage', 'MessageController@store');
 

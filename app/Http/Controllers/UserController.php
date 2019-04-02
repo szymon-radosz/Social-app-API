@@ -124,7 +124,12 @@ class UserController extends Controller
     public function details(Request $request) 
     { 
 
-        $userData = User::where('id', Auth::user()->id)->with('kids')->with('hobbies')->with('conversations')->firstOrFail();        
+        $userData = User::where('id', Auth::user()->id)
+                                            ->with('kids')
+                                            ->with('hobbies')
+                                            ->with('conversations')
+                                            ->with('votes')
+                                            ->firstOrFail();        
 
         $unreadedMessage = false;
         $unreadedMessageAmount = 0;
@@ -182,8 +187,11 @@ class UserController extends Controller
                     );
 
             $user = DB::table('users')::
-                    where('email', $userEmail)
-                    ->with('kids')->with('hobbies')->get();
+                                where('email', $userEmail)
+                                ->with('kids')
+                                ->with('hobbies')
+                                ->with('votes')
+                                ->get();
 
             return response()->json(['user' => $user]); 
         }catch(\Exception $e){
@@ -203,7 +211,10 @@ class UserController extends Controller
 
             $user = User::
                     where('email', $userEmail)
-                    ->with('kids')->with('hobbies')->get();
+                                    ->with('kids')
+                                    ->with('hobbies')
+                                    ->with('votes')
+                                    ->get();
 
             return response()->json(['user' => $user]); 
         }catch(\Exception $e){
@@ -229,7 +240,10 @@ class UserController extends Controller
                         ['lattitude', '>', $minLat], 
                         ['longitude', '>', $minLng]
                     ])
-                    ->with('kids')->with('hobbies')->get();
+                    ->with('kids')
+                    ->with('hobbies')
+                    ->with('votes')
+                    ->get();
 
             return response()->json(['userList' => $userList]); 
         }catch(\Exception $e){
@@ -272,7 +286,10 @@ class UserController extends Controller
         try{
             $userList = User::
                     where('name', 'like', '%' . $name . '%')
-                    ->with('kids')->with('hobbies')->get();
+                                                ->with('kids')
+                                                ->with('hobbies')
+                                                ->with('votes')
+                                                ->get();
 
             return response()->json(['userList' => $userList]); 
         }catch(\Exception $e){
