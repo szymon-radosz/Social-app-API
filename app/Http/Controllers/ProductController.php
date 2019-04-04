@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\Product;
 use App\Category;
 use App\ProductPhoto;
@@ -27,18 +28,26 @@ class ProductController extends Controller
             $newProduct->save();
 
             $newProductCategory = new ProductCategoryPivot();
-            $newProductCategory->category_id = $request->categoryId;
+            $newProductCategory->category_id = (int)$request->categoryId;
             $newProductCategory->product_id = $newProduct->id;
             $newProductCategory->save();
 
             $parsedPhotosArray = eval("return " . $request->photos . ";");
             
             //$request->photos should be e.g. ['path1','path2','path3']
+            $photoIndex = 1;
             foreach($parsedPhotosArray as $singlePhoto){
+
+                $filename = time() . '-product-' . $newProduct->id . '-photo-' . $photoIndex . ".jpg";
+    
                 $newProductPhoto = new ProductPhoto();
                 $newProductPhoto->product_id = $newProduct->id;
-                $newProductPhoto->path = $singlePhoto;
+                $newProductPhoto->path = $filename;
                 $newProductPhoto->save();
+
+                \Image::make($singlePhoto)->save(public_path('productPhotos/' . $filename));
+                
+                $photoIndex = $photoIndex + 1;
             }
 
             return response()->json(['product' => $newProduct, 'productPhoto' => $newProductPhoto]); 
@@ -66,9 +75,13 @@ class ProductController extends Controller
                                     ->with('productPhotos')
                                     ->with('categories')
                                     ->get();
+
+        //var_dump($productList[0]->category_id);
                     
         foreach($productList as $singleProduct){
-            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->id)
+            //var_dump($singleProduct->categories->category_id);
+
+            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
                                                     ->get(['name']);
 
             $singleProduct->setAttribute('categoryName', $productCategoryName);
@@ -88,7 +101,7 @@ class ProductController extends Controller
                                     ->get();
                     
         foreach($productList as $singleProduct){
-            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->id)
+            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
                                                     ->get(['name']);
 
             $singleProduct->setAttribute('categoryName', $productCategoryName);
@@ -108,5 +121,11 @@ class ProductController extends Controller
         }catch(\Exception $e){
             return $e->getMessage();
         }
+    }
+
+    public function getCategories(){
+        $categories = DB::table('product_categories')->get(['id', 'name']);
+
+        return response()->json(['categories' => $categories]);  
     }
 }

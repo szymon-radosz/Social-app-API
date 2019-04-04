@@ -26,6 +26,8 @@ Route::post('saveProduct', 'ProductController@store');
 Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoords');
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 Route::post('closeProduct', 'ProductController@closeProduct');
+Route::get('getCategories', 'ProductController@getCategories');
+
 
 Route::post('saveMessage', 'MessageController@store');
 
