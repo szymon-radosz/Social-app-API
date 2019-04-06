@@ -11,24 +11,28 @@ use DB;
 class HobbyController extends Controller
 {
     public function index(){
-        $hobbies = Hobby::all();
+        try{
+            $hobbies = Hobby::all();
 
-        return response()->json(['hobbiesList' => $hobbies]);
+            return response()->json(['status' => 'OK', 'result' => $hobbies]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy hobby.']);
+        }
+        
     }
     public function store(Request $request){
         try{
             $user = DB::table('users')->where('email', $request->userEmail)->get();
-
+            
             $findUser = User::find($user[0]->id);
-
+            
             $findUser->hobbies()->attach($request->hobby_id);
+            
+            $userData = User::find($user[0]->id)->with('kids')->with('hobbies')->get();
 
+            return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisywaniu hobby.']);
         }
-    
-        $userData = User::find($user[0]->id)->with('kids')->with('hobbies')->get();
-
-        return response()->json(['user' => $userData]); 
     }
 }

@@ -28,7 +28,6 @@ Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 Route::post('closeProduct', 'ProductController@closeProduct');
 Route::get('getCategories', 'ProductController@getCategories');
 
-
 Route::post('saveMessage', 'MessageController@store');
 
 Route::post('saveHobbyUser', 'HobbyController@store');

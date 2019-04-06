@@ -21,13 +21,12 @@ class KidController extends Controller
             $kid->date_of_birth = $request->dateOfBirth;
     
             $kid->save();
+
+            $userData = User::find($user[0]->id)->with('kids')->with('hobbies')->get();
+
+            return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie dzieci.']);
         }
-    
-        $userData = User::find($user[0]->id)->with('kids')->with('hobbies')->get();
-
-        return response()->json(['user' => $userData]); 
-
     }
 }

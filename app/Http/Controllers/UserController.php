@@ -27,10 +27,10 @@ class UserController extends Controller
             $success['token'] =  $user->createToken('myapp')->accessToken; 
             $user->api_token = $success['token'];
             $user->save();
-            return response()->json(['user' => $success], $this->successStatus); 
+            return response()->json(['status' => 'OK', 'user' => $success]);
         } 
         else{ 
-            return response()->json(['error'=>'Unauthorised'], 401); 
+            return response()->json(['status' => 'ERR', 'result' => 'Unauthorised']);  
         } 
     }
     /**
@@ -109,11 +109,9 @@ class UserController extends Controller
             $success['token'] =  $user->createToken('myapp')->accessToken; 
             $success['name'] =  $user->name;
 
-            return response()->json([
-                'user' => $user
-            ]);
+            return response()->json(['user' => $user, 'status' => 'OK']);
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu uzytkownika.']);
         }
     }
     /*
@@ -123,27 +121,30 @@ class UserController extends Controller
      */ 
     public function details(Request $request) 
     { 
+        try{
+            $userData = User::where('id', Auth::user()->id)
+                                                ->with('kids')
+                                                ->with('hobbies')
+                                                ->with('conversations')
+                                                ->with('votes')
+                                                ->firstOrFail();        
 
-        $userData = User::where('id', Auth::user()->id)
-                                            ->with('kids')
-                                            ->with('hobbies')
-                                            ->with('conversations')
-                                            ->with('votes')
-                                            ->firstOrFail();        
+            $unreadedMessage = false;
+            $unreadedMessageAmount = 0;
+        
+            $unreadedMessageAmount = Message::where([['receiver_id', Auth::user()->id], ['status', 0]])->count();
 
-        $unreadedMessage = false;
-        $unreadedMessageAmount = 0;
-       
-        $unreadedMessageAmount = Message::where([['receiver_id', Auth::user()->id], ['status', 0]])->count();
+            if($unreadedMessageAmount > 0){
+                $unreadedMessage = true;
+            }
 
-        if($unreadedMessageAmount > 0){
-            $unreadedMessage = true;
+            $userData->setAttribute('unreadedConversationMessage', $unreadedMessage);
+            $userData->setAttribute('unreadedConversationMessageAmount', $unreadedMessageAmount);
+
+            return response()->json(['status' => 'OK', 'result' => $userData]); 
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy autentykacji uytkownika.']); 
         }
-
-        $userData->setAttribute('unreadedConversationMessage', $unreadedMessage);
-        $userData->setAttribute('unreadedConversationMessageAmount', $unreadedMessageAmount);
-
-        return response()->json(['user' => $userData], $this->successStatus); 
     } 
 
     public function updatePhoto(Request $request)
@@ -162,9 +163,9 @@ class UserController extends Controller
             $user = DB::table('users')
                     ->where('email', $userEmail)->get();
 
-            return response()->json(['user' => $user]); 
+            return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy dodawaniu zdjęcia.']); 
         }
     }
 
@@ -192,10 +193,10 @@ class UserController extends Controller
                                 ->with('hobbies')
                                 ->with('votes')
                                 ->get();
-
-            return response()->json(['user' => $user]); 
+ 
+            return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z aktualizacją danych użytkownika.']); 
         }
     }
 
@@ -216,9 +217,9 @@ class UserController extends Controller
                                     ->with('votes')
                                     ->get();
 
-            return response()->json(['user' => $user]); 
+            return response()->json(['status' => 'OK', 'result' => $user]);  
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem danych potwierdzonego użytkownika.']); 
         }
     }
 
@@ -226,11 +227,11 @@ class UserController extends Controller
         $lat = $request->lat;
         $lng = $request->lng;
 
-        $minLat = $lat - 1;
-        $minLng = $lng - 1;
+        $minLat = $lat - 2;
+        $minLng = $lng - 2;
 
-        $maxLat = $lat + 1;
-        $maxLng = $lng + 1;
+        $maxLat = $lat + 2;
+        $maxLng = $lng + 2;
 
         try{
             $userList = User::
@@ -245,9 +246,9 @@ class UserController extends Controller
                     ->with('votes')
                     ->get();
 
-            return response()->json(['userList' => $userList]); 
+            return response()->json(['status' => 'OK', 'result' => $userList]);  
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników z okolicy.']); 
         }
     }
     
@@ -275,8 +276,11 @@ class UserController extends Controller
 
         return response()
                 ->json(
-                    ['userUnreadedMessages' => $userUnreadedMessages,
+                    [
+                        'status' => 'OK', 
+                        'result' => ['userUnreadedMessages' => $userUnreadedMessages,
                     'userUnreadedMessagesCount'  => $userUnreadedMessagesCount]
+                    ]
                 ); 
     }
 
@@ -291,9 +295,9 @@ class UserController extends Controller
                                                 ->with('votes')
                                                 ->get();
 
-            return response()->json(['userList' => $userList]); 
+            return response()->json(['status' => 'OK', 'result' => $userList]);  
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);  
         }
     }
 }

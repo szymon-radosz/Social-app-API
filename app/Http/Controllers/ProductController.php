@@ -50,9 +50,9 @@ class ProductController extends Controller
                 $photoIndex = $photoIndex + 1;
             }
 
-            return response()->json(['product' => $newProduct, 'productPhoto' => $newProductPhoto]); 
+            return response()->json(['status' => 'OK', 'result' => ['product' => $newProduct, 'productPhoto' => $newProductPhoto]]);
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem produktu.']); 
         }
     }
 
@@ -66,48 +66,55 @@ class ProductController extends Controller
         $minLat = $lat - 2;
         $minLng = $lng - 2;
 
-        $productList = Product::where([
-                                        ['lat', '>', $minLat], 
-                                        ['lat', '<', $maxLat], 
-                                        ['lng', '>', $minLng], 
-                                        ['lng', '<', $maxLng]
-                                    ])
-                                    ->with('productPhotos')
-                                    ->with('categories')
-                                    ->get();
+        try{
+            $productList = Product::where([
+                                            ['lat', '>', $minLat], 
+                                            ['lat', '<', $maxLat], 
+                                            ['lng', '>', $minLng], 
+                                            ['lng', '<', $maxLng]
+                                        ])
+                                        ->with('productPhotos')
+                                        ->with('categories')
+                                        ->get();
 
-        //var_dump($productList[0]->category_id);
-                    
-        foreach($productList as $singleProduct){
-            //var_dump($singleProduct->categories->category_id);
+            //var_dump($productList[0]->category_id);
+                        
+            foreach($productList as $singleProduct){
+                //var_dump($singleProduct->categories->category_id);
 
-            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
-                                                    ->get(['name']);
+                $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
+                                                        ->get(['name']);
 
-            $singleProduct->setAttribute('categoryName', $productCategoryName);
+                $singleProduct->setAttribute('categoryName', $productCategoryName);
+            }
+            return response()->json(['status' => 'OK', 'result' => $productList]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem produktów w okolicy.']);
         }
-
-        return response()->json(['productList' => $productList]);
     }
 
     public function loadProductBasedOnId(Request $request){
         $productId = $request->productId;
 
-        $productList = Product::where([
-                                        ['id', $productId]
-                                    ])
-                                    ->with('productPhotos')
-                                    ->with('categories')
-                                    ->get();
-                    
-        foreach($productList as $singleProduct){
-            $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
-                                                    ->get(['name']);
+        try{
+            $productList = Product::where([
+                                            ['id', $productId]
+                                        ])
+                                        ->with('productPhotos')
+                                        ->with('categories')
+                                        ->get();
+                        
+            foreach($productList as $singleProduct){
+                $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
+                                                        ->get(['name']);
 
-            $singleProduct->setAttribute('categoryName', $productCategoryName);
+                $singleProduct->setAttribute('categoryName', $productCategoryName);
+            }
+
+            return response()->json(['status' => 'OK', 'result' => $productList]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem produktów.']);
         }
-
-        return response()->json(['productDetails' => $productList]);
     }
 
     public function closeProduct(Request $request){
@@ -117,15 +124,19 @@ class ProductController extends Controller
             $closedProduct = Product::where('id', $productId)
                                         ->update(['status' => 1]);
 
-            return response()->json(['closedProduct' => $closedProduct]);  
+            return response()->json(['status' => 'OK', 'result' => $closedProduct]);
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zamknięciem produktu.']);
         }
     }
 
     public function getCategories(){
         $categories = DB::table('product_categories')->get(['id', 'name']);
 
-        return response()->json(['categories' => $categories]);  
+        try{
+            return response()->json(['status' => 'OK', 'result' => $categories]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem kategorii.']);
+        } 
     }
 }

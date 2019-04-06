@@ -50,7 +50,7 @@ class ConversationsProductController extends Controller
                 $conversation->product_id = $product_id;
                 $conversation->save();
             }catch(\Exception $e){
-                return $e->getMessage();
+                return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu konwersacji.']);
             }
     
             if($conversation->id){
@@ -72,13 +72,12 @@ class ConversationsProductController extends Controller
             
                     $newMessage->save();
                 }catch(\Exception $e){
-                    return $e->getMessage();
+                    return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu konwersacji.']);
                 }
             }
         
-            return response()->json(['conversation' => $conversation]); 
+            return response()->json(['status' => 'OK', 'result' => $conversation]);
         }
-        return response()->json(['error' => 'Użytkownicy są już ze sobą w konwersacji']);
+        return response()->json(['status' => 'ERR', 'result' => 'Użytkownicy są już ze sobą w konwersacji.']);
     }
-
 }

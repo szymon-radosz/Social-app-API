@@ -10,24 +10,24 @@ class VotesController extends Controller
     public function store(Request $request){
         $vote = new Vote();
 
-        $vote->user_id = $request->user_id;
+        $vote->user_id = $request->userId;
         $vote->vote = $request->vote;
         $vote->message = $request->message;
-        $vote->author_id = $request->author_id;
+        $vote->author_id = $request->authorId;
 
         try{
-            $userVotedForAnotherUser = Vote::where([['user_id', $request->user_id], ['author_id', $request->author_id]])->count();
+            $userVotedForAnotherUser = Vote::where([['user_id', $request->userId], ['author_id', $request->authorId]])->count();
 
             //user vote for user_id in the past
             if($userVotedForAnotherUser > 0){
-                return response()->json(['error' => 'Głos z Twojego konta był juz oddany']); 
+                return response()->json(['status' => 'ERR', 'result' => 'Głos z Twojego konta był juz oddany.']); 
             }else{
                 $vote->save();
 
-                return response()->json(['vote' => $vote]); 
+                return response()->json(['status' => 'OK', 'result' => $vote]); 
             }
         }catch(\Exception $e){
-            return $e->getMessage();
+            return response()->json(['status' => 'ERR', 'result' => 'Problem z dodaniem głosu.']); 
         }
     }
 }
