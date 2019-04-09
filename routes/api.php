@@ -19,6 +19,8 @@ Route::post('showConversationDetails', 'ConversationsController@showConversation
 Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkIfUsersBelongsToConversation');
 
 Route::post('saveConversationProduct', 'ConversationsProductController@store');
+Route::post('checkIfUsersBelongsToProductConversation', 'ConversationsProductController@checkIfUsersBelongsToProductConversation');
+
 
 Route::post('saveVote', 'VotesController@store');
 

@@ -11,26 +11,41 @@ use Illuminate\Support\Collection;
 
 class ConversationsController extends Controller
 {
-    public function store(Request $request){
-        $sender_id = $request->sender_id;
-        $receiver_id = $request->receiver_id;
-        $message = $request->message;
-
-        $senderConversations = DB::table('conversation_user')->where('user_id', $sender_id)->get();
+    public function checkIfUsersAreInNormalConversation($senderId, $receiverId){
+        $senderConversations = DB::table('conversation_user')->where('user_id', $senderId)->get();
 
         $usersAreInTheSameConversation = false;
 
-        foreach($senderConversations as $singleLoggedInUserConversation){
-            $checkIfConvationIdMatched = DB::table('conversation_user')->where(
+        foreach($senderConversations as $singleSenderConversation){
+            $convationIdMatched = DB::table('conversation_user')->where(
                                                         [
-                                                            ['conversation_id', $singleLoggedInUserConversation->conversation_id],
-                                                            ['user_id', $receiver_id]
-                                                        ])->count();
+                                                            ['conversation_id', $singleSenderConversation->conversation_id],
+                                                            ['user_id', $receiverId]
+                                                        ])->get();
 
-            if($checkIfConvationIdMatched > 0){
-                $usersAreInTheSameConversation = true;
+            //check when count() > 0 every conversation and when that product_id is 0 in some case, then users are in the same normal conversation
+            foreach($convationIdMatched as $singleFoundConversation){
+                $conversationNotProductIdData = Conversation::where([
+                                                            ['id', $singleFoundConversation->conversation_id],
+                                                            ['product_id', '=', 0]
+                                                        ])->count();
+                if($conversationNotProductIdData > 0){
+                    $usersAreInTheSameConversation = true;
+                }
             }
         }
+        
+        //var_dump($usersAreInTheSameConversation);
+        //return bool
+        return $usersAreInTheSameConversation;
+    }
+
+    public function store(Request $request){
+        $senderId = $request->senderId;
+        $receiverId = $request->receiverId;
+        $message = $request->message;
+
+        $usersAreInTheSameConversation = $this->checkIfUsersAreInNormalConversation($senderId, $receiverId);
 
         if($usersAreInTheSameConversation === false){
             try{
@@ -42,18 +57,18 @@ class ConversationsController extends Controller
     
             if($conversation->id){
                 try{
-                    $findSender = User::find($sender_id);
+                    $findSender = User::find($senderId);
                     $createdConversation = Conversation::find($conversation->id);
                     $createdConversation->users()->attach($findSender->id);
     
-                    $findReceiver = User::find($receiver_id);
+                    $findReceiver = User::find($receiverId);
                     $createdConversation = Conversation::find($conversation->id);
                     $createdConversation->users()->attach($findReceiver->id);
     
                     $newMessage = new Message();
                     $newMessage->conversation_id = $conversation->id;
-                    $newMessage->sender_id = $sender_id;
-                    $newMessage->receiver_id = $receiver_id;
+                    $newMessage->sender_id = $senderId;
+                    $newMessage->receiver_id = $receiverId;
                     $newMessage->message = $message;
                     $newMessage->status = 0;
             
@@ -62,11 +77,8 @@ class ConversationsController extends Controller
                     return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu konwersacji.']);
                 }
             }
-        
-            //return response()->json(['conversation' => $conversation]); 
             return response()->json(['status' => 'OK', 'result' => $conversation]);
         }
-        //return response()->json(['error' => 'Użytkownicy są już ze sobą w konwersacji']); 
         return response()->json(['status' => 'ERR', 'result' => 'Użytkownicy są już ze sobą w konwersacji.']);
     }
 
@@ -86,8 +98,6 @@ class ConversationsController extends Controller
                                     }])->first();
             }
             
-            //$userData = User::where('id', $user_id)->with('conversations')->first();
-    
             $conversationData = new Collection();
     
             //loop through all user conversation where user take part
@@ -155,29 +165,7 @@ class ConversationsController extends Controller
         $conversation_id = $request->conversation_id;
 
         try{
-            //$userData = User::where('id', $user_id)->with('conversations')->get();
             $conversation = Conversation::where('id', $conversation_id)->with('messages')->get();
-
-            //$conversationData = array();
-
-            //var_dump($userData[0]->conversations);
-
-            /*foreach($userData[0]->conversations as $singleConversation){
-                $conversationMessages = Conversation::where('id', $singleConversation->id)->with('messages')->get();
-
-                foreach($conversationMessages as $singleMessage){
-                    //var_dump($singleMessage->messages[0]->receiver_id);
-                    $receiverInfo = User::where('id', $singleMessage->messages[0]->receiver_id)->get(['name', 'email', 'photo_path']);
-
-                    $receiverName = $receiverInfo[0]->name;
-                    $receiverEmail = $receiverInfo[0]->email;
-                    $receiverPhotoPath = $receiverInfo[0]->photo_path;
-
-                    $singleMessage->setAttribute('receiverName', $receiverName);
-                    $singleMessage->setAttribute('receiverEmail', $receiverEmail);
-                    $singleMessage->setAttribute('receiverPhotoPath', $receiverPhotoPath);
-                }
-            }*/
 
             return response()->json(['status' => 'OK', 'result' => $conversation]);
         }catch(\Exception $e){
@@ -189,58 +177,8 @@ class ConversationsController extends Controller
         $loggedInUser = $request->loggedInUser;
         $searchedUser = $request->searchedUser;
 
-        try{
-            $loggedInUserConversations = DB::table('conversation_user')->where('user_id', $loggedInUser)->get();
+        $checkIfUsersAreInNormalConversation = $this->checkIfUsersAreInNormalConversation($loggedInUser, $searchedUser);
 
-            $usersAreInTheSameConversation = false;
-    
-            //var_dump($loggedInUserConversations);
-    
-            foreach($loggedInUserConversations as $singleLoggedInUserConversation){
-                $conversationUserList = DB::table('conversation_user')->where(
-                                                            [
-                                                                ['conversation_id', $singleLoggedInUserConversation->conversation_id],
-                                                                ['user_id', $searchedUser]
-                                                            ])->get();
-    
-                //var_dump($conversationUserList);
-    
-                foreach($conversationUserList as $singleConversationUser){
-                    if($request->has('productId')){
-                        //var_dump("product");
-                        $conversationProduct = Conversation::where([['id', $singleConversationUser->conversation_id], ['product_id', '=', (int)$request->productId]])->count();
-                    
-                        //var_dump($singleConversationUser->conversation_id);
-                        //var_dump($conversationProduct);
-                        //var_dump((int)$request->productId);
-    
-                        if($conversationProduct > 0){
-                            $usersAreInTheSameConversation = true;
-                        }
-                    }else{
-                        //var_dump("private");
-                        $conversationPrivate = Conversation::where([['id', $singleConversationUser->conversation_id], ['product_id', '==', 0]])->count();
-                    
-                        if($conversationPrivate > 0){
-                            $usersAreInTheSameConversation = true;
-                        }
-                        //var_dump($conversationPrivate);
-                    }
-                }
-    
-               
-                    //var_dump($conversations);
-                
-                
-    
-                /*if($checkIfConvationIdMatched > 0){
-                    $usersAreInTheSameConversation = true;
-                }*/
-            }
-    
-            return response()->json(['status' => 'OK', 'result' => $usersAreInTheSameConversation]);
-        }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy sprawdzaniu użytkowników we wspólnej konwersacji.']);
-        }
+        return response()->json(['status' => 'OK', 'result' => $checkIfUsersAreInNormalConversation]);
     }
 }
