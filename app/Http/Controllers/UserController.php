@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
 use App\Jobs\SendVerificationEmail;
 use DB;
+use Carbon\Carbon;
 
 class UserController extends Controller 
 {
@@ -76,12 +77,9 @@ class UserController extends Controller
         $user = User::where('email_token',$token)->first();
 
         $user->verified = 1;
+        $user->email_verified_at = Carbon::now();
 
         if($user->save()){
-            /*return response()->json([
-                'user' => $user
-            ]);*/
-
             return view('emailconfirm');
         }
     }
@@ -165,7 +163,7 @@ class UserController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy dodawaniu zdjęcia.']); 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
         }
     }
 

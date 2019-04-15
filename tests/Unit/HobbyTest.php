@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+//namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -8,11 +8,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class HobbyTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
     public function testExample()
     {
         $this->assertTrue(true);
@@ -31,12 +26,14 @@ class HobbyTest extends TestCase
     }
 
     public function testSaveHobby(){
+        //create factory example user
+        $user = factory(App\User::class)->make();
+
         $data = [
-            'userEmail' => "radoszszymon@gmail.com",
+            'userEmail' => $user->email,
             'hobby_id' => "2222"
         ];
 
-        //$user = factory(\App\User::class)->create();
         $response = $this->json('POST', '/api/saveHobbyUser', $data);
         $response->assertStatus(200);
         $response->assertJsonStructure(
