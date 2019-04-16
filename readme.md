@@ -76,3 +76,27 @@ MAIL_DRIVER=smtp
 3. php artisan migrate --env=testing
 4. create unit test with command: php artisan make:test TestName --unit
 5. run tests with command: ./vendor/bin/phpunit
+
+Adding factories and seeds
+
+1. php artisan make:factory TestFactory
+
+$factory->define(App\Test::class, function (Faker $faker) {
+return [
+'name' => $faker->text($min=5, $max=10)
+];
+});
+
+2. php artisan make:seeder TestSeeder
+
+public function run()
+{
+//create 10 elements
+factory(App\Test::class, 10)->create();
+}
+
+3. composer dump-autoload
+
+Looks for all of the classes it needs to include again. It just regenerates the list of all classes that need to be included in the project
+
+4. php artisan db:seed --class=TestSeeder

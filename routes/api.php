@@ -35,6 +35,15 @@ Route::post('saveMessage', 'MessageController@store');
 Route::post('saveHobbyUser', 'HobbyController@store');
 Route::get('hobbiesList', 'HobbyController@index');
 
+Route::get('posts', 'PostsController@index');
+Route::post('savePost', 'PostsController@store');
+Route::post('savePostComment', 'PostsController@savePostComment');
+Route::post('savePostVote', 'PostsController@savePostVote');
+Route::post('saveCommentVote', 'PostsController@saveCommentVote');
+Route::post('getPostById', 'PostsController@getPostById');
+Route::post('getPostByCategoryId', 'PostsController@getPostByCategoryId');
+
+
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
 });
