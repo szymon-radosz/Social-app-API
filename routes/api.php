@@ -42,6 +42,8 @@ Route::post('savePostVote', 'PostsController@savePostVote');
 Route::post('saveCommentVote', 'PostsController@saveCommentVote');
 Route::post('getPostById', 'PostsController@getPostById');
 Route::post('getPostByCategoryId', 'PostsController@getPostByCategoryId');
+Route::post('getPostCommentsByPostId', 'PostsController@getPostCommentsByPostId');
+
 
 
 Route::group(['middleware' => 'auth:api'], function(){

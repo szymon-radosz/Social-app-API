@@ -86,8 +86,6 @@ class PostsController extends Controller
             }else{
                 return response()->json(['status' => 'ERR', 'result' => 'Oddano juz głos z tego konta.']);
             }
-
-            return response()->json(['status' => 'OK', 'result' => $updatedPostVote]);
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie głosu na post.']);
         }
@@ -124,6 +122,7 @@ class PostsController extends Controller
         try{
             $post = Post::where('id', $postId)
                                 ->with('votes')
+                                ->with('users')
                                 ->with('comments.users')
                                 ->with('comments.votes')
                                 ->get();
@@ -147,6 +146,21 @@ class PostsController extends Controller
             return response()->json(['status' => 'OK', 'result' => $posts]);
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu postów po id kategorii.']);
+        }
+    }
+
+    public function getPostCommentsByPostId(Request $request){
+        $postId = $request->postId;
+
+        try{
+            $postComments = PostComment::where('post_id', $postId)
+                                ->with('votes')
+                                ->with('users')
+                                ->get();
+
+            return response()->json(['status' => 'OK', 'result' => $postComments]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
 }

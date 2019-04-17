@@ -23,4 +23,8 @@ class Post extends Model
     public function votes(){
         return $this->hasMany('App\PostVote', 'post_id');
     }
+
+    public function users(){
+        return $this->belongsTo('App\User', 'user_id');
+    }
 }
