@@ -7,6 +7,7 @@ use App\Post;
 use App\PostComment;
 use App\PostVote;
 use App\PostCommentVote;
+use App\PostCategory;
 
 class PostsController extends Controller
 {
@@ -15,6 +16,7 @@ class PostsController extends Controller
             $posts = Post::with('votes')
                                 ->with('comments.users')
                                 ->with('comments.votes')
+                                ->latest('created_at')
                                 ->get();
 
             return response()->json(['status' => 'OK', 'result' => $posts]);
@@ -125,6 +127,7 @@ class PostsController extends Controller
                                 ->with('users')
                                 ->with('comments.users')
                                 ->with('comments.votes')
+                                ->latest('created_at')
                                 ->get();
 
             return response()->json(['status' => 'OK', 'result' => $post]);
@@ -141,6 +144,7 @@ class PostsController extends Controller
                                 ->with('votes')
                                 ->with('comments.users')
                                 ->with('comments.votes')
+                                ->latest('created_at')
                                 ->get();
 
             return response()->json(['status' => 'OK', 'result' => $posts]);
@@ -161,6 +165,16 @@ class PostsController extends Controller
             return response()->json(['status' => 'OK', 'result' => $postComments]);
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+        }
+    }
+
+    public function getCategories(){
+        try{
+            $categories = PostCategory::get();
+
+            return response()->json(['status' => 'OK', 'result' => $categories]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Bład przy pobraniu kategorii']);
         }
     }
 }
