@@ -181,4 +181,23 @@ class ConversationsController extends Controller
 
         return response()->json(['status' => 'OK', 'result' => $checkIfUsersAreInNormalConversation]);
     }
+
+    public function loadUserById(Request $request){
+        $userId = $request->userId;
+        $loggedInUser = $request->loggedInUser;
+
+        try{
+            $user = User::where("id", $userId)
+                                    ->with('kids')
+                                    ->with('hobbies')
+                                    ->with('votes')
+                                    ->firstOrFail();
+
+            $checkIfUsersAreInNormalConversation = $this->checkIfUsersAreInNormalConversation($loggedInUser, $userId);
+
+            return response()->json(['status' => 'OK', 'result' => ['user' => $user, 'checkIfUsersAreInNormalConversation' => $checkIfUsersAreInNormalConversation]]);  
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
+        }
+    }
 }

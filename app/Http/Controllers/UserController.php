@@ -298,4 +298,6 @@ class UserController extends Controller
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);  
         }
     }
+
+    
 }

@@ -11,12 +11,14 @@ Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 Route::post('loadUserByName', 'UserController@loadUserByName');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 
+
 Route::post('saveKid', 'KidController@store');
 
 Route::post('saveConversation', 'ConversationsController@store');
 Route::post('showUserConversations', 'ConversationsController@showUserConversations');
 Route::post('showConversationDetails', 'ConversationsController@showConversationDetails');
 Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkIfUsersBelongsToConversation');
+Route::post('loadUserById', 'ConversationsController@loadUserById');
 
 Route::post('saveConversationProduct', 'ConversationsProductController@store');
 Route::post('checkIfUsersBelongsToProductConversation', 'ConversationsProductController@checkIfUsersBelongsToProductConversation');
