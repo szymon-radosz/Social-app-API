@@ -102,6 +102,7 @@ class ProductController extends Controller
                                         ])
                                         ->with('productPhotos')
                                         ->with('categories')
+                                        ->with('users')
                                         ->get();
                         
             foreach($productList as $singleProduct){
