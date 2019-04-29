@@ -170,7 +170,7 @@ class PostsController extends Controller
 
     public function getCategories(){
         try{
-            $categories = PostCategory::get();
+            $categories = PostCategory::with('posts')->get();
 
             return response()->json(['status' => 'OK', 'result' => $categories]);
         }catch(\Exception $e){
