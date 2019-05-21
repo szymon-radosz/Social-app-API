@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request; 
 use App\User; 
 use App\Message;
+use App\Hobby;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,7 @@ use Illuminate\Auth\Events\Registered;
 use App\Jobs\SendVerificationEmail;
 use DB;
 use Carbon\Carbon;
+use DateTime;
 
 class UserController extends Controller 
 {
@@ -299,5 +301,214 @@ class UserController extends Controller
         }
     }
 
-    
+    public function loadUsersFilter(Request $request){
+        $distance = $request->distance ? $request->distance : "";
+        $childAge = $request->childAge ? $request->childAge : "";
+        $childGender = $request->childGender ? $request->childGender : "";
+        $hobbyName = $request->hobbyName ? $request->hobbyName : "";
+        $currentUserLat = $request->currentUserLat;
+        $currentUserLng = $request->currentUserLng;
+
+        $childGenderQueryValue;
+        $childGenderDefault;
+        $hobbyDefault;
+        $hobbyId;
+
+        //var_dump($distance);
+
+        $calculateDistanceDifference = $this->calculateDistanceDifference($distance, $currentUserLat, $currentUserLng);
+        $calculateChildAgeDifference = $this->calculateChildAgeDifference($childAge);
+
+        if($childGender === "dziewczynka"){
+            $childGenderQueryValue = "female";
+            $childGenderDefault = false;
+        }else if($childGender === "chłopiec"){
+            $childGenderQueryValue = "male";
+            $childGenderDefault = false;
+        }else{
+            $childGenderQueryValue = "";
+            $childGenderDefault = true;
+        }
+        //var_dump([$calculateDistanceDifference, $calculateChildAgeDifference, $childGender]);
+
+        // if user send some data then we return json with default => false
+        // then in mobile app you can loop through all data from response
+        // and if default => false for specific field, e.g. distance, childAge
+        // then we setState with value from response and show active filters
+        if($hobbyName){
+            $hobbyRow = Hobby::where('name', $hobbyName)->first();
+            $hobbyId = $hobbyRow->id;
+            $hobbyDefault = false;
+        }else{
+            $hobbyDefault = true;
+            $hobbyId = 0;
+        }
+
+        //var_dump($hobbyId);
+
+        try{
+            $userList = User::
+                    where([
+                        ['lattitude', '>', $calculateDistanceDifference->getData()->latDifferenceBottom], 
+                        ['lattitude', '<', $calculateDistanceDifference->getData()->latDifferenceTop], 
+                        ['longitude', '>', $calculateDistanceDifference->getData()->lngDifferenceBottom], 
+                        ['longitude', '<', $calculateDistanceDifference->getData()->lngDifferenceTop]
+                    ])
+                    ->whereHas('kids', function ($query) use($calculateChildAgeDifference, $childGender, $childGenderQueryValue) {
+                        if($childGender){
+                            //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
+                            $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
+                            ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate)
+                            ->where('child_gender', '=', $childGenderQueryValue);
+                        }else{
+                            $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
+                            ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate);
+                        }
+                    })
+                    ->whereHas('hobbies', function ($query) use($hobbyId) {
+                        //var_dump($hobbyId);
+                        if($hobbyId != 0){
+                            //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
+                            $query->where('hobby_id', '=', $hobbyId);
+                        }
+                    })
+                    ->with('kids')
+                    ->with('hobbies')
+                    ->with('votes')
+                    ->get();
+
+            return response()->json(['status' => 'OK', 'result' => $userList, 'resultParameters' => [
+                                                                                                        ['name' => 'distance', 'value' => $distance, 'default' => $calculateDistanceDifference->getData()->distanceDefault],
+                                                                                                        ['name' => 'childAge', 'value' => $childAge, 'default' => $calculateChildAgeDifference->getData()->childAgeDefault],
+                                                                                                        ['name' => 'childGender', 'value' => $childGender, 'default' => $childGenderDefault],
+                                                                                                        ['name' => 'hobby', 'value' => $hobbyName, 'default' => $hobbyDefault]
+                                                                                                    ]
+                                    ]);  
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według dystansu.']);  
+        }
+    }
+
+    public function calculateChildAgeDifference($childAge){
+        //e.g. 1975-12-25
+        $todayDate = Carbon::now()->toDateString();
+        $timeStart = new DateTime($todayDate);
+        $timeEnd = new DateTime($todayDate);
+        $childAgeDefault;
+
+        //var_dump($childAge);
+
+        if($childAge === "0-6 miesięcy"){
+            $formattedStartDate = $timeStart->modify('-6 months')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "7-12 miesięcy"){
+            $formattedStartDate = $timeStart->modify('-1 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-6 months')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "1-2 lat"){
+            $formattedStartDate = $timeStart->modify('-2 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-1 year')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "2-4 lat"){
+            $formattedStartDate = $timeStart->modify('-4 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-2 year')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "4-8 lat"){
+            $formattedStartDate = $timeStart->modify('-8 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-4 year')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "8-12 lat"){
+            $formattedStartDate = $timeStart->modify('-12 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-8 year')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === "12-16 lat"){
+            $formattedStartDate = $timeStart->modify('-16 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->modify('-12 year')->format('Y-m-d');
+            $childAgeDefault = false;
+        }else if($childAge === ""){
+            $formattedStartDate = $timeStart->modify('-100 year')->format('Y-m-d');
+            $formattedEndDate = $timeEnd->format('Y-m-d');
+            $childAgeDefault = true;
+        }
+
+        return response()
+                ->json(
+                    [
+                        'formattedStartDate' => $formattedStartDate,
+                        'formattedEndDate' => $formattedEndDate,
+                        'childAgeDefault' => $childAgeDefault
+                    ]
+                ); 
+    }
+
+    public function calculateDistanceDifference($distance, $currentUserLat, $currentUserLng){
+        $coordsLatValue;
+        $coordsLngValue;
+        $distanceDefault;
+
+        /*
+        Degrees of latitude have the same linear distance anywhere in the world, because all lines of latitude are the same size. 
+        So 1 degree of latitude is equal to 1/360th of the circumference of the Earth, which is 1/360th of 40,075 km.
+
+        The length of a lines of longitude depends on the latitude. 
+        The line of longitude at latitude l will be cos(l)*40,075 km. 
+        One degree of longitude will be 1/360th of that.
+
+        So you can work backwards from that. 
+        Assuming you want something very close to one square kilometre, you'll want 1 * (360/40075) = 0.008983 degrees of latitude.
+
+        At your example latitude of 53.38292839, the line of longitude will be cos(53.38292839)*40075 = [approx] 23903.297 km long. 
+        So 1 km is 1 * (360/23903.297) = 0.015060 degrees.
+        */
+
+        if($distance === "1km"){
+            $coordsLatValue = 1 * (360/40075);
+            $coordsLngValue = 1 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === "2km"){
+            $coordsLatValue = 3 * (360/40075);
+            $coordsLngValue = 3 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === "5km"){
+            $coordsLatValue = 5 * (360/40075);
+            $coordsLngValue = 5 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === "10km"){
+            $coordsLatValue = 10 * (360/40075);
+            $coordsLngValue = 10 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === "50km"){
+            $coordsLatValue = 50 * (360/40075);
+            $coordsLngValue = 50 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === "100km"){
+            $coordsLatValue = 100 * (360/40075);
+            $coordsLngValue = 100 * (360/23903.297);
+            $distanceDefault = false;
+        }else if($distance === ""){
+            $coordsLatValue = 10 * (360/40075);
+            $coordsLngValue = 10 * (360/23903.297);
+            $distanceDefault = true;
+        }
+
+        $latDifferenceBottom = $currentUserLat - $coordsLatValue;
+        $lngDifferenceBottom = $currentUserLng - $coordsLngValue;
+
+        $latDifferenceTop = $currentUserLat + $coordsLatValue;
+        $lngDifferenceTop = $currentUserLng + $coordsLngValue;
+
+        //var_dump([$latDifferenceBottom,$lngDifferenceBottom, $latDifferenceTop, $lngDifferenceTop ]);
+
+        return response()
+        ->json(
+            [
+                'latDifferenceBottom' => $latDifferenceBottom,
+                'lngDifferenceBottom' => $lngDifferenceBottom,
+                'latDifferenceTop' => $latDifferenceTop,
+                'lngDifferenceTop' => $lngDifferenceTop,
+                'distanceDefault' => $distanceDefault
+            ]
+        ); 
+    }
 }

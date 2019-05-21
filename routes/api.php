@@ -9,8 +9,8 @@ Route::post('updateUserInfo', 'UserController@updateUserInfo');
 Route::post('setUserFilledInfo', 'UserController@setUserFilledInfo');
 Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 Route::post('loadUserByName', 'UserController@loadUserByName');
+Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
-
 
 Route::post('saveKid', 'KidController@store');
 
@@ -22,7 +22,6 @@ Route::post('loadUserById', 'ConversationsController@loadUserById');
 
 Route::post('saveConversationProduct', 'ConversationsProductController@store');
 Route::post('checkIfUsersBelongsToProductConversation', 'ConversationsProductController@checkIfUsersBelongsToProductConversation');
-
 
 Route::post('saveVote', 'VotesController@store');
 
@@ -46,7 +45,6 @@ Route::post('getPostById', 'PostsController@getPostById');
 Route::post('getPostByCategoryId', 'PostsController@getPostByCategoryId');
 Route::post('getPostCommentsByPostId', 'PostsController@getPostCommentsByPostId');
 Route::get('getPostsCategories', 'PostsController@getCategories');
-
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
