@@ -46,6 +46,11 @@ Route::post('getPostByCategoryId', 'PostsController@getPostByCategoryId');
 Route::post('getPostCommentsByPostId', 'PostsController@getPostCommentsByPostId');
 Route::get('getPostsCategories', 'PostsController@getCategories');
 
+Route::post('inviteFriend', 'FriendsController@inviteFriend');
+Route::post('confirmFriend', 'FriendsController@confirmFriend');
+Route::post('checkFriend', 'FriendsController@checkFriend');
+
+
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
 });
