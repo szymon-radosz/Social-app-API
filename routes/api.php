@@ -49,6 +49,8 @@ Route::get('getPostsCategories', 'PostsController@getCategories');
 Route::post('inviteFriend', 'FriendsController@inviteFriend');
 Route::post('confirmFriend', 'FriendsController@confirmFriend');
 Route::post('checkFriend', 'FriendsController@checkFriend');
+Route::post('countFriends', 'FriendsController@countFriends');
+Route::post('friendsList', 'FriendsController@friendsList');
 
 
 Route::group(['middleware' => 'auth:api'], function(){

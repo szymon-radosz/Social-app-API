@@ -7,6 +7,36 @@ use App\Friend;
 
 class FriendsController extends Controller
 {
+    public function friendsList(Request $request){
+        $userId = $request->userId;
+
+        try{
+            $friendsList = Friend::where([['sender_id', $userId]])
+                                ->orWhere([['receiver_id', $userId]])
+                                ->with('usersInvitedMe')
+                                ->with('usersInvitedByMe')
+                                ->get();
+
+            return response()->json(['status' => 'OK', 'result' => ['friendsList' => $friendsList]]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu ilości znajomych.']);
+        }
+    }
+
+    public function countFriends(Request $request){
+        $userId = $request->userId;
+
+        try{
+            $countFriends = Friend::where([['sender_id', $userId]])
+                                ->orWhere([['receiver_id', $userId]])
+                                ->count();
+
+            return response()->json(['status' => 'OK', 'result' => ['countFriends' => $countFriends]]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu ilości znajomych.']);
+        }
+    }
+
     public function checkFriend(Request $request){
         $senderId = $request->senderId;
         $receiverId = $request->receiverId;
