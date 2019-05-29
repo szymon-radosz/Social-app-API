@@ -11,14 +11,19 @@ use DB;
 class KidController extends Controller
 {
     public function store(Request $request){
+        $name = $request->name;
+        $dateOfBirth = $request->dateOfBirth;
+        $childGender = $request->childGender;
+
         try{
             $kid = new Kid();
 
             $user = DB::table('users')->where('email', $request->userEmail)->get(['id']);
 
             $kid->user_id = $user[0]->id;
-            $kid->name = $request->name;
-            $kid->date_of_birth = $request->dateOfBirth;
+            $kid->name = $name;
+            $kid->date_of_birth = $dateOfBirth;
+            $kid->child_gender = $childGender;
     
             $kid->save();
 
@@ -26,7 +31,7 @@ class KidController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie dzieci.']);
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem dzieci']);
         }
     }
 }
