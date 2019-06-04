@@ -149,7 +149,17 @@ class ProductController extends Controller
                 ['user_id', $userId]
             ])
             ->with('productPhotos')
+            ->with('categories')
             ->get();
+
+            foreach($productList as $singleProduct){
+                //var_dump($singleProduct->categories->category_id);
+
+                $productCategoryName = ProductCategory::where('id', '=', $singleProduct->categories->category_id)
+                                                        ->get(['name']);
+
+                $singleProduct->setAttribute('categoryName', $productCategoryName);
+            }
 
             return response()->json(['status' => 'OK', 'result' => $productList]);
         }catch(\Exception $e){
