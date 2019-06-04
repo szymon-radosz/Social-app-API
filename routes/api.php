@@ -30,6 +30,7 @@ Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoo
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 Route::post('closeProduct', 'ProductController@closeProduct');
 Route::get('getCategories', 'ProductController@getCategories');
+Route::post('loadUserProductList', 'ProductController@loadUserProductList');
 
 Route::post('saveMessage', 'MessageController@store');
 

@@ -140,4 +140,20 @@ class ProductController extends Controller
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem kategorii.']);
         } 
     }
+
+    public function loadUserProductList(Request $request){
+        $userId = $request->userId;
+
+        try{
+            $productList = Product::where([
+                ['user_id', $userId]
+            ])
+            ->with('productPhotos')
+            ->get();
+
+            return response()->json(['status' => 'OK', 'result' => $productList]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Problem ze zwróceniem listy aukcji uzytkownika']);
+        } 
+    }
 }
