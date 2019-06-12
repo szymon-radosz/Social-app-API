@@ -18,8 +18,8 @@ class HobbyController extends Controller
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy hobby.']);
         }
-        
     }
+
     public function store(Request $request){
         try{
             $user = DB::table('users')->where('email', $request->userEmail)->get();
@@ -33,6 +33,20 @@ class HobbyController extends Controller
             return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisywaniu hobby.']);
+        }
+    }
+
+    public function cleanUserHobbies(Request $request){
+        $userId = $request->userId;
+        
+        try{
+            $deletedHobbyUser = DB::table('hobby_user')
+                                            ->where('user_id', $userId)
+                                            ->delete();
+
+            return response()->json(['status' => 'OK', 'result' => $deletedHobbyUser]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd usunięciu relacji hobby-user']);
         }
     }
 }

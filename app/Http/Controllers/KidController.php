@@ -34,4 +34,18 @@ class KidController extends Controller
             return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem dzieci']);
         }
     }
+
+    public function cleanUserKids(Request $request){
+        $userId = $request->userId;
+        
+        try{
+            $deletedUserKids = DB::table('kids')
+                                            ->where('user_id', $userId)
+                                            ->delete();
+
+            return response()->json(['status' => 'OK', 'result' => $deletedUserKids]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd usunięciu relacji dziecko-user']);
+        }
+    }
 }

@@ -13,6 +13,7 @@ Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 
 Route::post('saveKid', 'KidController@store');
+Route::post('cleanUserKids', 'KidController@cleanUserKids');
 
 Route::post('saveConversation', 'ConversationsController@store');
 Route::post('showUserConversations', 'ConversationsController@showUserConversations');
@@ -36,6 +37,7 @@ Route::post('saveMessage', 'MessageController@store');
 
 Route::post('saveHobbyUser', 'HobbyController@store');
 Route::get('hobbiesList', 'HobbyController@index');
+Route::post('cleanUserHobbies', 'HobbyController@cleanUserHobbies');
 
 Route::get('posts', 'PostsController@index');
 Route::post('savePost', 'PostsController@store');

@@ -171,32 +171,32 @@ class UserController extends Controller
 
     public function updateUserInfo(Request $request)
     {
+        $userEmail = $request->userEmail;
+        $age = $request->age;
+        $desc = $request->desc;
+        $lat = $request->lat;
+        $lng = $request->lng;
+        $locationString = $request->locationString ? $request->locationString : "";
+
         try{
-            $userEmail = $request->userEmail;
-            $age = $request->age;
-            $desc = $request->desc;
-            $lat = $request->lat;
-            $lng = $request->lng;
+            $updateUserInfo = User::where('email', $userEmail)
+                                    ->update(
+                                        ['age' => $age,
+                                        'description' => $desc,
+                                        'lattitude' => (double)$lat,
+                                        'longitude' => (double)$lng,
+                                        'location_string' => $locationString]
+                                    );
 
-            $updateUserInfo = DB::table('users')
-                    ->where('email', $userEmail)
-                    ->update(
-                        ['age' => $age,
-                        'description' => $desc,
-                        'lattitude' => (double)$lat,
-                        'longitude' => (double)$lng]
-                    );
-
-            $user = DB::table('users')::
-                                where('email', $userEmail)
-                                ->with('kids')
-                                ->with('hobbies')
-                                ->with('votes')
-                                ->get();
+            $user = User::where('email', $userEmail)
+                            ->with('kids')
+                            ->with('hobbies')
+                            ->with('votes')
+                            ->get();
  
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd z aktualizacją danych użytkownika.']); 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
         }
     }
 
