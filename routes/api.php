@@ -12,6 +12,10 @@ Route::post('loadUserByName', 'UserController@loadUserByName');
 Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 
+Route::get('password-reset', 'ResetPasswordController@showForm'); //I did not create this controller. it simply displays a view with a form to take the email
+Route::post('password-reset', 'ResetPasswordController@sendPasswordResetToken');
+Route::post('reset-password/{token}', array('uses' => 'ResetPasswordController@resetPassword', 'as' => 'resetPassword'));
+
 Route::post('saveKid', 'KidController@store');
 Route::post('cleanUserKids', 'KidController@cleanUserKids');
 

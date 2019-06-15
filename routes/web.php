@@ -25,6 +25,9 @@ Route::get('{slug}', function() {
  */
 Route::get('/verifyemail/{token}', 'UserController@verify');
 
+Route::get('/reset-password/{token}', 'ResetPasswordController@showPasswordResetForm');
+
+
 //Auth::routes();
 /*
 Route::middleware('auth.basic')->get('/user', function (Request $request) {
