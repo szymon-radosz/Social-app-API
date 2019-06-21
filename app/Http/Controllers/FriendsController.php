@@ -19,7 +19,7 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['friendsList' => $friendsList]]);
         }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu ilości znajomych.']);
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
 
