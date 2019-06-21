@@ -284,6 +284,23 @@ class UserController extends Controller
                 ); 
     }
 
+    public function loadUserByEmail(Request $request){
+        $email = $request->email;
+
+        try{
+            $userList = User::
+                    where('email', 'like', '%' . $email . '%')
+                                                ->with('kids')
+                                                ->with('hobbies')
+                                                ->with('votes')
+                                                ->get();
+
+            return response()->json(['status' => 'OK', 'result' => $userList]);  
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);  
+        }
+    }
+
     public function loadUserByName(Request $request){
         $name = $request->name;
 

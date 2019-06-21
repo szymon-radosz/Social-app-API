@@ -17,6 +17,7 @@ class ProductController extends Controller
             
         $newProduct->user_id = $request->userId;
         $newProduct->name = $request->name;
+        $newProduct->description = $request->description;
         $newProduct->child_gender = $request->childGender;
         $newProduct->price = $request->price;
         $newProduct->lat = $request->lat;

@@ -9,6 +9,7 @@ Route::post('updateUserInfo', 'UserController@updateUserInfo');
 Route::post('setUserFilledInfo', 'UserController@setUserFilledInfo');
 Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 Route::post('loadUserByName', 'UserController@loadUserByName');
+Route::post('loadUserByEmail', 'UserController@loadUserByEmail');
 Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 
