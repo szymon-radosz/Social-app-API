@@ -11,8 +11,8 @@ class FriendsController extends Controller
         $userId = $request->userId;
 
         try{
-            $friendsList = Friend::where([['sender_id', $userId]])
-                                ->orWhere([['receiver_id', $userId]])
+            $friendsList = Friend::where([['sender_id', $userId], ['confirmed', 1]])
+                                ->orWhere([['receiver_id', $userId], ['confirmed', 1]])
                                 ->with('usersInvitedMe')
                                 ->with('usersInvitedByMe')
                                 ->get();
@@ -27,8 +27,8 @@ class FriendsController extends Controller
         $userId = $request->userId;
 
         try{
-            $countFriends = Friend::where([['sender_id', $userId]])
-                                ->orWhere([['receiver_id', $userId]])
+            $countFriends = Friend::where([['sender_id', $userId], ['confirmed', 1]])
+                                ->orWhere([['receiver_id', $userId], ['confirmed', 1]])
                                 ->count();
 
             return response()->json(['status' => 'OK', 'result' => ['countFriends' => $countFriends]]);

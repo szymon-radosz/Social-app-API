@@ -21,8 +21,7 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $posts]);
         }catch(\Exception $e){
-            //return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy postów.']);
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy postów.']);
         }
     }
 

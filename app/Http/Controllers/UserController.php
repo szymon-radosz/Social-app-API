@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request; 
 use App\User; 
 use App\Message;
+use App\Notification;
 use App\Hobby;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
@@ -127,6 +128,7 @@ class UserController extends Controller
                                                 ->with('hobbies')
                                                 ->with('conversations')
                                                 ->with('votes')
+                                                ->with('notifications')
                                                 ->firstOrFail();        
 
             $unreadedMessage = false;
@@ -140,6 +142,18 @@ class UserController extends Controller
 
             $userData->setAttribute('unreadedConversationMessage', $unreadedMessage);
             $userData->setAttribute('unreadedConversationMessageAmount', $unreadedMessageAmount);
+
+            $unreadedNotifications = false;
+            $unreadedNotificationsAmount = 0;
+        
+            $unreadedNotificationsAmount = Notification::where([['user_id', Auth::user()->id], ['status', 0]])->count();
+
+            if($unreadedNotificationsAmount > 0){
+                $unreadedNotifications = true;
+            }
+
+            $userData->setAttribute('unreadedNotifications', $unreadedNotifications);
+            $userData->setAttribute('unreadedNotificationsAmount', $unreadedNotificationsAmount);
 
             return response()->json(['status' => 'OK', 'result' => $userData]); 
         }catch(\Exception $e){
@@ -215,6 +229,7 @@ class UserController extends Controller
                                     ->with('kids')
                                     ->with('hobbies')
                                     ->with('votes')
+                                    ->with('notifications')
                                     ->get();
 
             return response()->json(['status' => 'OK', 'result' => $user]);  

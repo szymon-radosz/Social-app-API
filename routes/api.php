@@ -61,6 +61,9 @@ Route::post('checkFriend', 'FriendsController@checkFriend');
 Route::post('countFriends', 'FriendsController@countFriends');
 Route::post('friendsList', 'FriendsController@friendsList');
 
+Route::post('loadNotificationByUserId', 'NotificationController@loadNotificationByUserId');
+Route::post('addNotification', 'NotificationController@addNotification');
+Route::post('clearNotificationByUserId', 'NotificationController@clearNotificationByUserId');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
