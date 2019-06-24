@@ -60,6 +60,7 @@ Route::post('confirmFriend', 'FriendsController@confirmFriend');
 Route::post('checkFriend', 'FriendsController@checkFriend');
 Route::post('countFriends', 'FriendsController@countFriends');
 Route::post('friendsList', 'FriendsController@friendsList');
+Route::post('pendingFriendsList', 'FriendsController@pendingFriendsList');
 
 Route::post('loadNotificationByUserId', 'NotificationController@loadNotificationByUserId');
 Route::post('addNotification', 'NotificationController@addNotification');

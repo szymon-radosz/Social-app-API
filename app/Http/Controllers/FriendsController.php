@@ -23,6 +23,22 @@ class FriendsController extends Controller
         }
     }
 
+    public function pendingFriendsList(Request $request){
+        $userId = $request->userId;
+
+        try{
+            $friendsList = Friend::where([['sender_id', $userId], ['confirmed', 0]])
+                                ->orWhere([['receiver_id', $userId], ['confirmed', 0]])
+                                ->with('usersInvitedMe')
+                                ->with('usersInvitedByMe')
+                                ->get();
+
+            return response()->json(['status' => 'OK', 'result' => ['friendsList' => $friendsList]]);
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+        }
+    }
+
     public function countFriends(Request $request){
         $userId = $request->userId;
 
