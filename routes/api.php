@@ -66,6 +66,8 @@ Route::post('loadNotificationByUserId', 'NotificationController@loadNotification
 Route::post('addNotification', 'NotificationController@addNotification');
 Route::post('clearNotificationByUserId', 'NotificationController@clearNotificationByUserId');
 
+Route::post('saveUserReport', 'UserReportController@saveUserReport');
+
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'UserController@details');
 });
