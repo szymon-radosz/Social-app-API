@@ -59,12 +59,15 @@ class UserController extends Controller
     */
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
+        try{
+            $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+            event(new Registered($user = $this->create($request->all())));
 
-        dispatch(new SendVerificationEmail($user));
-
+            dispatch(new SendVerificationEmail($user));
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+        }
         //return view('verification');
         return $user;
     }
