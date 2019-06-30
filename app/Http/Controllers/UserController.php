@@ -26,15 +26,19 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response 
      */ 
     public function login(){ 
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('myapp')->accessToken; 
-            $user->api_token = $success['token'];
-            $user->save();
-            return response()->json(['status' => 'OK', 'user' => $success]);
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+            try{
+                $user = Auth::user(); 
+                $success['token'] =  $user->createToken('myapp')->accessToken; 
+                $user->api_token = $success['token'];
+                $user->save();
+                return response()->json(['status' => 'OK', 'user' => $success]);
+            }catch(\Exception $e){
+                return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            }
         } 
         else{ 
-            return response()->json(['status' => 'ERR', 'result' => 'Unauthorised']);  
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
         } 
     }
     /**
@@ -298,6 +302,21 @@ class UserController extends Controller
                         'status' => 'OK', 
                         'result' => ['userUnreadedMessages' => $userUnreadedMessages,
                     'userUnreadedMessagesCount'  => $userUnreadedMessagesCount]
+                    ]
+                ); 
+    }
+
+    public function clearUserNotificationsStatus(Request $request){
+        $userId = $request->userId;
+
+        $userNotifications = Notification::where('user_id', $userId)
+                                        ->update(['status' => 1]);
+
+        return response()
+                ->json(
+                    [
+                        'status' => 'OK', 
+                        'result' => ['userNotifications' => $userNotifications]
                     ]
                 ); 
     }
