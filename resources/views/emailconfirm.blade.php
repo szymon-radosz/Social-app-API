@@ -30,8 +30,6 @@
         <![endif]-->
     </head>
     <body data-spy="scroll" data-target=".mainmenu-area">
-  
-
         <section class="section-padding" id="about_page">
             <div class="container">
                 <div class="row">
@@ -42,13 +40,13 @@
                             <h5 class="title">Witamy</h5>
                             <div class="space-20"></div>
                             <p>Weryfikacja zakończona sukcesem. Możesz zalogować się w aplikacji E-mamy.</p>
+                            <p>Jesteś w pierwszym 1000 osób korzystających z E-mamy. Dziękujemy za Twoje wsparcie. Podziel się z nami swoimi spostrzeżeniami wysyłając wiadomość pod adres <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość">kontakt@e-mamy.pl</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
      
-        
         <section class="feature-area section-padding-top" id="features_page">
             <div class="container">
                 <div class="row">
