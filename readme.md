@@ -100,3 +100,10 @@ factory(App\Test::class, 10)->create();
 Looks for all of the classes it needs to include again. It just regenerates the list of all classes that need to be included in the project
 
 4. php artisan db:seed --class=TestSeeder
+
+
+#MyDevil Deployment
+
+all repo goes to folder and I clone public subdirectory content to /public_html directory:
+mv emamyAPI/public/* public_html
+I delete all files in emamyAPI/public
