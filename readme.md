@@ -101,12 +101,16 @@ Looks for all of the classes it needs to include again. It just regenerates the 
 
 4. php artisan db:seed --class=TestSeeder
 
-
 #MyDevil Deployment
 
 all repo goes to folder and I clone public subdirectory content to /public_html directory:
-mv emamyAPI/public/* public_html
+mv emamyAPI/public/\* public_html
 
 I delete all files in emamyAPI/public
 
 Wywyoływanie poleceń php na mydevil: /usr/local/bin/php71
+
+composer install
+/usr/local/bin/php71 artisan key:generate
+/usr/local/bin/php71 artisan queue:work
+/usr/local/bin/php71 passport:install
