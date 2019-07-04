@@ -127,7 +127,7 @@
     />
     <img
       id="thanks"
-      src="https://e-mamy.pl/images/header-bg.png"
+      src="https://e-mamy.pl/images/header-bg.jpg"
       style="width: 500px;margin-bottom: -10px;"
     />
     <div
@@ -136,7 +136,7 @@
     >
       <strong class="red" style="color: #f4a157;">
         Dziękujemy za rejestrację.<br /><br />
-        Potwierdź swój adres email klikając poniższy przycisk.
+        Potwierdź swój adres email, klikając poniższy przycisk.
       </strong>
 
       <a
@@ -147,7 +147,7 @@
       >
         <div
           class="button"
-          style="text-transform: uppercase;background-color: #f4a157;width: 300px;margin: 0 auto;border-radius: 2px;color: #FFF;padding: 26px; font-size:smaller; letter-spacing:.5px;"
+          style="text-transform: uppercase;background-color: #f4a157;width: 300px;margin: 0 auto 30px auto;border-radius: 2px;color: #FFF;padding: 26px; font-size:smaller; letter-spacing:.5px;"
         >
           Potwierdź adres email
         </div>
