@@ -46,7 +46,7 @@ class ProductController extends Controller
                 $newProductPhoto->path = $filename;
                 $newProductPhoto->save();
 
-                \Image::make($singlePhoto)->save(public_path('productPhotos/' . $filename));
+                \Image::make($singlePhoto)->save('https://e-mamy.pl/productPhotos/' . $filename);
                 
                 $photoIndex = $photoIndex + 1;
             }
