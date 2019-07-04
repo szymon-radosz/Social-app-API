@@ -11,8 +11,7 @@
         <title>E-mamy - Bądź częścią lokalnej społeczności mam</title>
 
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-        <link rel="apple-touch-icon" src="{{ asset('/images/apple-touch-icon.png') }}">
-        <link rel="shortcut icon" src="image/ico" href="{{ asset('/images/favicon.ico') }}" />
+        <link rel="shortcut icon" src="image/ico" href="{{ asset('/images/favicon.png') }}" />
    
         <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/owl.carousel.min.css') }}">
