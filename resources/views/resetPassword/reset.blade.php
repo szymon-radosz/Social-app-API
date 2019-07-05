@@ -29,6 +29,7 @@
                 background-color: #f4a157;
                 color: #fff;
                 margin: 0 auto;
+                padding: 15px 50px;
             }
         </style>
         <!--[if lt IE 9]>
