@@ -29,7 +29,7 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('email.resetPassword')->with([
+        return $this->view('email.resetPassword')->subject("Resetuj swoje hasło")->with([
             'token' => $this->token,
             ]);
     }
