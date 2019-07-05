@@ -99,14 +99,14 @@ class ResetPasswordController extends Controller
 
                 // If the user shouldn't reuse the token later, delete the token 
                 DB::table('reset_password')->where('email', $user->email)->delete();
-                return response()->json(['status' => 'ERR', 'result' => 'hasło zmienione']); 
+                return view('resetPassword.resetSuccess');
 
                 //redirect where we want according to whether they are logged in or not.
             }else{
-                return response()->json(['status' => 'ERR', 'result' => 'hasło i potwierdzenie nie są takie same']); 
+                return view('resetPassword.resetFail');                
             }
         }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+            return view('resetPassword.resetFail');  
         }
     }
 }
