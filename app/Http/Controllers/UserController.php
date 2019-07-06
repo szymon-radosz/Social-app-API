@@ -171,15 +171,16 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         try{
+            $file = Input::file('file');
             $path = $request->file;
             $userEmail = $request->userEmail;
-            $filename = time() . '-' . $request->fileName . ".jpg";
+            $filename = time() . '-' . $file->getClientOriginalName() . ".jpg";
             
             //I use static path for shared hosting
             //local:
             //\Image::make($path)->save(public_path('userPhotos/' . $filename));
             //hosting:
-            \Image::make($path)->save('https://e-mamy.pl/userPhotos/' . $filename);
+            \Image::make($file)->save('https://e-mamy.pl/userPhotos/' . $filename);
 
             $updateUserPhoto = DB::table('users')
                     ->where('email', $userEmail)
