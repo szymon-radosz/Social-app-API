@@ -179,7 +179,7 @@ class UserController extends Controller
             //local:
             //\Image::make($path)->save(public_path('userPhotos/' . $filename));
             //hosting:
-            \Image::make($path)->save(public_path('userPhotos/' . $filename));
+            \Image::make($path)->save(public_path('/userPhotos/' . $filename));
 
             $updateUserPhoto = DB::table('users')
                     ->where('email', $userEmail)
