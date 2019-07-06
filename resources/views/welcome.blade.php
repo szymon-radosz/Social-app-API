@@ -27,6 +27,17 @@
             <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
             <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143376405-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-143376405-1');
+        </script>
+
     </head>
     <body data-spy="scroll" data-target=".mainmenu-area">
   
@@ -566,7 +577,9 @@
                         <div class="col-xs-12 col-md-7">
                             <div class="footer-menu">
                                 <ul>
-                                    <img src="{{ asset('/images/fb.png') }}" alt="Facebook">
+                                    <a href="https://www.facebook.com/emamypl/" target="_blank" title="E-mamy - Facebook">
+                                        <img src="{{ asset('/images/fb.png') }}" alt="Facebook">
+                                    </a>
                                     <img src="{{ asset('/images/ig.png') }}" alt="Instagram">
                                 </ul>
                             </div>

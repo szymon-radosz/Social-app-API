@@ -1530,3 +1530,24 @@ a:focus {
     width: 30px;
     margin: 0 5px;
 }
+
+/* terms */
+.termsHeader {
+    color: #f4a157;
+    font-weight: 600;
+}
+.termsContent {
+    font-size: 11px;
+    color: #e4e4e4;
+    line-height: 13px;
+    margin-bottom: 30px;
+    text-align: justify;
+}
+
+/* reset password */
+.resetBtn {
+    background-color: #f4a157;
+    color: #fff;
+    margin: 0 auto;
+    padding: 15px 50px;
+}

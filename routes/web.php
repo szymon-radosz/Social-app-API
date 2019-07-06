@@ -27,6 +27,8 @@ Route::get('/verifyemail/{token}', 'UserController@verify');
 
 Route::get('/reset-password/{token}', 'ResetPasswordController@showPasswordResetForm');
 
+Route::get('/regulamin', 'WebsiteController@terms');
+
 
 //Auth::routes();
 /*
