@@ -16,6 +16,7 @@ use App\Jobs\SendVerificationEmail;
 use DB;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller 
 {
@@ -177,17 +178,16 @@ class UserController extends Controller
             
             //I use static path for shared hosting
             //local:
-            //\Image::make($path)->save(public_path('userPhotos/' . $filename));
+            \Image::make($path)->save(public_path('userPhotos/' . $filename));
             //hosting:
-            \Image::make($path)->save('https://e-mamy.pl/userPhotos/' . $filename);
+            //\Image::make($path)->save('https://e-mamy.pl/userPhotos/' . $filename);
+
 
             $updateUserPhoto = DB::table('users')
                     ->where('email', $userEmail)
                     ->update(['photo_path' => $filename]);
-
             $user = DB::table('users')
                     ->where('email', $userEmail)->get();
-
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
