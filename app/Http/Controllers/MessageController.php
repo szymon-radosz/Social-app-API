@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Message;
+use App\Http\Traits\ErrorLogTrait;
 
 class MessageController extends Controller
 {
+    use ErrorLogTrait;
+
     public function store(Request $request){
         $newMessage = new Message();
 
@@ -21,6 +24,8 @@ class MessageController extends Controller
     
             return response()->json(['status' => 'OK', 'result' => $newMessage]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->sender_id, '/saveMessage', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy wysyłaniu wiadomości.']);
         }
         

@@ -11,9 +11,12 @@ use App\User;
 use App\Mail\ResetPassword;
 use Validator;
 use Mail;
+use App\Http\Traits\ErrorLogTrait;
 
 class ResetPasswordController extends Controller
 {
+    use ErrorLogTrait;
+
     public function sendPasswordResetToken(Request $request)
     {
         //var_dump($request->email);
@@ -48,6 +51,10 @@ class ResetPasswordController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => true]);
         }catch(\Exception $e){
+            $user = User::where('email', $request->email)->first();
+
+            $this->storeErrorLog($user->id, '/sendPasswordResetToken', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
         }
     }

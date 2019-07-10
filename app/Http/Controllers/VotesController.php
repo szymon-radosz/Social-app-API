@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vote;
+use App\Http\Traits\ErrorLogTrait;
 
 class VotesController extends Controller
 {
+    use ErrorLogTrait;
+
     public function store(Request $request){
         $vote = new Vote();
 
@@ -27,6 +30,8 @@ class VotesController extends Controller
                 return response()->json(['status' => 'OK', 'result' => $vote]); 
             }
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/saveVote', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Problem z dodaniem głosu.']); 
         }
     }

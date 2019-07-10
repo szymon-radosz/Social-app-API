@@ -7,9 +7,12 @@ use App\Hobby;
 use App\User;
 use Illuminate\Support\Facades\Auth; 
 use DB;
+use App\Http\Traits\ErrorLogTrait;
 
 class HobbyController extends Controller
 {
+    use ErrorLogTrait;
+
     public function index(){
         try{
             $hobbies = Hobby::all();
@@ -32,6 +35,10 @@ class HobbyController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
+            $user = DB::table('users')->where('email', $request->userEmail)->get();
+
+            $this->storeErrorLog($user[0]->id, '/saveHobby', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisywaniu hobby.']);
         }
     }
@@ -46,7 +53,11 @@ class HobbyController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $deletedHobbyUser]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/cleanUserHobbies', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd usunięciu relacji hobby-user']);
         }
     }
+
+   
 }

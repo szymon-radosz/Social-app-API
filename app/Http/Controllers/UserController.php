@@ -17,9 +17,12 @@ use DB;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Traits\ErrorLogTrait;
 
 class UserController extends Controller 
 {
+    use ErrorLogTrait;
+
     public $successStatus = 200;
     /** 
      * login api 
@@ -39,6 +42,8 @@ class UserController extends Controller
             }
         } 
         else{ 
+            $this->storeErrorLog($user->id, '/login', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
         } 
     }
@@ -120,6 +125,8 @@ class UserController extends Controller
 
             return response()->json(['user' => $user, 'status' => 'OK']);
         }catch(\Exception $e){
+            $this->storeErrorLog($user->id, '/register', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu uzytkownika.']);
         }
     }
@@ -165,6 +172,8 @@ class UserController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $userData]); 
         }catch(\Exception $e){
+            $this->storeErrorLog(Auth::user()->id, '/userDetails', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy autentykacji uytkownika.']); 
         }
     } 
@@ -190,6 +199,11 @@ class UserController extends Controller
                     ->where('email', $userEmail)->get();
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
+            $user = DB::table('users')
+                    ->where('email', $userEmail)->get();
+
+            $this->storeErrorLog($user->id, '/updatePhoto', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
         }
     }
@@ -221,6 +235,10 @@ class UserController extends Controller
  
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
+            $user = User::where('email', $userEmail);
+
+            $this->storeErrorLog($user->id, '/updateUserInfo', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
         }
     }
@@ -245,6 +263,10 @@ class UserController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $user]);  
         }catch(\Exception $e){
+            $user = User::where('email', $userEmail);
+
+            $this->storeErrorLog($user->id, '/setUserFilledInfo', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem danych potwierdzonego użytkownika.']); 
         }
     }
@@ -274,6 +296,8 @@ class UserController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $userList]);  
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/loadUsersNearCoords', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników z okolicy.']); 
         }
     }
@@ -443,6 +467,8 @@ class UserController extends Controller
                                                                                                     ]
                                     ]);  
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/loadUsersFilter', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według dystansu.']);  
         }
     }
@@ -569,4 +595,5 @@ class UserController extends Controller
             ]
         ); 
     }
+
 }

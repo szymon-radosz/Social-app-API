@@ -8,9 +8,12 @@ use App\User;
 use App\Message;
 use DB;
 use Illuminate\Support\Collection;
+use App\Http\Traits\ErrorLogTrait;
 
 class ConversationsController extends Controller
 {
+    use ErrorLogTrait;
+
     public function checkIfUsersAreInNormalConversation($senderId, $receiverId){
         $senderConversations = DB::table('conversation_user')->where('user_id', $senderId)->get();
 
@@ -74,11 +77,15 @@ class ConversationsController extends Controller
             
                     $newMessage->save();
                 }catch(\Exception $e){
+                    $this->storeErrorLog($senderId, '/saveConversation1', $e->getMessage());
+
                     return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu konwersacji.']);
                 }
             }
             return response()->json(['status' => 'OK', 'result' => $conversation]);
         }
+        $this->storeErrorLog($request->senderId, '/saveConversation2', $e->getMessage());
+
         return response()->json(['status' => 'ERR', 'result' => 'Użytkownicy są już ze sobą w konwersacji.']);
     }
 
@@ -169,6 +176,8 @@ class ConversationsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $conversation]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/showConversationDetails', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu konwersacji użytkownika.']);
         }
     }
@@ -197,6 +206,8 @@ class ConversationsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['user' => $user, 'checkIfUsersAreInNormalConversation' => $checkIfUsersAreInNormalConversation]]);  
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/loadUserById', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
         }
     }

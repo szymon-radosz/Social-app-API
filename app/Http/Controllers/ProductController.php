@@ -9,9 +9,12 @@ use App\Category;
 use App\ProductPhoto;
 use App\ProductCategoryPivot;
 use App\ProductCategory;
+use App\Http\Traits\ErrorLogTrait;
 
 class ProductController extends Controller
 {
+    use ErrorLogTrait;
+
     public function store(Request $request){
         $newProduct = new Product();
             
@@ -57,6 +60,8 @@ class ProductController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['product' => $newProduct, 'productPhoto' => $newProductPhoto]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/saveProduct', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem produktu.']); 
         }
     }
@@ -94,6 +99,8 @@ class ProductController extends Controller
             }
             return response()->json(['status' => 'OK', 'result' => $productList]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/loadProductBasedOnCoords', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem produktów w okolicy.']);
         }
     }
@@ -119,6 +126,8 @@ class ProductController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $productList]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/loadProductBasedOnId', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem produktów.']);
         }
     }
@@ -132,6 +141,8 @@ class ProductController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $closedProduct]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/closeProduct', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd z zamknięciem produktu.']);
         }
     }
@@ -142,6 +153,8 @@ class ProductController extends Controller
         try{
             return response()->json(['status' => 'OK', 'result' => $categories]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/getCategories', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem kategorii.']);
         } 
     }
@@ -168,6 +181,8 @@ class ProductController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $productList]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/loadUserProductList', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Problem ze zwróceniem listy aukcji uzytkownika']);
         } 
     }
@@ -243,6 +258,8 @@ class ProductController extends Controller
                                                                                                     ]
                                     ]);  
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/loadProductsFilter', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
         }
     }

@@ -8,9 +8,11 @@ use App\User;
 use App\Message;
 use DB;
 use Illuminate\Support\Collection;
+use App\Http\Traits\ErrorLogTrait;
 
 class ConversationsProductController extends Controller
 {
+    use ErrorLogTrait;
 
     public function checkIfUsersAreInProductConversation($senderId, $receiverId, $productId){
         $senderConversations = DB::table('conversation_user')->where('user_id', $senderId)->get();
@@ -95,6 +97,8 @@ class ConversationsProductController extends Controller
         
             return response()->json(['status' => 'OK', 'result' => $conversation]);
         }
+        $this->storeErrorLog($request->senderId, '/saveConversationProduct', $e->getMessage());
+
         return response()->json(['status' => 'ERR', 'result' => 'Użytkownicy są już ze sobą w konwersacji.']);
     }
 }

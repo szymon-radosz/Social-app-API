@@ -7,9 +7,12 @@ use App\Kid;
 use App\User;
 use Illuminate\Support\Facades\Auth; 
 use DB;
+use App\Http\Traits\ErrorLogTrait;
 
 class KidController extends Controller
 {
+    use ErrorLogTrait;
+
     public function store(Request $request){
         $name = $request->name;
         $dateOfBirth = $request->dateOfBirth;
@@ -31,6 +34,10 @@ class KidController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $userData]);
         }catch(\Exception $e){
+            $user = DB::table('users')->where('email', $request->userEmail)->get(['id']);
+
+            $this->storeErrorLog($user[0]->id, '/saveKid', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem dzieci']);
         }
     }
@@ -45,6 +52,8 @@ class KidController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $deletedUserKids]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/cleanUserKids', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd usunięciu relacji dziecko-user']);
         }
     }

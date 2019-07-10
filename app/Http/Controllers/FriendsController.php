@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Friend;
+use App\Http\Traits\ErrorLogTrait;
 
 class FriendsController extends Controller
 {
+    use ErrorLogTrait;
+
     public function friendsList(Request $request){
         $userId = $request->userId;
 
@@ -19,6 +22,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['friendsList' => $friendsList]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/friendsList', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
@@ -35,6 +40,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['friendsList' => $friendsList]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/pendingFriendsList', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
@@ -49,6 +56,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['countFriends' => $countFriends]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/countFriends', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu ilości znajomych.']);
         }
     }
@@ -86,6 +95,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['friendship' => $confirmed]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->senderId, '/checkFriend', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy potwierdzeniu zaproszenia do znajomych.']);
         }
     }
@@ -108,6 +119,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $friendship]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->senderId, '/inviteFriend', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zaproszeniu do znajomych.']);
         }
     }
@@ -135,6 +148,8 @@ class FriendsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => ['confirmed' => $confirmed]]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->senderId, '/confirmFriend', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy potwierdzeniu zaproszenia do znajomych.']);
         }
     }

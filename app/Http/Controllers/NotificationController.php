@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Notification;
+use App\Http\Traits\ErrorLogTrait;
 
 class NotificationController extends Controller
 {
+    use ErrorLogTrait;
+
     public function loadNotificationByUserId(Request $request){
         $userId = $request->userId;
 
@@ -17,8 +20,9 @@ class NotificationController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $notificationList]);
         }catch(\Exception $e){
-            //return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy postów.']);
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            $this->storeErrorLog($request->userId, '/loadNotificationByUserId', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu powiadomień.']);
         }
     }
 
@@ -39,6 +43,8 @@ class NotificationController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $newNotification]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/addNotification', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie powiadomienia.']);
         }
     }
@@ -52,8 +58,9 @@ class NotificationController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $notificationList]);
         }catch(\Exception $e){
-            //return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy postów.']);
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            $this->storeErrorLog($request->userId, '/clearNotificationByUserId', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy czyszczeniu powiadomień']);
         }
     }
 }

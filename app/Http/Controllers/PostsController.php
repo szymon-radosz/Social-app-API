@@ -8,9 +8,12 @@ use App\PostComment;
 use App\PostVote;
 use App\PostCommentVote;
 use App\PostCategory;
+use App\Http\Traits\ErrorLogTrait;
 
 class PostsController extends Controller
 {
+    use ErrorLogTrait;
+
     public function index(){
         try{
             $posts = Post::with('votes')
@@ -21,6 +24,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $posts]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/posts', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróceniu listy postów.']);
         }
     }
@@ -43,6 +48,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $post]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/savePost', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie posta.']);
         }
     }
@@ -63,6 +70,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $postComment]);
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/savePostComment', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie posta.']);
         }
     }
@@ -88,6 +97,8 @@ class PostsController extends Controller
                 return response()->json(['status' => 'ERR', 'result' => 'Oddano juz głos z tego konta.']);
             }
         }catch(\Exception $e){
+            $this->storeErrorLog($request->userId, '/savePostVote', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zapisie głosu na post.']);
         }
     }
@@ -110,6 +121,8 @@ class PostsController extends Controller
 
                 return response()->json(['status' => 'OK', 'result' => $postCommentVote]);
             }else{
+                $this->storeErrorLog($request->userId, '/saveCommentVote', $e->getMessage());
+
                 return response()->json(['status' => 'ERR', 'result' => 'Oddano juz głos z tego konta.']);
             }
         }catch(\Exception $e){
@@ -131,6 +144,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $post]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/getPostById', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
@@ -148,6 +163,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $posts]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/getPostByCategoryId', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy zwróćeniu postów po id kategorii.']);
         }
     }
@@ -163,6 +180,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $postComments]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/getPostCommentsByPostId', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
@@ -173,6 +192,8 @@ class PostsController extends Controller
 
             return response()->json(['status' => 'OK', 'result' => $categories]);
         }catch(\Exception $e){
+            $this->storeErrorLog(0, '/getCategories', $e->getMessage());
+
             return response()->json(['status' => 'ERR', 'result' => 'Bład przy pobraniu kategorii']);
         }
     }
