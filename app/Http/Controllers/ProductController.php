@@ -49,12 +49,11 @@ class ProductController extends Controller
                 $newProductPhoto->path = $filename;
                 $newProductPhoto->save();
 
-                //localhost
-                \Image::make($singlePhoto)->save(public_path('productPhotos/' . $filename));
+                $img = \Image::make($singlePhoto);
+                $img->stream();
+    
+                Storage::disk('productPhotos')->put($filename, $img, 'public');
 
-                //e-mamy hosting
-                //\Image::make($singlePhoto)->save('https://e-mamy.pl/productPhotos/' . $filename);
-                
                 $photoIndex = $photoIndex + 1;
             }
 

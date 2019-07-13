@@ -167,8 +167,11 @@ class UserController extends Controller
                 $unreadedNotifications = true;
             }
 
+            $storagePath  = Storage::disk('userPhotos')->getDriver()->getAdapter()->getPathPrefix();
+
             $userData->setAttribute('unreadedNotifications', $unreadedNotifications);
             $userData->setAttribute('unreadedNotificationsAmount', $unreadedNotificationsAmount);
+            $userData->setAttribute('storagePath', $storagePath);
 
             return response()->json(['status' => 'OK', 'result' => $userData]); 
         }catch(\Exception $e){
@@ -184,13 +187,11 @@ class UserController extends Controller
             $path = $request->file;
             $userEmail = $request->userEmail;
             $filename = time() . '-' . $request->fileName . ".jpg";
-            
-            //I use static path for shared hosting
-            //local:
-            \Image::make($path)->save(public_path('userPhotos/' . $filename));
-            //hosting:
-            //\Image::make($path)->save('https://e-mamy.pl/userPhotos/' . $filename);
 
+            $img = \Image::make($path);
+            $img->stream();
+
+            Storage::disk('userPhotos')->put($filename, $img, 'public');
 
             $updateUserPhoto = DB::table('users')
                     ->where('email', $userEmail)
