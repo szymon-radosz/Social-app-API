@@ -184,18 +184,23 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         try{
-            $path = $request->file;
+            //$path = $request->file;
             $userEmail = $request->userEmail;
-            $filename = time() . '-' . $request->fileName . ".jpg";
+            $filename = 'userPhotos/' . time() . '-' . $request->fileName . ".jpg";
 
-            $img = \Image::make($path);
-            $img->stream();
+            //$img = \Image::make($path);
+            //$img->stream();
 
-            Storage::disk('userPhotos')->put($filename, $img, 'public');
+            //Storage::disk('userPhotos')->put($filename, $img, 'public');
+            //$s3path = Storage::disk('s3')->put( . $filename, $request->file);
+            Storage::disk('s3')->put($filename, file_get_contents($request->file));
+            Storage::disk('s3')->setVisibility($filename, 'public');
+
+            $url = Storage::disk('s3')->url($filename);
 
             $updateUserPhoto = DB::table('users')
                     ->where('email', $userEmail)
-                    ->update(['photo_path' => $filename]);
+                    ->update(['photo_path' => $url]);
             $user = DB::table('users')
                     ->where('email', $userEmail)->get();
             return response()->json(['status' => 'OK', 'result' => $user]); 

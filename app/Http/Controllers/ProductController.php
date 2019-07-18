@@ -10,6 +10,7 @@ use App\ProductPhoto;
 use App\ProductCategoryPivot;
 use App\ProductCategory;
 use App\Http\Traits\ErrorLogTrait;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -28,40 +29,56 @@ class ProductController extends Controller
         $newProduct->status = $request->status;
         $newProduct->state = $request->state;
 
-        try{
-            $newProduct->save();
+        $checkIfProductExists = Product::where([
+                                                    ['name', $request->name], 
+                                                    ['description', $request->description]
+                                                ])
+                                                ->first();
 
-            $newProductCategory = new ProductCategoryPivot();
-            $newProductCategory->category_id = (int)$request->categoryId;
-            $newProductCategory->product_id = $newProduct->id;
-            $newProductCategory->save();
-
-            $parsedPhotosArray = eval("return " . $request->photos . ";");
-            
-            //$request->photos should be e.g. ['path1','path2','path3']
-            $photoIndex = 1;
-            foreach($parsedPhotosArray as $singlePhoto){
-
-                $filename = time() . '-product-' . $newProduct->id . '-photo-' . $photoIndex . ".jpg";
+        if($checkIfProductExists === null){
+            try{
+                $newProduct->save();
     
-                $newProductPhoto = new ProductPhoto();
-                $newProductPhoto->product_id = $newProduct->id;
-                $newProductPhoto->path = $filename;
-                $newProductPhoto->save();
-
-                $img = \Image::make($singlePhoto);
-                $img->stream();
+                $newProductCategory = new ProductCategoryPivot();
+                $newProductCategory->category_id = (int)$request->categoryId;
+                $newProductCategory->product_id = $newProduct->id;
+                $newProductCategory->save();
     
-                Storage::disk('productPhotos')->put($filename, $img, 'public');
-
-                $photoIndex = $photoIndex + 1;
+                $parsedPhotosArray = eval("return " . $request->photos . ";");
+                
+                //$request->photos should be e.g. ['path1','path2','path3']
+                $photoIndex = 1;
+                foreach($parsedPhotosArray as $singlePhoto){
+    
+                    $filename = 'productPhotos/' . time() . '-product-' . $newProduct->id . '-photo-' . $photoIndex . ".jpg";
+        
+                    Storage::disk('s3')->put($filename, file_get_contents($singlePhoto));
+                    Storage::disk('s3')->setVisibility($filename, 'public');
+    
+                    $url = Storage::disk('s3')->url($filename);
+    
+                    $newProductPhoto = new ProductPhoto();
+                    $newProductPhoto->product_id = $newProduct->id;
+                    //$newProductPhoto->path = $filename;
+                    //$newProductPhoto->save();
+    
+                    //$img = \Image::make($singlePhoto);
+                    //$img->stream();
+        
+                    //Storage::disk('productPhotos')->put($filename, $img, 'public');
+    
+                    $newProductPhoto->path = $url;
+                    $newProductPhoto->save();
+    
+                    $photoIndex = $photoIndex + 1;
+                }
+    
+                return response()->json(['status' => 'OK', 'result' => ['product' => $newProduct, 'productPhoto' => $newProductPhoto]]);
+            }catch(\Exception $e){
+                $this->storeErrorLog($request->userId, '/saveProduct', $e->getMessage());
+    
+                return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
             }
-
-            return response()->json(['status' => 'OK', 'result' => ['product' => $newProduct, 'productPhoto' => $newProductPhoto]]);
-        }catch(\Exception $e){
-            $this->storeErrorLog($request->userId, '/saveProduct', $e->getMessage());
-
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem produktu.']); 
         }
     }
 
