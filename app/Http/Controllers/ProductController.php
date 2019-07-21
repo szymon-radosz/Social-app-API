@@ -45,27 +45,24 @@ class ProductController extends Controller
                 $newProductCategory->save();
     
                 $parsedPhotosArray = eval("return " . $request->photos . ";");
-                
-                //$request->photos should be e.g. ['path1','path2','path3']
+            
                 $photoIndex = 1;
+                
                 foreach($parsedPhotosArray as $singlePhoto){
     
                     $filename = 'productPhotos/' . time() . '-product-' . $newProduct->id . '-photo-' . $photoIndex . ".jpg";
         
-                    Storage::disk('s3')->put($filename, file_get_contents($singlePhoto));
+                    $img = $singlePhoto;
+                    $img = str_replace('data:image/png;base64,', '', $img);
+                    $img = str_replace(' ', '+', $img);
+                
+                    Storage::disk('s3')->put($filename, base64_decode($img));
                     Storage::disk('s3')->setVisibility($filename, 'public');
-    
+
                     $url = Storage::disk('s3')->url($filename);
     
                     $newProductPhoto = new ProductPhoto();
                     $newProductPhoto->product_id = $newProduct->id;
-                    //$newProductPhoto->path = $filename;
-                    //$newProductPhoto->save();
-    
-                    //$img = \Image::make($singlePhoto);
-                    //$img->stream();
-        
-                    //Storage::disk('productPhotos')->put($filename, $img, 'public');
     
                     $newProductPhoto->path = $url;
                     $newProductPhoto->save();
