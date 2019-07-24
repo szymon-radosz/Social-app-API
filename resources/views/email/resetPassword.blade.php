@@ -192,21 +192,21 @@
       </div>
     </div>
     <div class="social" style="margin-bottom: 20px;">
-      <a
-        href="https://www.instagram.com/socialps/"
-        style="margin: 0 10px;text-decoration:none;"
-      >
-        <img
-          src="https://s3.amazonaws.com/socialps-assets/join/ig.png?a=2"
-          style="max-height: 25px;"
-        />
-      </a>
-      <a
-        href="https://www.facebook.com/socialprintstudio"
+	<a
+        href="https://www.facebook.com/E-mamy-678607299320582/"
         style="margin: 0 10px;text-decoration:none;"
       >
         <img
           src="https://s3.amazonaws.com/socialps-assets/join/fb.png?a=2"
+          style="max-height: 25px;"
+        />
+      </a>
+      <a
+        href="https://www.instagram.com/emamy_pl/"
+        style="margin: 0 10px;text-decoration:none;"
+      >
+        <img
+          src="https://s3.amazonaws.com/socialps-assets/join/ig.png?a=2"
           style="max-height: 25px;"
         />
       </a>

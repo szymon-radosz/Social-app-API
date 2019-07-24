@@ -67,21 +67,21 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12 hidden-sm col-md-4">
-                        <figure class="mobile-image wow fadeInUp" data-wow-delay="0.2s">
+                        <figure class="mobile-image" >
                             <img src="{{ asset('/images/header-mobile.png') }}" alt="">
                         </figure>
                     </div>
                     <div class="col-xs-12 col-md-8">
                         <div class="space-80 hidden-xs"></div>
-                        <h1 class="wow fadeInUp" data-wow-delay="0.4s">Bądź częścią lokalnej społeczności mam</h1>
+                        <h1>Bądź częścią lokalnej społeczności mam</h1>
                         <div class="space-20"></div>
-                        <div class="desc wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="desc">
                             <p>Znajdź nowe znajome w swojej okolicy o wspólnych zainteresowaniach.</p>
                         </div>
                         <div class="space-20"></div>
-                        <p class="headerIconText wow fadeInUp ">Pobierz E-mamy</p>
-                        <a href="#" title="Pobierz z Google Play" class="wow fadeInUp googlePlayHeader headerIcon" data-wow-delay="0.8s"><img src="{{ asset('/images/googlePlay.png') }}" alt=""></a>
-                        <a href="#" title="Pobierz z App Store" class="wow fadeInUp appStoreHeader headerIcon" data-wow-delay="0.8s"><img src="{{ asset('/images/appStore.png') }}" alt=""></a>
+                        <p class="headerIconText">Pobierz E-mamy</p>
+                        <a href="#" title="Pobierz z Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt=""></a>
+                        <a href="#" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt=""></a>
                     </div>
                 </div>
             </div>
@@ -577,10 +577,12 @@
                         <div class="col-xs-12 col-md-7">
                             <div class="footer-menu">
                                 <ul>
-                                    <a href="https://www.facebook.com/emamypl/" target="_blank" title="E-mamy - Facebook">
+                                    <a href="https://www.facebook.com/E-mamy-678607299320582/" target="_blank" title="E-mamy - Facebook">
                                         <img src="{{ asset('/images/fb.png') }}" alt="Facebook">
                                     </a>
-                                    <!--<img src="{{ asset('/images/ig.png') }}" alt="Instagram">-->
+                                    <a href="https://www.instagram.com/emamy_pl/" target="_blank" title="E-mamy - Facebook">
+                                        <img src="{{ asset('/images/ig.png') }}" alt="Instagram">
+                                    </a>
                                 </ul>
                             </div>
                         </div>

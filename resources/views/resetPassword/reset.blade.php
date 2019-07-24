@@ -181,10 +181,12 @@
                         <div class="col-xs-12 col-md-7">
                             <div class="footer-menu">
                                 <ul>
-                                    <a href="https://www.facebook.com/emamypl/" target="_blank" title="E-mamy - Facebook">
+                                    <a href="https://www.facebook.com/E-mamy-678607299320582/" target="_blank" title="E-mamy - Facebook">
                                         <img src="{{ asset('/images/fb.png') }}" alt="Facebook">
                                     </a>
-                                    <!--<img src="{{ asset('/images/ig.png') }}" alt="Instagram">-->
+                                    <a href="https://www.instagram.com/emamy_pl/" target="_blank" title="E-mamy - Facebook">
+                                        <img src="{{ asset('/images/ig.png') }}" alt="Instagram">
+                                    </a>
                                 </ul>
                             </div>
                         </div>
