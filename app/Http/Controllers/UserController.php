@@ -113,6 +113,7 @@ class UserController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
+                'platform' => $data['platform'],
                 'age' => 0,
                 'lattitude' => 0,
                 'longitude' => 0,
