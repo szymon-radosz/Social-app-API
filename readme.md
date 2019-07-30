@@ -113,4 +113,4 @@ Wywyoływanie poleceń php na mydevil: /usr/local/bin/php71
 composer install
 /usr/local/bin/php71 artisan key:generate
 /usr/local/bin/php71 artisan queue:work
-/usr/local/bin/php71 passport:install
+/usr/local/bin/php71 artisan passport:install

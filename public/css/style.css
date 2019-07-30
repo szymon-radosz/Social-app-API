@@ -1564,7 +1564,7 @@ ul.nav.navbar-nav.mainmenu > .active {
     opacity: 1 !important;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 992px) {
     #home_page {
         margin: 0 !important;
         min-height: 100vh;
@@ -1577,6 +1577,9 @@ ul.nav.navbar-nav.mainmenu > .active {
     }
     .footer-bottom .col-md-5 {
         text-align: left !important;
+    }
+    .mobile-image img {
+        max-height: 80vh;
     }
 }
 
