@@ -80,8 +80,8 @@
                         </div>
                         <div class="space-20"></div>
                         <p class="headerIconText">Pobierz E-mamy</p>
-                        <a href="#" title="Pobierz z Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt=""></a>
-                        <a href="#" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt=""></a>
+                        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.emamy" title="Pobierz z Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt="Pobierz z Google Play"></a>
+                        <!--<a href="#" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt=""></a>-->
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                             <div class="box-icon">
                                 <img src="{{ asset('/images/auction.png') }}" alt="Logo">
                             </div>
-                            <h4>Aukcje</h4>
+                            <h4>Targ</h4>
                             <p>Sprzedaj i kupuj przedmioty<br>od innych użytkowniczek</p>
                         </div>
                         <div class="space-60"></div>
