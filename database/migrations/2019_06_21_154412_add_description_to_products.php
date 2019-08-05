@@ -14,7 +14,7 @@ class AddDescriptionToProducts extends Migration
     public function up()
     {
         Schema::table('products', function($table) {
-            $table->string('description')->default('');
+            $table->text('description');
         });
     }
 
