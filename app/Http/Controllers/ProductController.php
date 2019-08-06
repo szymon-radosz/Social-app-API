@@ -81,7 +81,7 @@ class ProductController extends Controller
         }
     }
 
-    public function loadProductBasedOnCoords(Request $request){
+    public function loadActiveProductBasedOnCoords(Request $request){
         $lat = $request->lat;
         $lng = $request->lng;
 
@@ -96,7 +96,8 @@ class ProductController extends Controller
                                             ['lat', '>', $minLat], 
                                             ['lat', '<', $maxLat], 
                                             ['lng', '>', $minLng], 
-                                            ['lng', '<', $maxLng]
+                                            ['lng', '<', $maxLng],
+                                            ['status', '=', 0]
                                         ])
                                         ->with('productPhotos')
                                         ->with('categories')
@@ -207,6 +208,7 @@ class ProductController extends Controller
         $childGender = $request->childGender ? $request->childGender : "";
         $price = $request->price ? $request->price : "";
         $status = $request->status ? $request->status : "";
+        $active = $request->active ? $request->active : true;
         $currentUserLat = $request->currentUserLat;
         $currentUserLng = $request->currentUserLng;
 
@@ -230,9 +232,11 @@ class ProductController extends Controller
                         ['lat', '>', $calculateDistanceDifference->getData()->latDifferenceBottom], 
                         ['lat', '<', $calculateDistanceDifference->getData()->latDifferenceTop], 
                         ['lng', '>', $calculateDistanceDifference->getData()->lngDifferenceBottom], 
-                        ['lng', '<', $calculateDistanceDifference->getData()->lngDifferenceTop]
+                        ['lng', '<', $calculateDistanceDifference->getData()->lngDifferenceTop],
+                        ['status', '=', 0]
                     ])
-                    ->when(request('price') !== "", function ($q) {
+                    ->when(request('price') !== null, function ($q) {
+                        //var_dump(request('price'));
                         if(request('price') === "0-20zł"){
                             return $q->where([['price', '>', 0], ['price', '<=', 20]]);
                         }else if(request('price') === "21zł-50zł"){
@@ -245,11 +249,12 @@ class ProductController extends Controller
                             return $q->where('price', '>', 200);
                         }
                     })
-                    ->when(request('status') !== "", function ($q) {
+                    ->when(request('status') !== null, function ($q) {
+                        //var_dump(request('status'));
                         if(request('status') === "Nowe"){
-                            return $q->where('status', 0);
+                            return $q->where('state', 0);
                         }else if(request('status') === "Używane"){
-                            return $q->where('status', 1);
+                            return $q->where('state', 1);
                         }
                     })
                     ->with('productPhotos')

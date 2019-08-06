@@ -33,7 +33,7 @@ Route::post('checkIfUsersBelongsToProductConversation', 'ConversationsProductCon
 Route::post('saveVote', 'VotesController@store');
 
 Route::post('saveProduct', 'ProductController@store');
-Route::post('loadProductBasedOnCoords', 'ProductController@loadProductBasedOnCoords');
+Route::post('loadActiveProductBasedOnCoords', 'ProductController@loadActiveProductBasedOnCoords');
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 Route::post('closeProduct', 'ProductController@closeProduct');
 Route::get('getCategories', 'ProductController@getCategories');
