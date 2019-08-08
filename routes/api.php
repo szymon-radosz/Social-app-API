@@ -36,6 +36,7 @@ Route::post('saveProduct', 'ProductController@store');
 Route::post('loadActiveProductBasedOnCoords', 'ProductController@loadActiveProductBasedOnCoords');
 Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
 Route::post('closeProduct', 'ProductController@closeProduct');
+Route::post('reactivateProduct', 'ProductController@reactivateProduct');
 Route::get('getCategories', 'ProductController@getCategories');
 Route::post('loadUserProductList', 'ProductController@loadUserProductList');
 Route::post('loadProductsFilter', 'ProductController@loadProductsFilter');

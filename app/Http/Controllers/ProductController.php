@@ -163,6 +163,21 @@ class ProductController extends Controller
         }
     }
 
+    public function reactivateProduct(Request $request){
+        $productId = $request->productId;
+
+        try{
+            $reactivatedProduct = Product::where('id', $productId)
+                                        ->update(['status' => 0]);
+
+            return response()->json(['status' => 'OK', 'result' => $reactivatedProduct]);
+        }catch(\Exception $e){
+            $this->storeErrorLog(0, '/reactivateProduct', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z wznowieniem produktu.']);
+        }
+    }
+
     public function getCategories(){
         $categories = DB::table('product_categories')->get(['id', 'name']);
 

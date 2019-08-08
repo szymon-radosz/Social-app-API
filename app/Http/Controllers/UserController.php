@@ -409,7 +409,6 @@ class UserController extends Controller
 
         //var_dump($calculateDistanceDifference, $calculateChildAgeDifference);
 
-
         if($childGender === "dziewczynka"){
             $childGenderQueryValue = "female";
             $childGenderDefault = false;
