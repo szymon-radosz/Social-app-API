@@ -10,6 +10,7 @@ Route::post('setUserFilledInfo', 'UserController@setUserFilledInfo');
 Route::post('loadUsersNearCoords', 'UserController@loadUsersNearCoords');
 Route::post('loadUserByName', 'UserController@loadUserByName');
 Route::post('loadUserByEmail', 'UserController@loadUserByEmail');
+Route::post('loadUserDataById', 'UserController@loadUserDataById');
 Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 Route::post('clearUserNotificationsStatus', 'UserController@clearUserNotificationsStatus');

@@ -389,6 +389,19 @@ class UserController extends Controller
         }
     }
 
+    public function loadUserDataById(Request $request){
+        $id = $request->id;
+
+        try{
+            $user = User::where('id', $id)
+                            ->get(["name", "email", "photo_path"]);
+
+            return response()->json(['status' => 'OK', 'result' => $user]);  
+        }catch(\Exception $e){
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkownika.']);  
+        }
+    }
+
     public function loadUsersFilter(Request $request){
         $distance = $request->distance ? $request->distance : "";
         $childAge = $request->childAge ? $request->childAge : "";
