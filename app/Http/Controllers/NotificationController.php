@@ -30,6 +30,8 @@ class NotificationController extends Controller
         $type = $request->type;
         $message = $request->message;
         $userId = $request->userId;
+        $senderId = $request->senderId;
+        $openDetailsId = $request->openDetailsId;
 
         $newNotification = new Notification();
 
@@ -37,6 +39,8 @@ class NotificationController extends Controller
             $newNotification->type = $type;
             $newNotification->message = $message;
             $newNotification->user_id = $userId;
+            $newNotification->sender_id = $senderId;
+            $newNotification->open_details_id = $openDetailsId;
             $newNotification->status = 0;
     
             $newNotification->save();

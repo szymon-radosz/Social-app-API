@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPlatformToUsers extends Migration
+class OpenDetailsIdToNotifications extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddPlatformToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function($table) {
-            $table->string('platform')->default('android');
+        Schema::table('notifications', function($table) {
+            $table->integer('open_details_id')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddPlatformToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('platform');
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->dropColumn('open_details_id');
         });
     }
 }
