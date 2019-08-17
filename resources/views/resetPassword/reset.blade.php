@@ -55,13 +55,13 @@
                                 {{ csrf_field() }}
 
                                 <div class="form-group">
-                                    <div>{!! Form::label('password', 'Nowe hasło') !!}</div>
-                                    {{ Form::password('password', array('id' => 'password', "class" => "form-control", "autocomplete" => "off)) }}
+                                    {{ Form::label('password', 'Nowe hasło') }}
+                                    {{ Form::password('password', null, ['class' => 'form-control']) }}
                                 </div>
 
                                 <div class="form-group">
-                                    <div>{!! Form::label('passwordConfirmation', 'Potwierdzenie hasła') !!}</div>
-                                    {{ Form::password('passwordConfirmation', array('id' => 'passwordConfirmation', "class" => "form-control", "autocomplete" => "off)) }}}
+                                    {{ Form::label('passwordConfirmation', 'Potwierdzenie hasła') }}
+                                    {{ Form::password('passwordConfirmation', null, ['class' => 'form-control']) }}
                                 </div>
 
                                 {!! Form::submit('Zmień hasło', ['class' => 'btn resetBtn']) !!}
