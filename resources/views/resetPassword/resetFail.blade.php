@@ -49,7 +49,7 @@
                             <div class="space-20"></div>
                             <h5 class="title">Resetuj hasło</h5>
                             <div class="space-20"></div>
-                            <p>Resetowanie hasła zakończone niepowodzeniem. Podziel się z nami swoimi spostrzeżeniami wysyłając wiadomość pod adres <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość">kontakt@e-mamy.pl</a></p>
+                            <p>Resetowanie hasła zakończone niepowodzeniem. Wróć na poprzednią stronę i upewnij się, że wprowadziłaś poprawne hasło i potwierdzenie. Podziel się z nami swoimi spostrzeżeniami wysyłając wiadomość pod adres <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość">kontakt@e-mamy.pl</a></p>
                         </div>
                     </div>
                 </div>

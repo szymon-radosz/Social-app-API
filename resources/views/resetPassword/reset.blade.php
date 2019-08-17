@@ -56,12 +56,12 @@
 
                                 <div class="form-group">
                                     {!! Form::label('password', 'Nowe hasło') !!}
-                                    {!! Form::text('password', null, ['class' => 'form-control']) !!}
+                                    {!! Form::password('password', null, ['class' => 'form-control']) !!}
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('passwordConfirmation', 'Potwierdzenie hasła') !!}
-                                    {!! Form::text('passwordConfirmation', null, ['class' => 'form-control']) !!}
+                                    {!! Form::password('passwordConfirmation', null, ['class' => 'form-control']) !!}
                                 </div>
 
                                 {!! Form::submit('Zmień hasło', ['class' => 'btn resetBtn']) !!}
