@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\UserFeedback; 
+use App\User;
 use App\Http\Traits\ErrorLogTrait;
+use Mail;
+use App\Mail\Feedback;
 
 class UserFeedbackController extends Controller
 {
@@ -23,6 +26,11 @@ class UserFeedbackController extends Controller
             $newUserFeedback->user_id = $user_id;
     
             $newUserFeedback->save();
+
+            $userEmail = User::where('id', $user_id)->first();
+
+            $SendVerificationEmail = new Feedback($userEmail->email, $topic, $message);
+            Mail::to("kontakt@e-mamy.pl")->send($SendVerificationEmail);
 
             return response()->json(['status' => 'OK', 'result' => $newUserFeedback]);
         }catch(\Exception $e){
