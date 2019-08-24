@@ -9,6 +9,7 @@ use App\Message;
 use DB;
 use Illuminate\Support\Collection;
 use App\Http\Traits\ErrorLogTrait;
+use App\Product;
 
 class ConversationsController extends Controller
 {
@@ -172,9 +173,18 @@ class ConversationsController extends Controller
         $conversation_id = $request->conversation_id;
 
         try{
-            $conversation = Conversation::where('id', $conversation_id)->with('messages')->get();
+            $conversation = Conversation::where('id', $conversation_id)
+                                                            ->with('messages')
+                                                            ->first();
 
-            return response()->json(['status' => 'OK', 'result' => $conversation]);
+            if($conversation->product_id){
+                $product = Product::where('id', $conversation->product_id)->first();
+
+                return response()->json(['status' => 'OK', 'result' => ['conversation' => $conversation, 'productOwnerId' => $product->user_id]]);
+            }else{
+               return response()->json(['status' => 'OK', 'result' => ['conversation' => $conversation, 'productOwnerId' => 0]]);
+            }
+            
         }catch(\Exception $e){
             $this->storeErrorLog(0, '/showConversationDetails', $e->getMessage());
 
