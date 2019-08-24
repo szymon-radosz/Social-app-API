@@ -14,6 +14,7 @@ Route::post('loadUserDataById', 'UserController@loadUserDataById');
 Route::post('loadUsersFilter', 'UserController@loadUsersFilter');
 Route::post('setUserMessagesStatus', 'UserController@setUserMessagesStatus');
 Route::post('clearUserNotificationsStatus', 'UserController@clearUserNotificationsStatus');
+Route::post('checkIfEmailExists', 'UserController@checkIfEmailExists');
 
 Route::get('password-reset', 'ResetPasswordController@showForm'); //I did not create this controller. it simply displays a view with a form to take the email
 Route::post('password-reset', 'ResetPasswordController@sendPasswordResetToken');

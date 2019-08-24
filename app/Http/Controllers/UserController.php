@@ -183,6 +183,23 @@ class UserController extends Controller
         }
     } 
 
+    public function checkIfEmailExists(Request $request)
+    {
+        try{
+            $email = $request->email;
+            
+            $user = User::where('email', $email)->count();
+
+            return response()->json(['status' => 'OK', 'result' => $user]); 
+        }catch(\Exception $e){
+            $user = User::where('email', $email)->get();
+
+            $this->storeErrorLog($user->id, '/checkIfEmailExists', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+        }
+    }
+
     public function updatePhoto(Request $request)
     {
         try{
