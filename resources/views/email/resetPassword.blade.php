@@ -173,15 +173,18 @@
         </p>
       </div>
       <div>
-        <!--<a href="#">
+        <a 
+          href="https://apps.apple.com/il/app/e-mamy/id1477994168"
+          title="Pobierz E-mamy z App Store"
+          target="_blank">
           <img
             class="get"
             src="https://e-mamy.pl/images/appStore.png"
             style="max-height:36px;margin: 15px 1px;"
           />
-        </a>-->
+        </a>
         <a
-		href="https://play.google.com/store/apps/details?id=com.emamy"
+		      href="https://play.google.com/store/apps/details?id=com.emamy"
           title="Pobierz E-mamy z Google Play"
           target="_blank"
         >

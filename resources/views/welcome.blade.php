@@ -80,8 +80,8 @@
                         </div>
                         <div class="space-20"></div>
                         <p class="headerIconText">Pobierz E-mamy</p>
+                        <a target="_blank" href="https://apps.apple.com/il/app/e-mamy/id1477994168" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt="Pobierz z App Store"></a>
                         <a target="_blank" href="https://play.google.com/store/apps/details?id=com.emamy" title="Pobierz z Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt="Pobierz z Google Play"></a>
-                        <!--<a href="#" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt=""></a>-->
                     </div>
                 </div>
             </div>
