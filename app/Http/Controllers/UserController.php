@@ -114,6 +114,7 @@ class UserController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
+                'nickname' => '',
                 'platform' => $data['platform'],
                 'age' => 0,
                 'lattitude' => 0,
@@ -234,6 +235,7 @@ class UserController extends Controller
     public function updateUserInfo(Request $request)
     {
         $userEmail = $request->userEmail;
+        $nickname = $request->nickname;
         $age = $request->age;
         $desc = $request->desc;
         $lat = $request->lat;
@@ -242,27 +244,51 @@ class UserController extends Controller
 
         try{
             $updateUserInfo = User::where('email', $userEmail)
-                                    ->update(
-                                        ['age' => $age,
-                                        'description' => $desc,
-                                        'lattitude' => (double)$lat,
-                                        'longitude' => (double)$lng,
-                                        'location_string' => $locationString]
-                                    );
+                ->update(
+                    ['nickname' => $nickname,
+                    'age' => $age,
+                    'description' => $desc,
+                    'lattitude' => (double)$lat,
+                    'longitude' => (double)$lng,
+                    'location_string' => $locationString]
+                );
 
             $user = User::where('email', $userEmail)
-                            ->with('kids')
-                            ->with('hobbies')
-                            ->with('votes')
-                            ->get();
- 
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->get();
+
             return response()->json(['status' => 'OK', 'result' => $user]); 
         }catch(\Exception $e){
-            $user = User::where('email', $userEmail);
+            $user = User::where('email', $userEmail)->first();
 
             $this->storeErrorLog($user->id, '/updateUserInfo', $e->getMessage());
 
             return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+        }
+    }
+
+    public function checkAvailableNickname(Request $request){
+        $userEmail = $request->userEmail;
+        $nickname = $request->nickname;
+
+        try{
+            $userByNickname = User::where([['nickname', $nickname], ['user_filled_info', 1]])->first();
+
+            if($userByNickname && $userByNickname->email === $userEmail){
+                return response()->json(['status' => 'OK', 'result' => true]); 
+            }else if($userByNickname === null){
+                return response()->json(['status' => 'OK', 'result' => true]); 
+            }else{
+                return response()->json(['status' => 'ERR', 'result' => false]); 
+            }
+        }catch(\Exception $e){
+            $user = User::where('email', $userEmail)->first();
+
+            $this->storeErrorLog($user->id, '/checkAvailableNickname', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => 'Problem ze sprawdzeniem nazwy.']); 
         }
     }
 
