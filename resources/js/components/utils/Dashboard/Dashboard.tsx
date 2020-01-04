@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { DashboardProps, DashboardState } from "./Dashboard.interface";
-import ReactDOM from "react-dom";
-import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
-import Users from "./Users/Users";
+import { Redirect } from "react-router-dom";
+import DashboardContainer from "./../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../MainContext";
-import TopBar from "../TopBar/TopBar";
-import Sidebar from "../Sidebar/Sidebar";
+import Header from "./utils/Header";
+import DashboardInfoRect from "./utils/DashboardInfoRect";
+import axios from "axios";
 
 class Dashboard extends Component<DashboardProps, DashboardState> {
     routes: any;
@@ -14,33 +14,180 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         super(props);
 
         this.state = {
-            redirectLogin: true
+            redirectLogin: true,
+            usersCount: 0,
+            productsCount: 0,
+            ForumPostsCount: 0,
+            ForumCommentsCount: 0
         };
-
-        this.routes = [
-            {
-                path: "/users",
-                name: "Users",
-                Component: Users
-            }
-        ];
     }
 
+    getUsers = () => {
+        return new Promise(resolve => {
+            this.context.handleShowLoader(true);
+            try {
+                axios.get(`${this.context.API_URL}get-users`).then(response => {
+                    console.log(["response", response, response.status]);
+
+                    const { data } = response;
+
+                    if (response.status === 200) {
+                        this.setState({ usersCount: data.result.users });
+                    }
+
+                    resolve(response);
+                });
+            } catch (err) {
+                console.log(err);
+            } finally {
+                this.context.handleShowLoader(false);
+            }
+        });
+    };
+
+    getProducts = () => {
+        return new Promise(resolve => {
+            this.context.handleShowLoader(true);
+            try {
+                axios
+                    .get(`${this.context.API_URL}get-products`)
+                    .then(response => {
+                        console.log(["response", response, response.status]);
+
+                        const { data } = response;
+
+                        if (response.status === 200) {
+                            this.setState({
+                                productsCount: data.result.products
+                            });
+                        }
+
+                        resolve(response);
+                    });
+            } catch (err) {
+                console.log(err);
+            } finally {
+                this.context.handleShowLoader(false);
+            }
+        });
+    };
+
+    getForumPosts = () => {
+        return new Promise(resolve => {
+            this.context.handleShowLoader(true);
+            try {
+                axios
+                    .get(`${this.context.API_URL}get-forum-posts`)
+                    .then(response => {
+                        console.log(["response", response, response.status]);
+
+                        const { data } = response;
+
+                        if (response.status === 200) {
+                            this.setState({
+                                ForumPostsCount: data.result.forumPosts
+                            });
+                        }
+
+                        resolve(response);
+                    });
+            } catch (err) {
+                console.log(err);
+            } finally {
+                this.context.handleShowLoader(false);
+            }
+        });
+    };
+
+    getForumComments = () => {
+        return new Promise(resolve => {
+            this.context.handleShowLoader(true);
+            try {
+                axios
+                    .get(`${this.context.API_URL}get-forum-comments`)
+                    .then(response => {
+                        console.log(["response", response, response.status]);
+
+                        const { data } = response;
+
+                        if (response.status === 200) {
+                            this.setState({
+                                ForumCommentsCount: data.result.forumComments
+                            });
+                        }
+
+                        resolve(response);
+                    });
+            } catch (err) {
+                console.log(err);
+            } finally {
+                this.context.handleShowLoader(false);
+            }
+        });
+    };
+
+    getStatsInfo = async () => {
+        await this.getUsers();
+        await this.getProducts();
+        await this.getForumPosts();
+        await this.getForumComments();
+    };
+
     componentDidMount = () => {
+        this.context.handlAactiveMenuSection("Dashboard");
+
         if (this.context && !this.context.userLoggedIn) {
             console.log(this.context.userLoggedIn);
             this.setState({ redirectLogin: true });
         }
+
+        this.getStatsInfo();
     };
 
     render() {
-        const { redirectLogin } = this.state;
+        const {
+            redirectLogin,
+            usersCount,
+            productsCount,
+            ForumPostsCount,
+            ForumCommentsCount
+        } = this.state;
 
         if (!redirectLogin) {
             return <Redirect to="/login" />;
-        } else {
-            return <Redirect to="/users" />;
         }
+
+        return (
+            <DashboardContainer>
+                <Header text="Statistics - Current Week" />
+
+                <div className="dashboard__rect-container row">
+                    <DashboardInfoRect
+                        icon="/images/group.png"
+                        headerText="New Users"
+                        number={usersCount}
+                    />
+
+                    <DashboardInfoRect
+                        icon="/images/product.png"
+                        headerText="New Products"
+                        number={productsCount}
+                    />
+
+                    <DashboardInfoRect
+                        icon="/images/forum-icon.png"
+                        headerText="New Forum Posts"
+                        number={ForumPostsCount}
+                    />
+
+                    <DashboardInfoRect
+                        icon="/images/forum-icon.png"
+                        headerText="New Forum Comments"
+                        number={ForumCommentsCount}
+                    />
+                </div>
+            </DashboardContainer>
+        );
     }
 }
 

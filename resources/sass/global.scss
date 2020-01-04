@@ -5,6 +5,18 @@ body {
         list-style-type: none;
     }
 
+    .loader__container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.5);
+        z-index: 10;
+    }
     .app__container > div {
         display: flex;
         flex-direction: column;
@@ -19,6 +31,16 @@ body {
         .dashboard__container--content {
             padding: 20px;
             width: 100%;
+            position: relative;
+        }
+    }
+    .header__container {
+        p {
+            font-weight: 600;
+            margin: 0;
+            padding-bottom: 20px;
+            color: $dark;
+            font-size: 16px;
         }
     }
 }

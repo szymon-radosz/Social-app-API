@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { TranslationsProps, TranslationsState } from "./Translations.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Translations extends Component<TranslationsProps, TranslationsState> {
     constructor(props: TranslationsProps) {
@@ -17,7 +18,7 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Translations</div>
+                <Header text="Translations" />
             </DashboardContainer>
         );
     }

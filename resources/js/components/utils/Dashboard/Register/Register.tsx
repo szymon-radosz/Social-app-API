@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { RegisterProps, RegisterState } from "./Register.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Register extends Component<RegisterProps, RegisterState> {
     constructor(props: RegisterProps) {
@@ -17,7 +18,7 @@ class Register extends Component<RegisterProps, RegisterState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Register</div>
+                <Header text="Register" />
             </DashboardContainer>
         );
     }

@@ -5,5 +5,8 @@ export const MainContext = React.createContext({
     showSidebarText: false,
     handleShowSidebarText: () => {},
     activeMenuSection: "",
-    handlAactiveMenuSection: (text: string) => {}
+    handlAactiveMenuSection: (text: string) => {},
+    API_URL: "",
+    handleShowLoader: (status: boolean) => {},
+    showLoader: false
 });

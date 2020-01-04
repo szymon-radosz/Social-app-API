@@ -13,8 +13,6 @@ class UserTableSeeder extends Seeder
     {
         //create(); will save data to db
         //make(); will create data without saving
-        factory(App\User::class, 2)->make()->each(function($user) {
-            $user->hobbies()->save(factory(App\Hobby::class)->make());
-        });
+        factory(App\User::class, 10)->create();
     }
 }

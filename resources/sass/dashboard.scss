@@ -1,0 +1,31 @@
+.dashboard__rect-container {
+    .dashboard-info-rect__container {
+        background-color: #fff;
+        border-radius: 6px;
+        padding: 10px;
+        margin-bottom: 20px;
+
+        .dashboard-info-rect__header {
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+
+            img {
+                height: 30px;
+            }
+            p {
+                margin: 0;
+                padding-left: 10px;
+                font-size: 13px;
+                color: $gray;
+            }
+        }
+        .dashboard-info-rect__number {
+            margin: 0;
+            font-size: 32px;
+            line-height: 32px;
+            font-weight: 600;
+            color: $dark;
+        }
+    }
+}

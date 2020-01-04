@@ -5,6 +5,7 @@ import {
 } from "./ProductCategories.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class ProductCategories extends Component<
     ProductCategoriesProps,
@@ -23,7 +24,7 @@ class ProductCategories extends Component<
     render() {
         return (
             <DashboardContainer>
-                <div>ProductCategories</div>
+                <Header text="Product Categories" />
             </DashboardContainer>
         );
     }

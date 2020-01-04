@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { UsersProps, UsersState } from "./Users.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Users extends Component<UsersProps, UsersState> {
     constructor(props: UsersProps) {
@@ -17,7 +18,7 @@ class Users extends Component<UsersProps, UsersState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Users</div>
+                <Header text="Users" />
             </DashboardContainer>
         );
     }

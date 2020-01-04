@@ -2,31 +2,25 @@
 
 namespace App;
 
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'platform', 'age', 'lattitude', 'longitude', 'location_string', 'description', 'email_token', 'api_token', 'platform', 'nickname'
+        'name', 'email', 'password', 'platform', 'age', 'lattitude', 'longitude', 'location_string', 'description', 'email_token', 'api_token', 'platform', 'nickname',
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function kids()
-    {
-        return $this->hasMany('App\Kid', 'user_id');
-    }
-
     public function hobbies()
     {
-        return $this->belongsToMany('App\Hobby', 'hobby_user', 'user_id', 'hobby_id' );
+        return $this->belongsToMany('App\Hobby', 'hobby_user', 'user_id', 'hobby_id');
     }
 
     public function conversations()

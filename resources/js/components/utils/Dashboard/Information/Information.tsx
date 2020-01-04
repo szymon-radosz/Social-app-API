@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { InformationProps, InformationState } from "./Information.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Information extends Component<InformationProps, InformationState> {
     constructor(props: InformationProps) {
@@ -17,7 +18,7 @@ class Information extends Component<InformationProps, InformationState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Information</div>
+                <Header text="Information" />
             </DashboardContainer>
         );
     }

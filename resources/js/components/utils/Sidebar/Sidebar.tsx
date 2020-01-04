@@ -9,6 +9,40 @@ const Sidebar = () => {
             <ul>
                 <li>
                     <div className="sidebar__item">
+                        {context.activeMenuSection === "Dashboard" && (
+                            <div className="active-sidebar-item"></div>
+                        )}
+                        <a
+                            href="#"
+                            onClick={() => {
+                                context.changePath("/dashboard");
+                                context.handlAactiveMenuSection("Dashboard");
+                            }}
+                        >
+                            <img
+                                className="sidebar-icon"
+                                src="/images/stats.png"
+                                alt="Icon made by Freepik from www.flaticon.com"
+                                title="Dashboard"
+                            />
+                        </a>
+                        {context.showSidebarText && (
+                            <a
+                                href="#"
+                                onClick={() => {
+                                    context.changePath("/dashboard");
+                                    context.handlAactiveMenuSection(
+                                        "Dashboard"
+                                    );
+                                }}
+                            >
+                                <p className="sidebar__item--text">Dashboard</p>
+                            </a>
+                        )}
+                    </div>
+                </li>
+                <li>
+                    <div className="sidebar__item">
                         {context.activeMenuSection === "Users" && (
                             <div className="active-sidebar-item"></div>
                         )}

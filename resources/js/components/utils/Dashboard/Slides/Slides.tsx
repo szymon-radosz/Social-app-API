@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { SlidesProps, SlidesState } from "./Slides.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Slides extends Component<SlidesProps, SlidesState> {
     constructor(props: SlidesProps) {
@@ -17,7 +18,7 @@ class Slides extends Component<SlidesProps, SlidesState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Slides</div>
+                <Header text="Slides" />
             </DashboardContainer>
         );
     }

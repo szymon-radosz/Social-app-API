@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::post('uploadUserPhoto', 'UserController@updatePhoto');
@@ -71,10 +69,14 @@ Route::post('loadNotificationByUserId', 'NotificationController@loadNotification
 Route::post('addNotification', 'NotificationController@addNotification');
 Route::post('clearNotificationByUserId', 'NotificationController@clearNotificationByUserId');
 
-Route::post('saveUserFeedback', 'UserFeedbackController@saveUserFeedback'); 
+Route::post('saveUserFeedback', 'UserFeedbackController@saveUserFeedback');
 
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group(['middleware' => 'auth:api'], function () {
     Route::post('details', 'UserController@details');
 });
 
-
+//DASHBOARD
+Route::get('get-users', 'DashboardStatsController@getUsers');
+Route::get('get-products', 'DashboardStatsController@getProducts');
+Route::get('get-forum-posts', 'DashboardStatsController@getForumPosts');
+Route::get('get-forum-comments', 'DashboardStatsController@getForumComments');

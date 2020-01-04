@@ -5,6 +5,7 @@ import {
 } from "./ForumCategories.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class ForumCategories extends Component<
     ForumCategoriesProps,
@@ -23,7 +24,7 @@ class ForumCategories extends Component<
     render() {
         return (
             <DashboardContainer>
-                <div>ForumCategories</div>
+                <Header text="Forum Categories" />
             </DashboardContainer>
         );
     }

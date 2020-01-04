@@ -25,7 +25,9 @@ class Main extends Component<MainProps, MainState> {
         this.state = {
             userLoggedIn: false,
             showSidebarText: false,
-            activeMenuSection: ""
+            activeMenuSection: "",
+            API_URL: "http://127.0.0.1:8000/api/",
+            showLoader: false
         };
 
         this.history = history;
@@ -84,11 +86,16 @@ class Main extends Component<MainProps, MainState> {
         ];
     }
 
+    handleShowLoader = (status: boolean) => {
+        console.log("handleShowLoader");
+        this.setState({ showLoader: status });
+    };
+
     handleShowSidebarText = () => {
         this.setState({ showSidebarText: !this.state.showSidebarText });
     };
 
-    handlAactiveMenuSection = text => {
+    handlAactiveMenuSection = (text: string) => {
         this.setState({ activeMenuSection: text });
     };
 
@@ -98,7 +105,13 @@ class Main extends Component<MainProps, MainState> {
     };
 
     render() {
-        const { userLoggedIn, showSidebarText, activeMenuSection } = this.state;
+        const {
+            userLoggedIn,
+            showSidebarText,
+            activeMenuSection,
+            API_URL,
+            showLoader
+        } = this.state;
 
         return (
             <MainContext.Provider
@@ -108,7 +121,10 @@ class Main extends Component<MainProps, MainState> {
                     showSidebarText: showSidebarText,
                     handleShowSidebarText: this.handleShowSidebarText,
                     activeMenuSection: activeMenuSection,
-                    handlAactiveMenuSection: this.handlAactiveMenuSection
+                    handlAactiveMenuSection: this.handlAactiveMenuSection,
+                    API_URL: API_URL,
+                    showLoader: showLoader,
+                    handleShowLoader: this.handleShowLoader
                 }}
             >
                 <div className="container-sm app__container">

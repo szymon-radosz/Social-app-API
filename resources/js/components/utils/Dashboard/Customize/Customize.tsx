@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { CustomizeProps, CustomizeState } from "./Customize.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
+import Header from "./../utils/Header";
 
 class Customize extends Component<CustomizeProps, CustomizeState> {
     constructor(props: CustomizeProps) {
@@ -17,7 +18,7 @@ class Customize extends Component<CustomizeProps, CustomizeState> {
     render() {
         return (
             <DashboardContainer>
-                <div>Customize</div>
+                <Header text="Customize" />
             </DashboardContainer>
         );
     }
