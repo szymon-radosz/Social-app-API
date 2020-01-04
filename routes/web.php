@@ -8,18 +8,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
 Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
-*/
+ */
 /*
 Route::get('/', function () {
-    return view('welcome');
+return view('welcome');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('{slug}', function() {
-    return view('home');
+return view('home');
 })
 ->where('slug', '(?!api)([A-z\d-\/_.]+)?');
  */
@@ -27,12 +26,16 @@ Route::get('/verifyemail/{token}', 'UserController@verify');
 
 Route::get('/reset-password/{token}', 'ResetPasswordController@showPasswordResetForm');
 
-Route::get('/regulamin', 'WebsiteController@terms');
+Route::get('/terms', 'WebsiteController@terms');
 
+Route::get('/dashboard', 'WebsiteController@dashboard');
+
+Route::get('{slug}', function () {
+    return view('dashboard');
+});
 
 //Auth::routes();
 /*
 Route::middleware('auth.basic')->get('/user', function (Request $request) {
-    return Auth::user();
+return Auth::user();
 });*/
-

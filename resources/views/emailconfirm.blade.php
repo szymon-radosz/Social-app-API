@@ -12,7 +12,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" src="image/ico" href="{{ asset('/images/favicon.png') }}" />
-   
+
         <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/owl.carousel.min.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/linearicons.css') }}">
@@ -47,7 +47,7 @@
                         <div class="page-title text-center">
                             <img class="aboutImg" src="{{ asset('/images/about-logo.png') }}" alt="About Logo">
                             <div class="space-20"></div>
-                            <h5 class="title">Witamy</h5>
+                            <h5 class="title">Welcome</h5>
                             <div class="space-20"></div>
                             <p>Weryfikacja zakończona sukcesem. Możesz zalogować się w aplikacji E-mamy.</p>
                             <p>Podziel się z nami swoimi spostrzeżeniami wysyłając wiadomość pod adres <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość">kontakt@e-mamy.pl</a></p>
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </section>
-     
+
         <section class="feature-area section-padding-top" id="features_page">
             <div class="container">
                 <div class="row">
@@ -143,7 +143,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-xs-12 col-sm-12">
                             <div class="footer-box">
                                 <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość"><div class="box-icon">
@@ -152,7 +152,7 @@
                                 <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość"><p>kontakt@e-mamy.pl</p></a>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -179,21 +179,21 @@
                 </div>
             </div>
         </footer>
-       
+
         <script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us3.list-manage.com","uuid":"e05c2147ffb2f25baf5da262d","lid":"9be1800ae8","uniqueMethods":true}) })</script>
 
-     
+
         <script src="{{ URL::asset('/js/vendor/jquery-1.12.4.min.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/jquery-ui.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/bootstrap.min.js') }}"></script>
-        
+
         <script src="{{ URL::asset('/js/owl.carousel.min.js') }}"></script>
         <script src="{{ URL::asset('/js/contact-form.js') }}"></script>
         <script src="{{ URL::asset('/js/ajaxchimp.js') }}"></script>
         <script src="{{ URL::asset('/js/scrollUp.min.js') }}"></script>
         <script src="{{ URL::asset('/js/magnific-popup.min.js') }}"></script>
         <script src="{{ URL::asset('/js/wow.min.js') }}"></script>
-        
+
         <script src="{{ URL::asset('/js/main.js') }}"></script>
     </body>
 </html>

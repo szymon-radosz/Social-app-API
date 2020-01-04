@@ -10,4 +10,9 @@ class WebsiteController extends Controller
     {
         return view('terms');
     }
+
+    public function dashboard()
+    {
+        return view('dashboard');
+    }
 }

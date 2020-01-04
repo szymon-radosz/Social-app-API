@@ -2,52 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request; 
-use App\User; 
+use App\Hobby;
+use App\Http\Traits\CalculateDistanceDifferenceTrait;
+use App\Http\Traits\ErrorLogTrait;
+use App\Jobs\SendVerificationEmail;
 use App\Message;
 use App\Notification;
-use App\Hobby;
-use Illuminate\Support\Facades\Auth; 
-use Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Auth\Events\Registered;
-use App\Jobs\SendVerificationEmail;
-use DB;
+use App\User;
 use Carbon\Carbon;
 use DateTime;
+use DB;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Traits\ErrorLogTrait;
-use App\Http\Traits\CalculateDistanceDifferenceTrait;
+use Validator;
 
-class UserController extends Controller 
+class UserController extends Controller
 {
     use ErrorLogTrait;
     use CalculateDistanceDifferenceTrait;
 
     public $successStatus = 200;
-    /** 
-     * login api 
-     * 
-     * @return \Illuminate\Http\Response 
-     */ 
-    public function login(){ 
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
-            try{
-                $user = Auth::user(); 
-                $success['token'] =  $user->createToken('myapp')->accessToken; 
+    /**
+     * login api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function login()
+    {
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            try {
+                $user = Auth::user();
+                $success['token'] = $user->createToken('myapp')->accessToken;
                 $user->api_token = $success['token'];
                 $user->save();
                 return response()->json(['status' => 'OK', 'user' => $success]);
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
             }
-        } 
-        else{ 
+        } else {
             $this->storeErrorLog($user->id, '/login', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);  
-        } 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+        }
     }
     /**
      * Get a validator for an incoming registration request.
@@ -64,39 +63,40 @@ class UserController extends Controller
         ]);
     }
     /**
-    * Handle a registration request for the application.
-    *
-    * @param \Illuminate\Http\Request $request
-    * @return \Illuminate\Http\Response
-    */
+     * Handle a registration request for the application.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
-        try{
+        try {
             $this->validator($request->all())->validate();
 
             event(new Registered($user = $this->create($request->all())));
 
             dispatch(new SendVerificationEmail($user));
-        }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+        } catch (\Exception $e) {
+            $this->storeErrorLog("", '/register', $e->getMessage());
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
         return $user;
     }
 
     /**
-    * Handle a registration request for the application.
-    *
-    * @param $token
-    * @return \Illuminate\Http\Response
-    */
+     * Handle a registration request for the application.
+     *
+     * @param $token
+     * @return \Illuminate\Http\Response
+     */
     public function verify($token)
     {
-        $user = User::where('email_token',$token)->first();
+        $user = User::where('email_token', $token)->first();
 
         $user->verified = 1;
         $user->email_verified_at = Carbon::now();
 
-        if($user->save()){
+        if ($user->save()) {
             return view('emailconfirm');
         }
     }
@@ -109,7 +109,7 @@ class UserController extends Controller
      */
     protected function create(array $data)
     {
-        try{
+        try {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -120,41 +120,41 @@ class UserController extends Controller
                 'lattitude' => 0,
                 'longitude' => 0,
                 'description' => '',
-                'email_token' => base64_encode($data['email'])
+                'email_token' => base64_encode($data['email']),
             ]);
 
-            $success['token'] =  $user->createToken('myapp')->accessToken; 
-            $success['name'] =  $user->name;
+            $success['token'] = $user->createToken('myapp')->accessToken;
+            $success['name'] = $user->name;
 
             return response()->json(['user' => $user, 'status' => 'OK']);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->storeErrorLog($user->id, '/register', $e->getMessage());
 
             return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu uzytkownika.']);
         }
     }
     /*
-     * details api 
-     * 
-     * @return \Illuminate\Http\Response 
-     */ 
-    public function details(Request $request) 
-    { 
-        try{
+     * details api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function details(Request $request)
+    {
+        try {
             $userData = User::where('id', Auth::user()->id)
-                                                ->with('kids')
-                                                ->with('hobbies')
-                                                ->with('conversations')
-                                                ->with('votes')
-                                                ->with('notifications')
-                                                ->firstOrFail();        
+                ->with('kids')
+                ->with('hobbies')
+                ->with('conversations')
+                ->with('votes')
+                ->with('notifications')
+                ->firstOrFail();
 
             $unreadedMessage = false;
             $unreadedMessageAmount = 0;
-        
+
             $unreadedMessageAmount = Message::where([['receiver_id', Auth::user()->id], ['status', 0]])->count();
 
-            if($unreadedMessageAmount > 0){
+            if ($unreadedMessageAmount > 0) {
                 $unreadedMessage = true;
             }
 
@@ -163,72 +163,76 @@ class UserController extends Controller
 
             $unreadedNotifications = false;
             $unreadedNotificationsAmount = 0;
-        
+
             $unreadedNotificationsAmount = Notification::where([['user_id', Auth::user()->id], ['status', 0]])->count();
 
-            if($unreadedNotificationsAmount > 0){
+            if ($unreadedNotificationsAmount > 0) {
                 $unreadedNotifications = true;
             }
 
-            $storagePath  = Storage::disk('userPhotos')->getDriver()->getAdapter()->getPathPrefix();
+            $storagePath = Storage::disk('userPhotos')->getDriver()->getAdapter()->getPathPrefix();
 
             $userData->setAttribute('unreadedNotifications', $unreadedNotifications);
             $userData->setAttribute('unreadedNotificationsAmount', $unreadedNotificationsAmount);
             $userData->setAttribute('storagePath', $storagePath);
 
-            return response()->json(['status' => 'OK', 'result' => $userData]); 
-        }catch(\Exception $e){
+            return response()->json(['status' => 'OK', 'result' => $userData]);
+        } catch (\Exception $e) {
             $this->storeErrorLog(Auth::user()->id, '/userDetails', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy autentykacji uytkownika.']); 
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy autentykacji uytkownika.']);
         }
-    } 
+    }
 
     public function checkIfEmailExists(Request $request)
     {
-        try{
+        try {
             $email = $request->email;
-            
+
             $user = User::where('email', $email)->count();
 
-            return response()->json(['status' => 'OK', 'result' => $user]); 
-        }catch(\Exception $e){
+            return response()->json(['status' => 'OK', 'result' => $user]);
+        } catch (\Exception $e) {
             $user = User::where('email', $email)->get();
 
             $this->storeErrorLog($user->id, '/checkIfEmailExists', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
 
     public function updatePhoto(Request $request)
     {
-        try{
+        try {
             $userEmail = $request->userEmail;
             $filename = 'userPhotos/' . time() . '-' . $request->fileName . ".jpg";
 
             $img = $request->file;
             $img = str_replace('data:image/png;base64,', '', $img);
             $img = str_replace(' ', '+', $img);
-           
+
             Storage::disk('s3')->put($filename, base64_decode($img));
             Storage::disk('s3')->setVisibility($filename, 'public');
 
             $url = Storage::disk('s3')->url($filename);
 
+            $this->storeErrorLog("", '/url', $url);
+
             $updateUserPhoto = DB::table('users')
-                    ->where('email', $userEmail)
-                    ->update(['photo_path' => $url]);
+                ->where('email', $userEmail)
+                ->update(['photo_path' => $url]);
+
             $user = DB::table('users')
-                    ->where('email', $userEmail)->get();
-            return response()->json(['status' => 'OK', 'result' => $user]); 
-        }catch(\Exception $e){
+                ->where('email', $userEmail)->get();
+
+            return response()->json(['status' => 'OK', 'result' => $user]);
+        } catch (\Exception $e) {
             $user = DB::table('users')
-                    ->where('email', $userEmail)->get();
+                ->where('email', $userEmail)->get();
 
             $this->storeErrorLog($user->id, '/updatePhoto', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
 
@@ -242,15 +246,15 @@ class UserController extends Controller
         $lng = $request->lng;
         $locationString = $request->locationString ? $request->locationString : "";
 
-        try{
+        try {
             $updateUserInfo = User::where('email', $userEmail)
                 ->update(
                     ['nickname' => $nickname,
-                    'age' => $age,
-                    'description' => $desc,
-                    'lattitude' => (double)$lat,
-                    'longitude' => (double)$lng,
-                    'location_string' => $locationString]
+                        'age' => $age,
+                        'description' => $desc,
+                        'lattitude' => (double) $lat,
+                        'longitude' => (double) $lng,
+                        'location_string' => $locationString]
                 );
 
             $user = User::where('email', $userEmail)
@@ -259,68 +263,71 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $user]); 
-        }catch(\Exception $e){
+            return response()->json(['status' => 'OK', 'result' => $user]);
+        } catch (\Exception $e) {
             $user = User::where('email', $userEmail)->first();
 
             $this->storeErrorLog($user->id, '/updateUserInfo', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]); 
+            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
         }
     }
 
-    public function checkAvailableNickname(Request $request){
+    public function checkAvailableNickname(Request $request)
+    {
         $userEmail = $request->userEmail;
         $nickname = $request->nickname;
 
-        try{
+        try {
             $userByNickname = User::where([['nickname', $nickname], ['user_filled_info', 1]])->first();
 
-            if($userByNickname && $userByNickname->email === $userEmail){
-                return response()->json(['status' => 'OK', 'result' => true]); 
-            }else if($userByNickname === null){
-                return response()->json(['status' => 'OK', 'result' => true]); 
-            }else{
-                return response()->json(['status' => 'ERR', 'result' => false]); 
+            if ($userByNickname && $userByNickname->email === $userEmail) {
+                return response()->json(['status' => 'OK', 'result' => true]);
+            } else if ($userByNickname === null) {
+                return response()->json(['status' => 'OK', 'result' => true]);
+            } else {
+                return response()->json(['status' => 'ERR', 'result' => false]);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $user = User::where('email', $userEmail)->first();
 
             $this->storeErrorLog($user->id, '/checkAvailableNickname', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Problem ze sprawdzeniem nazwy.']); 
+            return response()->json(['status' => 'ERR', 'result' => 'Problem ze sprawdzeniem nazwy.']);
         }
     }
 
-    public function setUserFilledInfo(Request $request){
-        try{
+    public function setUserFilledInfo(Request $request)
+    {
+        try {
             $userEmail = $request->userEmail;
 
             $updateUserInfo = DB::table('users')
-                    ->where('email', $userEmail)
-                    ->update(
-                        ['user_filled_info' => 1]
-                    );
+                ->where('email', $userEmail)
+                ->update(
+                    ['user_filled_info' => 1]
+                );
 
             $user = User::
-                    where('email', $userEmail)
-                                    ->with('kids')
-                                    ->with('hobbies')
-                                    ->with('votes')
-                                    ->with('notifications')
-                                    ->get();
+                where('email', $userEmail)
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->with('notifications')
+                ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $user]);  
-        }catch(\Exception $e){
+            return response()->json(['status' => 'OK', 'result' => $user]);
+        } catch (\Exception $e) {
             $user = User::where('email', $userEmail);
 
             $this->storeErrorLog($user->id, '/setUserFilledInfo', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem danych potwierdzonego użytkownika.']); 
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem danych potwierdzonego użytkownika.']);
         }
     }
 
-    public function loadUsersNearCoords(Request $request){
+    public function loadUsersNearCoords(Request $request)
+    {
         $lat = $request->lat;
         $lng = $request->lng;
 
@@ -330,122 +337,128 @@ class UserController extends Controller
         $maxLat = $lat + 2;
         $maxLng = $lng + 2;
 
-        try{
+        try {
             $userList = User::
-                    where([
-                        ['lattitude', '<', $maxLat], 
-                        ['longitude', '<', $maxLng],
-                        ['lattitude', '>', $minLat], 
-                        ['longitude', '>', $minLng]
-                    ])
-                    ->with('kids')
-                    ->with('hobbies')
-                    ->with('votes')
-                    ->get();
+                where([
+                ['lattitude', '<', $maxLat],
+                ['longitude', '<', $maxLng],
+                ['lattitude', '>', $minLat],
+                ['longitude', '>', $minLng],
+            ])
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);  
-        }catch(\Exception $e){
+            return response()->json(['status' => 'OK', 'result' => $userList]);
+        } catch (\Exception $e) {
             $this->storeErrorLog(0, '/loadUsersNearCoords', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników z okolicy.']); 
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników z okolicy.']);
         }
     }
-    
-    public function setUserMessagesStatus(Request $request){
+
+    public function setUserMessagesStatus(Request $request)
+    {
         $userId = $request->userId;
         $conversationId = $request->conversationId;
 
         $userMessagesUpdate = Message::where([
-                                        ['conversation_id', $conversationId],
-                                        ['receiver_id', $userId]
-                                        ])
-                                        ->update(['status' => 1]);
+            ['conversation_id', $conversationId],
+            ['receiver_id', $userId],
+        ])
+            ->update(['status' => 1]);
 
         $userUnreadedMessagesCount = Message::where([
-                                            ['receiver_id', $userId],
-                                            ['status', 0]
-                                        ])
-                                        ->count();
+            ['receiver_id', $userId],
+            ['status', 0],
+        ])
+            ->count();
 
         $userUnreadedMessages = false;
 
-        if($userUnreadedMessagesCount > 0){
+        if ($userUnreadedMessagesCount > 0) {
             $userUnreadedMessages = true;
         }
 
         return response()
-                ->json(
-                    [
-                        'status' => 'OK', 
-                        'result' => ['userUnreadedMessages' => $userUnreadedMessages,
-                    'userUnreadedMessagesCount'  => $userUnreadedMessagesCount]
-                    ]
-                ); 
+            ->json(
+                [
+                    'status' => 'OK',
+                    'result' => ['userUnreadedMessages' => $userUnreadedMessages,
+                        'userUnreadedMessagesCount' => $userUnreadedMessagesCount],
+                ]
+            );
     }
 
-    public function clearUserNotificationsStatus(Request $request){
+    public function clearUserNotificationsStatus(Request $request)
+    {
         $userId = $request->userId;
 
         $userNotifications = Notification::where('user_id', $userId)
-                                        ->update(['status' => 1]);
+            ->update(['status' => 1]);
 
         return response()
-                ->json(
-                    [
-                        'status' => 'OK', 
-                        'result' => ['userNotifications' => $userNotifications]
-                    ]
-                ); 
+            ->json(
+                [
+                    'status' => 'OK',
+                    'result' => ['userNotifications' => $userNotifications],
+                ]
+            );
     }
 
-    public function loadUserByEmail(Request $request){
+    public function loadUserByEmail(Request $request)
+    {
         $email = $request->email;
 
-        try{
+        try {
             $userList = User::
-                    where('email', 'like', '%' . $email . '%')
-                                                ->with('kids')
-                                                ->with('hobbies')
-                                                ->with('votes')
-                                                ->get();
+                where('email', 'like', '%' . $email . '%')
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);  
-        }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);  
+            return response()->json(['status' => 'OK', 'result' => $userList]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);
         }
     }
 
-    public function loadUserByName(Request $request){
+    public function loadUserByName(Request $request)
+    {
         $name = $request->name;
 
-        try{
+        try {
             $userList = User::
-                    where('name', 'like', '%' . $name . '%')
-                                                ->with('kids')
-                                                ->with('hobbies')
-                                                ->with('votes')
-                                                ->get();
+                where('name', 'like', '%' . $name . '%')
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);  
-        }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);  
+            return response()->json(['status' => 'OK', 'result' => $userList]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);
         }
     }
 
-    public function loadUserDataById(Request $request){
+    public function loadUserDataById(Request $request)
+    {
         $id = $request->id;
 
-        try{
+        try {
             $user = User::where('id', $id)
-                            ->get(["name", "email", "photo_path"]);
+                ->get(["name", "email", "photo_path"]);
 
-            return response()->json(['status' => 'OK', 'result' => $user]);  
-        }catch(\Exception $e){
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkownika.']);  
+            return response()->json(['status' => 'OK', 'result' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkownika.']);
         }
     }
 
-    public function loadUsersFilter(Request $request){
+    public function loadUsersFilter(Request $request)
+    {
         $distance = $request->distance ? $request->distance : "";
         $childAge = $request->childAge ? $request->childAge : "";
         $childGender = $request->childGender ? $request->childGender : "";
@@ -465,13 +478,13 @@ class UserController extends Controller
 
         //var_dump($calculateDistanceDifference, $calculateChildAgeDifference);
 
-        if($childGender === "dziewczynka"){
+        if ($childGender === "dziewczynka") {
             $childGenderQueryValue = "female";
             $childGenderDefault = false;
-        }else if($childGender === "chłopiec"){
+        } else if ($childGender === "chłopiec") {
             $childGenderQueryValue = "male";
             $childGenderDefault = false;
-        }else{
+        } else {
             $childGenderQueryValue = "";
             $childGenderDefault = true;
         }
@@ -481,63 +494,64 @@ class UserController extends Controller
         // then in mobile app you can loop through all data from response
         // and if default => false for specific field, e.g. distance, childAge
         // then we setState with value from response and show active filters
-        if($hobbyName){
+        if ($hobbyName) {
             $hobbyRow = Hobby::where('name', $hobbyName)->first();
             $hobbyId = $hobbyRow->id;
             $hobbyDefault = false;
-        }else{
+        } else {
             $hobbyDefault = true;
             $hobbyId = 0;
         }
 
         //var_dump($hobbyId);
 
-        try{
+        try {
             $userList = User::
-                    where([
-                        ['lattitude', '>', $calculateDistanceDifference->getData()->latDifferenceBottom], 
-                        ['lattitude', '<', $calculateDistanceDifference->getData()->latDifferenceTop], 
-                        ['longitude', '>', $calculateDistanceDifference->getData()->lngDifferenceBottom], 
-                        ['longitude', '<', $calculateDistanceDifference->getData()->lngDifferenceTop]
-                    ])
-                    ->whereHas('kids', function ($query) use($calculateChildAgeDifference, $childGender, $childGenderQueryValue) {
-                        if($childGender){
-                            //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
-                            $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
+                where([
+                ['lattitude', '>', $calculateDistanceDifference->getData()->latDifferenceBottom],
+                ['lattitude', '<', $calculateDistanceDifference->getData()->latDifferenceTop],
+                ['longitude', '>', $calculateDistanceDifference->getData()->lngDifferenceBottom],
+                ['longitude', '<', $calculateDistanceDifference->getData()->lngDifferenceTop],
+            ])
+                ->whereHas('kids', function ($query) use ($calculateChildAgeDifference, $childGender, $childGenderQueryValue) {
+                    if ($childGender) {
+                        //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
+                        $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
                             ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate)
                             ->where('child_gender', '=', $childGenderQueryValue);
-                        }else{
-                            $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
+                    } else {
+                        $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
                             ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate);
-                        }
-                    })
-                    ->whereHas('hobbies', function ($query) use($hobbyId) {
-                        //var_dump($hobbyId);
-                        if($hobbyId != 0){
-                            //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
-                            $query->where('hobby_id', '=', $hobbyId);
-                        }
-                    })
-                    ->with('kids')
-                    ->with('hobbies')
-                    ->with('votes')
-                    ->get();
+                    }
+                })
+                ->whereHas('hobbies', function ($query) use ($hobbyId) {
+                    //var_dump($hobbyId);
+                    if ($hobbyId != 0) {
+                        //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
+                        $query->where('hobby_id', '=', $hobbyId);
+                    }
+                })
+                ->with('kids')
+                ->with('hobbies')
+                ->with('votes')
+                ->get();
 
             return response()->json(['status' => 'OK', 'result' => $userList, 'resultParameters' => [
-                                                                                                        ['name' => 'distance', 'value' => $distance, 'default' => $calculateDistanceDifference->getData()->distanceDefault],
-                                                                                                        ['name' => 'childAge', 'value' => $childAge, 'default' => $calculateChildAgeDifference->getData()->childAgeDefault],
-                                                                                                        ['name' => 'childGender', 'value' => $childGender, 'default' => $childGenderDefault],
-                                                                                                        ['name' => 'hobby', 'value' => $hobbyName, 'default' => $hobbyDefault]
-                                                                                                    ]
-                                    ]);  
-        }catch(\Exception $e){
+                ['name' => 'distance', 'value' => $distance, 'default' => $calculateDistanceDifference->getData()->distanceDefault],
+                ['name' => 'childAge', 'value' => $childAge, 'default' => $calculateChildAgeDifference->getData()->childAgeDefault],
+                ['name' => 'childGender', 'value' => $childGender, 'default' => $childGenderDefault],
+                ['name' => 'hobby', 'value' => $hobbyName, 'default' => $hobbyDefault],
+            ],
+            ]);
+        } catch (\Exception $e) {
             $this->storeErrorLog(0, '/loadUsersFilter', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według dystansu.']);  
+            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według dystansu.']);
         }
     }
 
-    public function calculateChildAgeDifference($childAge){
+    public function calculateChildAgeDifference($childAge)
+    {
         //e.g. 1975-12-25
         $todayDate = Carbon::now()->toDateString();
         $timeStart = new DateTime($todayDate);
@@ -546,47 +560,47 @@ class UserController extends Controller
 
         //var_dump($childAge);
 
-        if($childAge === "0-6 miesięcy"){
+        if ($childAge === "0-6 miesięcy") {
             $formattedStartDate = $timeStart->modify('-6 months')->format('Y-m-d');
             $formattedEndDate = $timeEnd->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "7-12 miesięcy"){
+        } else if ($childAge === "7-12 miesięcy") {
             $formattedStartDate = $timeStart->modify('-1 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-6 months')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "1-2 lat"){
+        } else if ($childAge === "1-2 lat") {
             $formattedStartDate = $timeStart->modify('-2 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-1 year')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "2-4 lat"){
+        } else if ($childAge === "2-4 lat") {
             $formattedStartDate = $timeStart->modify('-4 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-2 year')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "4-8 lat"){
+        } else if ($childAge === "4-8 lat") {
             $formattedStartDate = $timeStart->modify('-8 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-4 year')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "8-12 lat"){
+        } else if ($childAge === "8-12 lat") {
             $formattedStartDate = $timeStart->modify('-12 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-8 year')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === "12-16 lat"){
+        } else if ($childAge === "12-16 lat") {
             $formattedStartDate = $timeStart->modify('-16 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->modify('-12 year')->format('Y-m-d');
             $childAgeDefault = false;
-        }else if($childAge === ""){
+        } else if ($childAge === "") {
             $formattedStartDate = $timeStart->modify('-100 year')->format('Y-m-d');
             $formattedEndDate = $timeEnd->format('Y-m-d');
             $childAgeDefault = true;
         }
 
         return response()
-                ->json(
-                    [
-                        'formattedStartDate' => $formattedStartDate,
-                        'formattedEndDate' => $formattedEndDate,
-                        'childAgeDefault' => $childAgeDefault
-                    ]
-                ); 
+            ->json(
+                [
+                    'formattedStartDate' => $formattedStartDate,
+                    'formattedEndDate' => $formattedEndDate,
+                    'childAgeDefault' => $childAgeDefault,
+                ]
+            );
     }
 }

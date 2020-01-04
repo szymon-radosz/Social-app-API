@@ -3,16 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="author" content="John Doew">
-        <meta name="description" content="E-mamy - Bądź częścią lokalnej społeczności mam">
-        <meta name="keywords" content="E-mamy, mamy, matki, macierzyństwo, dzieci, wychowywanie, mam, aplikacja">
+        <meta name="description" content="Juff-app.com - People like you in your neighborhood">
+        <meta name="keywords" content="juff, app, community, friends">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>E-mamy - Bądź częścią lokalnej społeczności mam</title>
+        <title>Juff-app.com - People like you in your neighborhood</title>
 
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" src="image/ico" href="{{ asset('/images/favicon.png') }}" />
-   
+
         <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/owl.carousel.min.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/linearicons.css') }}">
@@ -40,7 +40,7 @@
 
     </head>
     <body data-spy="scroll" data-target=".mainmenu-area">
-  
+
         <nav class="mainmenu-area" data-spy="affix" data-offset-top="200">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -53,16 +53,16 @@
                 </div>
                 <div class="collapse navbar-collapse" id="primary_menu">
                     <ul class="nav navbar-nav mainmenu">
-                        <li class="active"><a href="#home_page">Strona Główna</a></li>
-                        <li><a href="#about_page">O Aplikacji</a></li>
-                        <li><a href="#features_page">Działanie</a></li>
-                        <li><a href="#contact_page">Kontakt</a></li>
+                        <li class="active"><a href="#home_page">Home</a></li>
+                        <li><a href="#about_page">About</a></li>
+                        <li><a href="#features_page">How it works?</a></li>
+                        <li><a href="#contact_page">Contact</a></li>
                     </ul>
 
                 </div>
             </div>
         </nav>
-     
+
         <header class="home-area overlay" id="home_page">
             <div class="container">
                 <div class="row">
@@ -73,20 +73,20 @@
                     </div>
                     <div class="col-xs-12 col-md-8">
                         <div class="space-80 hidden-xs"></div>
-                        <h1>Bądź częścią lokalnej społeczności mam</h1>
+                        <h1>People like you<br />in your neighborhood</h1>
                         <div class="space-20"></div>
                         <div class="desc">
-                            <p>Znajdź nowe znajome w swojej okolicy o wspólnych zainteresowaniach.</p>
+                            <p>Find people with same interests like you</p>
                         </div>
                         <div class="space-20"></div>
-                        <p class="headerIconText">Pobierz E-mamy</p>
-                        <a target="_blank" href="https://apps.apple.com/il/app/e-mamy/id1477994168" title="Pobierz z App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt="Pobierz z App Store"></a>
-                        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.emamy" title="Pobierz z Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt="Pobierz z Google Play"></a>
+                        <p class="headerIconText">Download</p>
+                        <!--<a target="_blank" href="" title="Download App Store" class="appStoreHeader headerIcon"><img src="{{ asset('/images/appStore.png') }}" alt="App Store"></a>-->
+                        <a target="_blank" href="" title="Google Play" class="googlePlayHeader headerIcon"><img src="{{ asset('/images/googlePlay.png') }}" alt="Google Play"></a>
                     </div>
                 </div>
             </div>
         </header>
-     
+
         <section class="section-padding" id="about_page">
             <div class="container">
                 <div class="row">
@@ -94,17 +94,17 @@
                         <div class="page-title text-center">
                             <img class="aboutImg" src="{{ asset('/images/about-logo.png') }}" alt="About Logo">
                             <div class="space-20"></div>
-                            <h5 class="title">O aplikacji</h5>
+                            <h5 class="title">About</h5>
                             <div class="space-30"></div>
-                            <h3 class="blue-color">Rozwijaj społeczność mam w Twojej okolicy.</h3>
+                            <h3 class="blue-color">Juff app (join us for fun)</h3>
                             <div class="space-20"></div>
-                            <p>Poznawaj inne mamy z Twojej okolicy posiadające dzieci w podobnym wieku <br>lub o zainteresowaniach zbliżonych do Twoich.</p>
+                            <p>There are many people with same interest like you. <br />Spend your time with awesome people.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    
+
         <!--<section class="progress-area gray-bg" id="progress_page">
             <div class="container">
                 <div class="row">
@@ -129,7 +129,7 @@
                 </div>
             </div>
         </section>-->
-  
+
         <!--<section class="video-area section-padding">
             <div class="container">
                 <div class="row">
@@ -163,9 +163,9 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                         <div class="page-title text-center">
-                            <h5 class="title">Działanie</h5>
+                            <h5 class="title">How it works?</h5>
                             <div class="space-10"></div>
-                            <h3>Jak działa aplikacja E-mamy?</h3>
+                            <h3>Tell me more about Juff app</h3>
                             <div class="space-60"></div>
                         </div>
                     </div>
@@ -176,24 +176,24 @@
                             <div class="box-icon">
                             <img src="{{ asset('/images/eco.png') }}" alt="Logo">
                             </div>
-                            <h4>Społeczność</h4>
-                            <p>Buduj lokalną społeczność mam</p>
+                            <h4>Community</h4>
+                            <p>Be a part of open-minded community</p>
                         </div>
                         <div class="space-60"></div>
                         <div class="service-box wow fadeInUp" data-wow-delay="0.2s">
                             <div class="box-icon">
                                 <img src="{{ asset('/images/friends.png') }}" alt="Logo">
                             </div>
-                            <h4>Znajomości</h4>
-                            <p>Poznawaj inne mamy z Twojej okolicy</p>
+                            <h4>New friends</h4>
+                            <p>Have some fun with people you feel comfortable with</p>
                         </div>
                         <div class="space-60"></div>
                         <div class="service-box wow fadeInUp" data-wow-delay="0.6s">
                             <div class="box-icon">
                                 <img src="{{ asset('/images/auction.png') }}" alt="Logo">
                             </div>
-                            <h4>Targ</h4>
-                            <p>Sprzedaj i kupuj przedmioty<br>od innych użytkowniczek</p>
+                            <h4>Free market</h4>
+                            <p>Give items you don't need for your others</p>
                         </div>
                         <div class="space-60"></div>
                     </div>
@@ -208,23 +208,23 @@
                                 <img src="{{ asset('/images/forum.png') }}" alt="Logo">
                             </div>
                             <h4>Forum</h4>
-                            <p>Bierz czynny udział w dyskusjach</p>
+                            <p>Ask questions and get answer</p>
                         </div>
                         <div class="space-60"></div>
                         <div class="service-box wow fadeInUp" data-wow-delay="0.6s">
                             <div class="box-icon">
                                 <img src="{{ asset('/images/woman.png') }}" alt="Logo">
                             </div>
-                            <h4>Kontakty</h4>
-                            <p>Utrzymuj czynny kontakt z innymi mamami</p>
+                            <h4>Contacts</h4>
+                            <p>Take care of relationships with your crew</p>
                         </div>
                         <div class="space-60"></div>
                         <div class="service-box wow fadeInUp" data-wow-delay="0.4s">
                             <div class="box-icon">
                                 <img src="{{ asset('/images/gym.png') }}" alt="Logo">
                             </div>
-                            <h4>Dopasowanie</h4>
-                            <p>Znajduj inne mamy w okolicy o zainteresowaniach<br> podobnych do Twoich</p>
+                            <h4>Fit your new contacts</h4>
+                            <p>Find people with same interests like you</p>
                         </div>
                         <div class="space-60"></div>
                     </div>
@@ -299,7 +299,7 @@
                 </div>
             </div>
         </section>-->
-  
+
         <!--<section class="section-padding">
             <div class="container">
                 <div class="row">
@@ -365,7 +365,7 @@
                 </div>
             </div>
         </div>-->
-     
+
         <!--<section class="section-padding price-area" id="price_page">
             <div class="container">
                 <div class="row">
@@ -452,7 +452,7 @@
                 </div>
             </div>
         </section>-->
-   
+
         <!--<section id="questions_page" class="questions-area section-padding">
             <div class="container">
                 <div class="row">
@@ -509,7 +509,7 @@
                 </div>
             </div>
         </section>-->
-    
+
         <!--<div class="subscribe-area section-padding">
             <div class="container">
                 <div class="row">
@@ -517,53 +517,53 @@
                         <div class="subscribe-form text-center">
                             <h3 class="blue-color">Zapisz się do newslettera</h3>
                             <div class="space-20"></div>
-                            
+
                             <div id="mc_embed_signup">
                             <form action="https://e-mamy.us3.list-manage.com/subscribe/post?u=e05c2147ffb2f25baf5da262d&amp;id=9be1800ae8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                                 <div id="mc_embed_signup_scroll">
                                 <div class="mc-field-group">
                                     <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
                                 </div>
-                            
+
                             	<div id="mce-responses" class="clear">
                                     <div class="response" id="mce-error-response" style="display:none"></div>
                                     <div class="response" id="mce-success-response" style="display:none"></div>
-                                </div>   
+                                </div>
                                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_e05c2147ffb2f25baf5da262d_9be1800ae8" tabindex="-1" value=""></div>
                                 <div class="clear"><input type="submit" value="Zapisz się" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
                                 </div>
                             </form>
                             </div>
-                          
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>-->
-     
+
         <footer class="footer-area" id="contact_page">
             <div class="section-padding">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="page-title text-center">
-                                <h5 class="title">Kontakt</h5>
-                                <h3 class="dark-color">Pomóż nam rozwijać E-mamy</h3>
+                                <h5 class="title">Contact</h5>
+                                <h3 class="dark-color">Help us build better communities</h3>
                                 <div class="space-60"></div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-xs-12 col-sm-12">
                             <div class="footer-box">
-                                <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość"><div class="box-icon">
+                                <a href="mailto:contact@juff-app.com" title="Write a message"><div class="box-icon">
                                     <span class="lnr lnr-envelope"></span>
                                 </div></a>
-                                <a href="mailto:kontakt@e-mamy.pl" title="Napisz wiadomość"><p>kontakt@e-mamy.pl</p></a>
+                                <a href="mailto:contact@juff-app.com" title="Write a message"><p>contact@juff-app.com</p></a>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -571,16 +571,16 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 col-md-5">
-                        <span>Copyright &copy; 2019 E-mamy</span>
+                        <span>Copyright &copy; 2020 Juff-app.com</span>
                             <div class="space-10 hidden visible-xs"></div>
                         </div>
                         <div class="col-xs-12 col-md-7">
                             <div class="footer-menu">
                                 <ul>
-                                    <a href="https://www.facebook.com/E-mamy-678607299320582/" target="_blank" title="E-mamy - Facebook">
+                                    <a href="" target="_blank" title="Juff app - Facebook">
                                         <img src="{{ asset('/images/fb.png') }}" alt="Facebook">
                                     </a>
-                                    <a href="https://www.instagram.com/emamy_pl/" target="_blank" title="E-mamy - Facebook">
+                                    <a href="" target="_blank" title="Juff app - Instagram">
                                         <img src="{{ asset('/images/ig.png') }}" alt="Instagram">
                                     </a>
                                 </ul>
@@ -590,21 +590,21 @@
                 </div>
             </div>
         </footer>
-       
+
         <script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script><script type="text/javascript">window.dojoRequire(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us3.list-manage.com","uuid":"e05c2147ffb2f25baf5da262d","lid":"9be1800ae8","uniqueMethods":true}) })</script>
 
-     
+
         <script src="{{ URL::asset('/js/vendor/jquery-1.12.4.min.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/jquery-ui.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/bootstrap.min.js') }}"></script>
-        
+
         <script src="{{ URL::asset('/js/owl.carousel.min.js') }}"></script>
         <script src="{{ URL::asset('/js/contact-form.js') }}"></script>
         <script src="{{ URL::asset('/js/ajaxchimp.js') }}"></script>
         <script src="{{ URL::asset('/js/scrollUp.min.js') }}"></script>
         <script src="{{ URL::asset('/js/magnific-popup.min.js') }}"></script>
         <script src="{{ URL::asset('/js/wow.min.js') }}"></script>
-        
+
         <script src="{{ URL::asset('/js/main.js') }}"></script>
     </body>
 </html>
