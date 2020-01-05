@@ -9,9 +9,6 @@ import history from "./History";
 import Users from "./utils/Dashboard/Users/Users";
 import ForumCategories from "./utils/Dashboard/ForumCategories/ForumCategories";
 import ProductCategories from "./utils/Dashboard/ProductCategories/ProductCategories";
-import Information from "./utils/Dashboard/Information/Information";
-import Customize from "./utils/Dashboard/Customize/Customize";
-import Slides from "./utils/Dashboard/Slides/Slides";
 import Translations from "./utils/Dashboard/Translations/Translations";
 import Register from "./utils/Dashboard/Register/Register";
 
@@ -57,21 +54,6 @@ class Main extends Component<MainProps, MainState> {
                 path: "/product-categories",
                 name: "ProductCategories",
                 Component: ProductCategories
-            },
-            {
-                path: "/information",
-                name: "Information",
-                Component: Information
-            },
-            {
-                path: "/customize",
-                name: "Customize",
-                Component: Customize
-            },
-            {
-                path: "/slides",
-                name: "Slides",
-                Component: Slides
             },
             {
                 path: "/translations",

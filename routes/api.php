@@ -76,7 +76,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 //DASHBOARD
-Route::get('get-users', 'DashboardStatsController@getUsers');
-Route::get('get-products', 'DashboardStatsController@getProducts');
-Route::get('get-forum-posts', 'DashboardStatsController@getForumPosts');
-Route::get('get-forum-comments', 'DashboardStatsController@getForumComments');
+Route::get('get-users', 'Dashboard\DashboardStatsController@getUsers');
+Route::get('get-products', 'Dashboard\DashboardStatsController@getProducts');
+Route::get('get-forum-posts', 'Dashboard\DashboardStatsController@getForumPosts');
+Route::get('get-forum-comments', 'Dashboard\DashboardStatsController@getForumComments');
+
+Route::get('get-users-list', 'Dashboard\DashboardUsersController@getUsers');
+Route::post('get-users-by-query', 'Dashboard\DashboardUsersController@getUsersByQuery');
+Route::post('block-user', 'Dashboard\DashboardUsersController@blockUser');

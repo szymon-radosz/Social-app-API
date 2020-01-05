@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
+use App\Http\Traits\ErrorLogTrait;
 use App\Post;
 use App\PostComment;
 use App\Product;
@@ -10,6 +12,8 @@ use Carbon\Carbon;
 
 class DashboardStatsController extends Controller
 {
+    use ErrorLogTrait;
+
     public function getUsers()
     {
         try {

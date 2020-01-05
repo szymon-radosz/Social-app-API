@@ -1,0 +1,10 @@
+.user-search-box__container {
+    margin-bottom: 25px;
+
+    input {
+        max-width: $maxInputWidth;
+    }
+}
+.danger-row {
+    background-color: $lightRed;
+}
