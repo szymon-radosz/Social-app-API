@@ -23,14 +23,12 @@ class ForumCategories extends Component<
     }
 
     getCategories = () => {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             this.context.handleShowLoader(true);
             try {
                 axios
                     .get(`${this.context.API_URL}get-forum-categories`)
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -43,6 +41,7 @@ class ForumCategories extends Component<
                     });
             } catch (err) {
                 console.log(err);
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }
@@ -50,10 +49,8 @@ class ForumCategories extends Component<
     };
 
     handleCategoryChangeName = (id, name) => {
-        console.log(["handleCategoryChangeName", id, name]);
-
         this.context.handleShowLoader(true);
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let data = JSON.stringify({
                     id: id,
@@ -71,14 +68,19 @@ class ForumCategories extends Component<
                         }
                     )
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
-                        const { data } = response;
+                        this.context.handleShowAlert(
+                            "Successfully updated category",
+                            "success"
+                        );
 
                         resolve(response);
                     });
             } catch (err) {
-                console.log(err);
+                this.context.handleShowAlert(
+                    "Cannot update category",
+                    "danger"
+                );
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }
@@ -86,10 +88,8 @@ class ForumCategories extends Component<
     };
 
     handleCategoryBlock = id => {
-        console.log(["block", id]);
-
         this.context.handleShowLoader(true);
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let data = JSON.stringify({
                     id: id
@@ -102,13 +102,6 @@ class ForumCategories extends Component<
                         }
                     })
                     .then(response => {
-                        console.log([
-                            "response",
-                            response,
-                            response.status,
-                            this.state.categories
-                        ]);
-
                         let newCategoriesState = this.state.categories;
 
                         newCategoriesState.map((category, i) => {
@@ -118,10 +111,20 @@ class ForumCategories extends Component<
                         });
 
                         this.setState({ categories: newCategoriesState });
+
+                        this.context.handleShowAlert(
+                            "Successfully changed category status",
+                            "success"
+                        );
                         resolve(response);
                     });
             } catch (err) {
                 console.log(err);
+                this.context.handleShowAlert(
+                    "Cannot changed category status",
+                    "danger"
+                );
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }
@@ -129,39 +132,51 @@ class ForumCategories extends Component<
     };
 
     addNewCategory = name => {
-        console.log(["addNewCategory", name]);
-
-        this.context.handleShowLoader(true);
-        return new Promise(async resolve => {
-            try {
-                let data = JSON.stringify({
-                    name: name
-                });
-
-                axios
-                    .post(`${this.context.API_URL}add-forum-category`, data, {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(response => {
-                        console.log([
-                            "response",
-                            response,
-                            response.status,
-                            this.state.categories
-                        ]);
-
-                        this.getCategories();
-
-                        resolve(response);
+        if (!name) {
+            this.context.handleShowAlert(
+                "Please, provide category name",
+                "danger"
+            );
+        } else {
+            this.context.handleShowLoader(true);
+            return new Promise(async (resolve, reject) => {
+                try {
+                    let data = JSON.stringify({
+                        name: name
                     });
-            } catch (err) {
-                console.log(err);
-            } finally {
-                this.context.handleShowLoader(false);
-            }
-        });
+
+                    axios
+                        .post(
+                            `${this.context.API_URL}add-forum-category`,
+                            data,
+                            {
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            }
+                        )
+                        .then(response => {
+                            this.getCategories();
+
+                            this.context.handleShowAlert(
+                                "Successfully added new category",
+                                "success"
+                            );
+
+                            resolve(response);
+                        });
+                } catch (err) {
+                    console.log(err);
+                    this.context.handleShowAlert(
+                        "Cannot added new category",
+                        "danger"
+                    );
+                    reject(err);
+                } finally {
+                    this.context.handleShowLoader(false);
+                }
+            });
+        }
     };
 
     componentDidMount = () => {

@@ -41804,6 +41804,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Dashboard_ProductCategories_ProductCategories__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/Dashboard/ProductCategories/ProductCategories */ "./resources/js/components/utils/Dashboard/ProductCategories/ProductCategories.tsx");
 /* harmony import */ var _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/Dashboard/Translations/Translations */ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx");
 /* harmony import */ var _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/Dashboard/Register/Register */ "./resources/js/components/utils/Dashboard/Register/Register.tsx");
+/* harmony import */ var _utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utils/Alert/Alert */ "./resources/js/components/utils/Alert/Alert.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -41829,12 +41830,18 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 
 
+
 var Main = (function (_super) {
     __extends(Main, _super);
     function Main(props) {
         var _this = _super.call(this, props) || this;
+        _this.handleShowAlert = function (message, status) {
+            _this.setState({ alertMessage: message, alertStatus: status });
+            setTimeout(function () {
+                _this.setState({ alertMessage: "", alertStatus: "" });
+            }, 4000);
+        };
         _this.handleShowLoader = function (status) {
-            console.log("handleShowLoader");
             _this.setState({ showLoader: status });
         };
         _this.handleShowSidebarText = function () {
@@ -41845,7 +41852,6 @@ var Main = (function (_super) {
         };
         _this.changePath = function (path, state) {
             if (state === void 0) { state = {}; }
-            console.log(path);
             _this.history.push({ pathname: path, state: state });
         };
         _this.state = {
@@ -41853,7 +41859,9 @@ var Main = (function (_super) {
             showSidebarText: false,
             activeMenuSection: "",
             API_URL: "http://127.0.0.1:8000/api/",
-            showLoader: false
+            showLoader: false,
+            alertMessage: "",
+            alertStatus: ""
         };
         _this.history = _History__WEBPACK_IMPORTED_MODULE_6__["default"];
         _this.routes = [
@@ -41896,7 +41904,7 @@ var Main = (function (_super) {
         return _this;
     }
     Main.prototype.render = function () {
-        var _a = this.state, userLoggedIn = _a.userLoggedIn, showSidebarText = _a.showSidebarText, activeMenuSection = _a.activeMenuSection, API_URL = _a.API_URL, showLoader = _a.showLoader;
+        var _a = this.state, userLoggedIn = _a.userLoggedIn, showSidebarText = _a.showSidebarText, activeMenuSection = _a.activeMenuSection, API_URL = _a.API_URL, showLoader = _a.showLoader, alertMessage = _a.alertMessage, alertStatus = _a.alertStatus;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MainContext__WEBPACK_IMPORTED_MODULE_5__["MainContext"].Provider, { value: {
                 changePath: this.changePath,
                 userLoggedIn: userLoggedIn,
@@ -41906,8 +41914,10 @@ var Main = (function (_super) {
                 handlAactiveMenuSection: this.handlAactiveMenuSection,
                 API_URL: API_URL,
                 showLoader: showLoader,
-                handleShowLoader: this.handleShowLoader
+                handleShowLoader: this.handleShowLoader,
+                handleShowAlert: this.handleShowAlert
             } },
+            alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], { message: alertMessage, status: alertStatus })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_styledComponents_AppComponent__WEBPACK_IMPORTED_MODULE_2__["AppComponent"], null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["BrowserRouter"], { history: _History__WEBPACK_IMPORTED_MODULE_6__["default"] },
@@ -41946,8 +41956,31 @@ var MainContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
     handlAactiveMenuSection: function (text) { },
     API_URL: "",
     handleShowLoader: function (status) { },
-    showLoader: false
+    showLoader: false,
+    handleShowAlert: function (message, status) { }
 });
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Alert/Alert.tsx":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/utils/Alert/Alert.tsx ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var Alert = function (_a) {
+    var message = _a.message, status = _a.status;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "alert alert-" + status + " alert-dismissible", role: "alert" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, message)));
+};
+/* harmony default export */ __webpack_exports__["default"] = (Alert);
 
 
 /***/ }),
@@ -42288,13 +42321,12 @@ var ForumCategories = (function (_super) {
     function ForumCategories(props) {
         var _this = _super.call(this, props) || this;
         _this.getCategories = function () {
-            return new Promise(function (resolve) {
+            return new Promise(function (resolve, reject) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_4___default.a
                         .get(_this.context.API_URL + "get-forum-categories")
                         .then(function (response) {
-                        console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({
@@ -42306,6 +42338,7 @@ var ForumCategories = (function (_super) {
                 }
                 catch (err) {
                     console.log(err);
+                    reject(err);
                 }
                 finally {
                     _this.context.handleShowLoader(false);
@@ -42313,10 +42346,10 @@ var ForumCategories = (function (_super) {
             });
         };
         _this.handleCategoryChangeName = function (id, name) {
-            console.log(["handleCategoryChangeName", id, name]);
             _this.context.handleShowLoader(true);
-            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                 var data;
+                var _this = this;
                 return __generator(this, function (_a) {
                     try {
                         data = JSON.stringify({
@@ -42330,13 +42363,13 @@ var ForumCategories = (function (_super) {
                             }
                         })
                             .then(function (response) {
-                            console.log(["response", response, response.status]);
-                            var data = response.data;
+                            _this.context.handleShowAlert("Successfully updated category", "success");
                             resolve(response);
                         });
                     }
                     catch (err) {
-                        console.log(err);
+                        this.context.handleShowAlert("Cannot update category", "danger");
+                        reject(err);
                     }
                     finally {
                         this.context.handleShowLoader(false);
@@ -42346,9 +42379,8 @@ var ForumCategories = (function (_super) {
             }); });
         };
         _this.handleCategoryBlock = function (id) {
-            console.log(["block", id]);
             _this.context.handleShowLoader(true);
-            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                 var data;
                 var _this = this;
                 return __generator(this, function (_a) {
@@ -42363,12 +42395,6 @@ var ForumCategories = (function (_super) {
                             }
                         })
                             .then(function (response) {
-                            console.log([
-                                "response",
-                                response,
-                                response.status,
-                                _this.state.categories
-                            ]);
                             var newCategoriesState = _this.state.categories;
                             newCategoriesState.map(function (category, i) {
                                 if (category.id === id) {
@@ -42376,11 +42402,14 @@ var ForumCategories = (function (_super) {
                                 }
                             });
                             _this.setState({ categories: newCategoriesState });
+                            _this.context.handleShowAlert("Successfully changed category status", "success");
                             resolve(response);
                         });
                     }
                     catch (err) {
                         console.log(err);
+                        this.context.handleShowAlert("Cannot changed category status", "danger");
+                        reject(err);
                     }
                     finally {
                         this.context.handleShowLoader(false);
@@ -42390,42 +42419,43 @@ var ForumCategories = (function (_super) {
             }); });
         };
         _this.addNewCategory = function (name) {
-            console.log(["addNewCategory", name]);
-            _this.context.handleShowLoader(true);
-            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                var data;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    try {
-                        data = JSON.stringify({
-                            name: name
-                        });
-                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
-                            .post(this.context.API_URL + "add-forum-category", data, {
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
-                        })
-                            .then(function (response) {
-                            console.log([
-                                "response",
-                                response,
-                                response.status,
-                                _this.state.categories
-                            ]);
-                            _this.getCategories();
-                            resolve(response);
-                        });
-                    }
-                    catch (err) {
-                        console.log(err);
-                    }
-                    finally {
-                        this.context.handleShowLoader(false);
-                    }
-                    return [2];
-                });
-            }); });
+            if (!name) {
+                _this.context.handleShowAlert("Please, provide category name", "danger");
+            }
+            else {
+                _this.context.handleShowLoader(true);
+                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var data;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        try {
+                            data = JSON.stringify({
+                                name: name
+                            });
+                            axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                                .post(this.context.API_URL + "add-forum-category", data, {
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(function (response) {
+                                _this.getCategories();
+                                _this.context.handleShowAlert("Successfully added new category", "success");
+                                resolve(response);
+                            });
+                        }
+                        catch (err) {
+                            console.log(err);
+                            this.context.handleShowAlert("Cannot added new category", "danger");
+                            reject(err);
+                        }
+                        finally {
+                            this.context.handleShowLoader(false);
+                        }
+                        return [2];
+                    });
+                }); });
+            }
         };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Forum Categories");
@@ -42881,13 +42911,12 @@ var Users = (function (_super) {
     function Users(props) {
         var _this = _super.call(this, props) || this;
         _this.getUsers = function () {
-            return new Promise(function (resolve) {
+            return new Promise(function (resolve, reject) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_6___default.a
                         .get(_this.context.API_URL + "get-users-list")
                         .then(function (response) {
-                        console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({
@@ -42904,6 +42933,7 @@ var Users = (function (_super) {
                 }
                 catch (err) {
                     console.log(err);
+                    reject(err);
                 }
                 finally {
                     _this.context.handleShowLoader(false);
@@ -42912,14 +42942,13 @@ var Users = (function (_super) {
         };
         _this.handlePageChange = function (data) {
             _this.context.handleShowLoader(true);
-            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                 var _this = this;
                 return __generator(this, function (_a) {
                     try {
                         axios__WEBPACK_IMPORTED_MODULE_6___default.a
                             .get(this.context.API_URL + "get-users-list?page=" + (data.selected + 1))
                             .then(function (response) {
-                            console.log(["response", response, response.status]);
                             var data = response.data;
                             if (response.status === 200) {
                                 _this.setState({
@@ -42936,6 +42965,7 @@ var Users = (function (_super) {
                     }
                     catch (err) {
                         console.log(err);
+                        reject(err);
                     }
                     finally {
                         this.context.handleShowLoader(false);
@@ -42945,13 +42975,12 @@ var Users = (function (_super) {
             }); });
         };
         _this.getUserByQuery = function (query) {
-            console.log(query);
             if (!query) {
                 _this.getUsers();
             }
             else {
                 _this.context.handleShowLoader(true);
-                return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                     var data;
                     var _this = this;
                     return __generator(this, function (_a) {
@@ -42966,11 +42995,6 @@ var Users = (function (_super) {
                                 }
                             })
                                 .then(function (response) {
-                                console.log([
-                                    "response",
-                                    response,
-                                    response.status
-                                ]);
                                 var data = response.data;
                                 if (response.status === 200) {
                                     _this.setState({
@@ -42987,6 +43011,7 @@ var Users = (function (_super) {
                         }
                         catch (err) {
                             console.log(err);
+                            reject(err);
                         }
                         finally {
                             this.context.handleShowLoader(false);
@@ -42997,9 +43022,8 @@ var Users = (function (_super) {
             }
         };
         _this.handleUserBlock = function (id) {
-            console.log(["block", id]);
             _this.context.handleShowLoader(true);
-            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                 var data;
                 var _this = this;
                 return __generator(this, function (_a) {
@@ -43014,12 +43038,6 @@ var Users = (function (_super) {
                             }
                         })
                             .then(function (response) {
-                            console.log([
-                                "response",
-                                response,
-                                response.status,
-                                _this.state.users
-                            ]);
                             var newUsersState = _this.state.users;
                             newUsersState.map(function (user, i) {
                                 if (user.id === id) {
@@ -43027,11 +43045,14 @@ var Users = (function (_super) {
                                 }
                             });
                             _this.setState({ users: newUsersState });
+                            _this.context.handleShowAlert("Successfully changed user status", "success");
                             resolve(response);
                         });
                     }
                     catch (err) {
                         console.log(err);
+                        this.context.handleShowAlert("Cannot blocked the user", "danger");
+                        reject(err);
                     }
                     finally {
                         this.context.handleShowLoader(false);

@@ -6,6 +6,8 @@ interface MainState {
     activeMenuSection: string;
     API_URL: string;
     showLoader: boolean;
+    alertMessage: string;
+    alertStatus: string;
 }
 
 export { MainProps, MainState };

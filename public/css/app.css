@@ -109,6 +109,13 @@ body .legend__container .legend .legend__text {
   font-size: 12px;
 }
 
+body .alert {
+  position: fixed;
+  top: 70px;
+  right: 10px;
+  z-index: 10;
+}
+
 .sidebar {
   background-color: #fff;
   border-right: 2px solid #f0eff4;

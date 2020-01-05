@@ -11,6 +11,7 @@ import ForumCategories from "./utils/Dashboard/ForumCategories/ForumCategories";
 import ProductCategories from "./utils/Dashboard/ProductCategories/ProductCategories";
 import Translations from "./utils/Dashboard/Translations/Translations";
 import Register from "./utils/Dashboard/Register/Register";
+import Alert from "./utils/Alert/Alert";
 
 class Main extends Component<MainProps, MainState> {
     history: any;
@@ -24,7 +25,9 @@ class Main extends Component<MainProps, MainState> {
             showSidebarText: false,
             activeMenuSection: "",
             API_URL: "http://127.0.0.1:8000/api/",
-            showLoader: false
+            showLoader: false,
+            alertMessage: "",
+            alertStatus: ""
         };
 
         this.history = history;
@@ -68,8 +71,15 @@ class Main extends Component<MainProps, MainState> {
         ];
     }
 
+    handleShowAlert = (message: string, status: string) => {
+        this.setState({ alertMessage: message, alertStatus: status });
+
+        setTimeout(() => {
+            this.setState({ alertMessage: "", alertStatus: "" });
+        }, 4000);
+    };
+
     handleShowLoader = (status: boolean) => {
-        console.log("handleShowLoader");
         this.setState({ showLoader: status });
     };
 
@@ -82,7 +92,6 @@ class Main extends Component<MainProps, MainState> {
     };
 
     changePath = (path: string, state = {}) => {
-        console.log(path);
         this.history.push({ pathname: path, state: state });
     };
 
@@ -92,7 +101,9 @@ class Main extends Component<MainProps, MainState> {
             showSidebarText,
             activeMenuSection,
             API_URL,
-            showLoader
+            showLoader,
+            alertMessage,
+            alertStatus
         } = this.state;
 
         return (
@@ -106,9 +117,13 @@ class Main extends Component<MainProps, MainState> {
                     handlAactiveMenuSection: this.handlAactiveMenuSection,
                     API_URL: API_URL,
                     showLoader: showLoader,
-                    handleShowLoader: this.handleShowLoader
+                    handleShowLoader: this.handleShowLoader,
+                    handleShowAlert: this.handleShowAlert
                 }}
             >
+                {alertMessage && alertStatus && (
+                    <Alert message={alertMessage} status={alertStatus} />
+                )}
                 <div className="container-sm app__container">
                     <AppComponent>
                         <Router history={history}>

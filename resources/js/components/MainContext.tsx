@@ -8,5 +8,6 @@ export const MainContext = React.createContext({
     handlAactiveMenuSection: (text: string) => {},
     API_URL: "",
     handleShowLoader: (status: boolean) => {},
-    showLoader: false
+    showLoader: false,
+    handleShowAlert: (message: string, status: string) => {}
 });

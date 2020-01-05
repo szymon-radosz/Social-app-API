@@ -24,14 +24,12 @@ class Users extends Component<UsersProps, UsersState> {
     }
 
     getUsers = () => {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             this.context.handleShowLoader(true);
             try {
                 axios
                     .get(`${this.context.API_URL}get-users-list`)
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -49,6 +47,7 @@ class Users extends Component<UsersProps, UsersState> {
                     });
             } catch (err) {
                 console.log(err);
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }
@@ -57,7 +56,7 @@ class Users extends Component<UsersProps, UsersState> {
 
     handlePageChange = data => {
         this.context.handleShowLoader(true);
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             try {
                 axios
                     .get(
@@ -66,8 +65,6 @@ class Users extends Component<UsersProps, UsersState> {
                         }get-users-list?page=${data.selected + 1}`
                     )
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -85,6 +82,7 @@ class Users extends Component<UsersProps, UsersState> {
                     });
             } catch (err) {
                 console.log(err);
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }
@@ -92,12 +90,11 @@ class Users extends Component<UsersProps, UsersState> {
     };
 
     getUserByQuery = query => {
-        console.log(query);
         if (!query) {
             this.getUsers();
         } else {
             this.context.handleShowLoader(true);
-            return new Promise(async resolve => {
+            return new Promise(async (resolve, reject) => {
                 try {
                     let data = JSON.stringify({
                         query: query
@@ -114,12 +111,6 @@ class Users extends Component<UsersProps, UsersState> {
                             }
                         )
                         .then(response => {
-                            console.log([
-                                "response",
-                                response,
-                                response.status
-                            ]);
-
                             const { data } = response;
 
                             if (response.status === 200) {
@@ -137,6 +128,7 @@ class Users extends Component<UsersProps, UsersState> {
                         });
                 } catch (err) {
                     console.log(err);
+                    reject(err);
                 } finally {
                     this.context.handleShowLoader(false);
                 }
@@ -145,10 +137,8 @@ class Users extends Component<UsersProps, UsersState> {
     };
 
     handleUserBlock = id => {
-        console.log(["block", id]);
-
         this.context.handleShowLoader(true);
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             try {
                 let data = JSON.stringify({
                     id: id
@@ -161,13 +151,6 @@ class Users extends Component<UsersProps, UsersState> {
                         }
                     })
                     .then(response => {
-                        console.log([
-                            "response",
-                            response,
-                            response.status,
-                            this.state.users
-                        ]);
-
                         let newUsersState = this.state.users;
 
                         newUsersState.map((user, i) => {
@@ -177,10 +160,20 @@ class Users extends Component<UsersProps, UsersState> {
                         });
 
                         this.setState({ users: newUsersState });
+
+                        this.context.handleShowAlert(
+                            "Successfully changed user status",
+                            "success"
+                        );
                         resolve(response);
                     });
             } catch (err) {
                 console.log(err);
+                this.context.handleShowAlert(
+                    "Cannot blocked the user",
+                    "danger"
+                );
+                reject(err);
             } finally {
                 this.context.handleShowLoader(false);
             }

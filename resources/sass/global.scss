@@ -78,4 +78,10 @@ body {
             }
         }
     }
+    .alert {
+        position: fixed;
+        top: 70px;
+        right: 10px;
+        z-index: 10;
+    }
 }
