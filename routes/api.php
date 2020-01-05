@@ -19,9 +19,6 @@ Route::get('password-reset', 'ResetPasswordController@showForm'); //I did not cr
 Route::post('password-reset', 'ResetPasswordController@sendPasswordResetToken');
 Route::post('reset-password/{token}', array('uses' => 'ResetPasswordController@resetPassword', 'as' => 'resetPassword'));
 
-Route::post('saveKid', 'KidController@store');
-Route::post('cleanUserKids', 'KidController@cleanUserKids');
-
 Route::post('saveConversation', 'ConversationsController@store');
 Route::post('showUserConversations', 'ConversationsController@showUserConversations');
 Route::post('showConversationDetails', 'ConversationsController@showConversationDetails');
@@ -84,3 +81,8 @@ Route::get('get-forum-comments', 'Dashboard\DashboardStatsController@getForumCom
 Route::get('get-users-list', 'Dashboard\DashboardUsersController@getUsers');
 Route::post('get-users-by-query', 'Dashboard\DashboardUsersController@getUsersByQuery');
 Route::post('block-user', 'Dashboard\DashboardUsersController@blockUser');
+
+Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController@getCategories');
+Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@updateCategory');
+Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
+Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');

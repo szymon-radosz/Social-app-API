@@ -142,7 +142,6 @@ class UserController extends Controller
     {
         try {
             $userData = User::where('id', Auth::user()->id)
-                ->with('kids')
                 ->with('hobbies')
                 ->with('conversations')
                 ->with('votes')
@@ -258,7 +257,6 @@ class UserController extends Controller
                 );
 
             $user = User::where('email', $userEmail)
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->get();
@@ -310,7 +308,6 @@ class UserController extends Controller
 
             $user = User::
                 where('email', $userEmail)
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->with('notifications')
@@ -345,7 +342,6 @@ class UserController extends Controller
                 ['lattitude', '>', $minLat],
                 ['longitude', '>', $minLng],
             ])
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->get();
@@ -414,7 +410,6 @@ class UserController extends Controller
         try {
             $userList = User::
                 where('email', 'like', '%' . $email . '%')
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->get();
@@ -432,7 +427,6 @@ class UserController extends Controller
         try {
             $userList = User::
                 where('name', 'like', '%' . $name . '%')
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->get();
@@ -513,17 +507,6 @@ class UserController extends Controller
                 ['longitude', '>', $calculateDistanceDifference->getData()->lngDifferenceBottom],
                 ['longitude', '<', $calculateDistanceDifference->getData()->lngDifferenceTop],
             ])
-                ->whereHas('kids', function ($query) use ($calculateChildAgeDifference, $childGender, $childGenderQueryValue) {
-                    if ($childGender) {
-                        //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
-                        $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
-                            ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate)
-                            ->where('child_gender', '=', $childGenderQueryValue);
-                    } else {
-                        $query->where('date_of_birth', '>', $calculateChildAgeDifference->getData()->formattedStartDate)
-                            ->where('date_of_birth', '<', $calculateChildAgeDifference->getData()->formattedEndDate);
-                    }
-                })
                 ->whereHas('hobbies', function ($query) use ($hobbyId) {
                     //var_dump($hobbyId);
                     if ($hobbyId != 0) {
@@ -531,7 +514,6 @@ class UserController extends Controller
                         $query->where('hobby_id', '=', $hobbyId);
                     }
                 })
-                ->with('kids')
                 ->with('hobbies')
                 ->with('votes')
                 ->get();

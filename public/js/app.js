@@ -42183,6 +42183,32 @@ Dashboard.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"]
 
 /***/ }),
 
+/***/ "./resources/js/components/utils/Dashboard/ForumCategories/AddCategory/AddCategory.tsx":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/ForumCategories/AddCategory/AddCategory.tsx ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var AddCategory = function (_a) {
+    var addNewCategory = _a.addNewCategory;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewCategory(name); } },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Category Name...", onChange: function (e) { return setName(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewCategory(name); }, className: "btn blue-btn" }, "Add New Category"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (AddCategory);
+
+
+/***/ }),
+
 /***/ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategories.tsx":
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/utils/Dashboard/ForumCategories/ForumCategories.tsx ***!
@@ -42197,6 +42223,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
 /* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../MainContext */ "./resources/js/components/MainContext.tsx");
 /* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _ForumCategoryList_ForumCategoryList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ForumCategoryList/ForumCategoryList */ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryList.tsx");
+/* harmony import */ var _AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AddCategory/AddCategory */ "./resources/js/components/utils/Dashboard/ForumCategories/AddCategory/AddCategory.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -42210,6 +42240,45 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
 
 
 
@@ -42218,20 +42287,242 @@ var ForumCategories = (function (_super) {
     __extends(ForumCategories, _super);
     function ForumCategories(props) {
         var _this = _super.call(this, props) || this;
+        _this.getCategories = function () {
+            return new Promise(function (resolve) {
+                _this.context.handleShowLoader(true);
+                try {
+                    axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                        .get(_this.context.API_URL + "get-forum-categories")
+                        .then(function (response) {
+                        console.log(["response", response, response.status]);
+                        var data = response.data;
+                        if (response.status === 200) {
+                            _this.setState({
+                                categories: data.result.categories
+                            });
+                        }
+                        resolve(response);
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                }
+                finally {
+                    _this.context.handleShowLoader(false);
+                }
+            });
+        };
+        _this.handleCategoryChangeName = function (id, name) {
+            console.log(["handleCategoryChangeName", id, name]);
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            id: id,
+                            name: name
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "update-forum-category", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            console.log(["response", response, response.status]);
+                            var data = response.data;
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
+        _this.handleCategoryBlock = function (id) {
+            console.log(["block", id]);
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            id: id
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "block-forum-category", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            console.log([
+                                "response",
+                                response,
+                                response.status,
+                                _this.state.categories
+                            ]);
+                            var newCategoriesState = _this.state.categories;
+                            newCategoriesState.map(function (category, i) {
+                                if (category.id === id) {
+                                    category.blocked = !category.blocked;
+                                }
+                            });
+                            _this.setState({ categories: newCategoriesState });
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
+        _this.addNewCategory = function (name) {
+            console.log(["addNewCategory", name]);
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            name: name
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "add-forum-category", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            console.log([
+                                "response",
+                                response,
+                                response.status,
+                                _this.state.categories
+                            ]);
+                            _this.getCategories();
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Forum Categories");
+            _this.getCategories();
         };
-        _this.state = {};
+        _this.state = {
+            categories: []
+        };
         return _this;
     }
     ForumCategories.prototype.render = function () {
+        var categories = this.state.categories;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Forum Categories" })));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Forum Categories" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewCategory: this.addNewCategory }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryList_ForumCategoryList__WEBPACK_IMPORTED_MODULE_5__["default"], { handleCategoryChangeName: this.handleCategoryChangeName, categories: categories, handleCategoryBlock: this.handleCategoryBlock })));
     };
     return ForumCategories;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
 ForumCategories.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
 /* harmony default export */ __webpack_exports__["default"] = (ForumCategories);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryList.tsx":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryList.tsx ***!
+  \*********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ForumCategoryRow/ForumCategoryRow */ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryRow/ForumCategoryRow.tsx");
+/* harmony import */ var _utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../utils/TableLegend */ "./resources/js/components/utils/Dashboard/utils/TableLegend.tsx");
+
+
+
+var legends = [
+    {
+        text: "Blocked Forum Categories",
+        color: "#ffd4d8"
+    }
+];
+var UserList = function (_a) {
+    var categories = _a.categories, handleCategoryChangeName = _a.handleCategoryChangeName, handleCategoryBlock = _a.handleCategoryBlock;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "table-responsive" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", { className: "table" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "#"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Name"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Created At"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Update"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Blocked"))),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, categories &&
+                    categories.map(function (category, i) {
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__["default"], { category: category, i: i, handleCategoryChangeName: handleCategoryChangeName, handleCategoryBlock: handleCategoryBlock }));
+                    })))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__["default"], { legends: legends })));
+};
+/* harmony default export */ __webpack_exports__["default"] = (UserList);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryRow/ForumCategoryRow.tsx":
+/*!*************************************************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/ForumCategories/ForumCategoryList/ForumCategoryRow/ForumCategoryRow.tsx ***!
+  \*************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var ForumCategoryRow = function (_a) {
+    var category = _a.category, i = _a.i, handleCategoryChangeName = _a.handleCategoryChangeName, handleCategoryBlock = _a.handleCategoryBlock;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(category.name), name = _b[0], setName = _b[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: category.blocked && "danger-row" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Category name", value: name, onChange: function (e) { return setName(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, category.created_at && category.created_at),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleCategoryChangeName(category.id, name); }, className: "btn blue-btn" }, "Update")),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleCategoryBlock(category.id); }, className: "btn blue-btn" }, category.blocked ? "Unblock" : "Block"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (ForumCategoryRow);
 
 
 /***/ }),

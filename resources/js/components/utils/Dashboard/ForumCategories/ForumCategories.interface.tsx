@@ -1,5 +1,7 @@
 interface ForumCategoriesProps {}
 
-interface ForumCategoriesState {}
+interface ForumCategoriesState {
+    categories: any;
+}
 
 export { ForumCategoriesProps, ForumCategoriesState };
