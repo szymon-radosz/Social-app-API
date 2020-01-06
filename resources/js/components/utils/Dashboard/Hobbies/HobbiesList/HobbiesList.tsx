@@ -1,15 +1,15 @@
 import React from "react";
-import ForumCategoryRow from "./ForumCategoryRow/ForumCategoryRow";
+import HobbyRow from "./HobbyRow/HobbyRow";
 import TableLegend from "./../../utils/TableLegend";
 
 const legends = [
     {
-        text: "Blocked Forum Categories",
+        text: "Blocked Hobbies",
         color: "#ffd4d8"
     }
 ];
 
-const ForumCategoryList = ({ categories, handleCategoryBlock }) => {
+const HobbiesList = ({ hobbies, handleHobbyBlock }) => {
     return (
         <>
             <div className="table-responsive">
@@ -23,16 +23,14 @@ const ForumCategoryList = ({ categories, handleCategoryBlock }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {categories &&
-                            categories.map((category, i) => {
+                        {hobbies &&
+                            hobbies.map((hobby, i) => {
                                 return (
-                                    <ForumCategoryRow
+                                    <HobbyRow
                                         key={i}
-                                        category={category}
+                                        hobby={hobby}
                                         i={i}
-                                        handleCategoryBlock={
-                                            handleCategoryBlock
-                                        }
+                                        handleHobbyBlock={handleHobbyBlock}
                                     />
                                 );
                             })}
@@ -44,4 +42,4 @@ const ForumCategoryList = ({ categories, handleCategoryBlock }) => {
     );
 };
 
-export default ForumCategoryList;
+export default HobbiesList;

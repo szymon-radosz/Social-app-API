@@ -1,37 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ForumCategoryRow = ({
-    category,
-    i,
-    handleCategoryChangeName,
-    handleCategoryBlock
-}) => {
-    const [name, setName] = useState(category.name);
-
+const ForumCategoryRow = ({ category, i, handleCategoryBlock }) => {
     return (
         <tr className={category.blocked && "danger-row"}>
             <th scope="row">{i + 1}</th>
-            <td>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Category name"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                    />
-                </div>
-            </td>
+            <td>{category.name}</td>
             <td>{category.created_at && category.created_at}</td>
-            <td>
-                <button
-                    type="button"
-                    onClick={() => handleCategoryChangeName(category.id, name)}
-                    className="btn blue-btn"
-                >
-                    Update
-                </button>
-            </td>
             <td>
                 <button
                     type="button"

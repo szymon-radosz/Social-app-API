@@ -8,6 +8,7 @@ import { MainContext } from "./MainContext";
 import history from "./History";
 import Users from "./utils/Dashboard/Users/Users";
 import ForumCategories from "./utils/Dashboard/ForumCategories/ForumCategories";
+import Hobbies from "./utils/Dashboard/Hobbies/Hobbies";
 import Translations from "./utils/Dashboard/Translations/Translations";
 import Register from "./utils/Dashboard/Register/Register";
 import Alert from "./utils/Alert/Alert";
@@ -51,6 +52,11 @@ class Main extends Component<MainProps, MainState> {
                 path: "/forum-categories",
                 name: "ForumCategories",
                 Component: ForumCategories
+            },
+            {
+                path: "/hobbies",
+                name: "Hobbies",
+                Component: Hobbies
             },
             {
                 path: "/translations",

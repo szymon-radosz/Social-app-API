@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostCategoriesTable extends Migration
+class AddBlockedToTranslations extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreatePostCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique();
-            $table->timestamps();
+        Schema::table('translations', function ($table) {
+            $table->boolean('blocked')->default(0);
         });
     }
 
@@ -27,6 +25,8 @@ class CreatePostCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_categories');
+        Schema::table('translations', function (Blueprint $table) {
+            $table->dropColumn('blocked');
+        });
     }
 }

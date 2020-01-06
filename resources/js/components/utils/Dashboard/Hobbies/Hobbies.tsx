@@ -1,39 +1,33 @@
 import React, { Component } from "react";
-import {
-    ForumCategoriesProps,
-    ForumCategoriesState
-} from "./ForumCategories.interface";
+import { HobbiesProps, HobbiesState } from "./Hobbies.interface";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
 import Header from "./../utils/Header";
 import axios from "axios";
-import ForumCategoryList from "./ForumCategoryList/ForumCategoryList";
+import HobbiesList from "./HobbiesList/HobbiesList";
 import AddCategory from "./AddCategory/AddCategory";
 
-class ForumCategories extends Component<
-    ForumCategoriesProps,
-    ForumCategoriesState
-> {
-    constructor(props: ForumCategoriesProps) {
+class Hobbies extends Component<HobbiesProps, HobbiesState> {
+    constructor(props: HobbiesProps) {
         super(props);
 
         this.state = {
-            categories: []
+            hobbies: []
         };
     }
 
-    getCategories = () => {
+    getHobbies = () => {
         return new Promise((resolve, reject) => {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-forum-categories`)
+                    .get(`${this.context.API_URL}get-hobbies`)
                     .then(response => {
                         const { data } = response;
 
                         if (response.status === 200) {
                             this.setState({
-                                categories: data.result.categories
+                                hobbies: data.result.hobbies
                             });
                         }
 
@@ -48,7 +42,7 @@ class ForumCategories extends Component<
         });
     };
 
-    handleCategoryBlock = id => {
+    handleHobbyBlock = id => {
         this.context.handleShowLoader(true);
         return new Promise(async (resolve, reject) => {
             try {
@@ -57,24 +51,24 @@ class ForumCategories extends Component<
                 });
 
                 axios
-                    .post(`${this.context.API_URL}block-forum-category`, data, {
+                    .post(`${this.context.API_URL}block-hobby`, data, {
                         headers: {
                             "Content-Type": "application/json"
                         }
                     })
                     .then(response => {
-                        let newCategoriesState = this.state.categories;
+                        let newHobbiesState = this.state.hobbies;
 
-                        newCategoriesState.map((category, i) => {
-                            if (category.id === id) {
-                                category.blocked = !category.blocked;
+                        newHobbiesState.map((hobby, i) => {
+                            if (hobby.id === id) {
+                                hobby.blocked = !hobby.blocked;
                             }
                         });
 
-                        this.setState({ categories: newCategoriesState });
+                        this.setState({ hobbies: newHobbiesState });
 
                         this.context.handleShowAlert(
-                            "Successfully changed category status",
+                            "Successfully changed hobby status",
                             "success"
                         );
                         resolve(response);
@@ -82,7 +76,7 @@ class ForumCategories extends Component<
             } catch (err) {
                 console.log(err);
                 this.context.handleShowAlert(
-                    "Cannot changed category status",
+                    "Cannot changed hobby status",
                     "danger"
                 );
                 reject(err);
@@ -92,10 +86,10 @@ class ForumCategories extends Component<
         });
     };
 
-    addNewCategory = name => {
+    addNewHobby = name => {
         if (!name) {
             this.context.handleShowAlert(
-                "Please, provide category name",
+                "Please, provide hobby name",
                 "danger"
             );
         } else {
@@ -107,20 +101,16 @@ class ForumCategories extends Component<
                     });
 
                     axios
-                        .post(
-                            `${this.context.API_URL}add-forum-category`,
-                            data,
-                            {
-                                headers: {
-                                    "Content-Type": "application/json"
-                                }
+                        .post(`${this.context.API_URL}add-hobby`, data, {
+                            headers: {
+                                "Content-Type": "application/json"
                             }
-                        )
+                        })
                         .then(response => {
-                            this.getCategories();
+                            this.getHobbies();
 
                             this.context.handleShowAlert(
-                                "Successfully added new category",
+                                "Successfully added new hobby",
                                 "success"
                             );
 
@@ -129,7 +119,7 @@ class ForumCategories extends Component<
                 } catch (err) {
                     console.log(err);
                     this.context.handleShowAlert(
-                        "Cannot added new category",
+                        "Cannot added new hobby",
                         "danger"
                     );
                     reject(err);
@@ -141,28 +131,28 @@ class ForumCategories extends Component<
     };
 
     componentDidMount = () => {
-        this.context.handlAactiveMenuSection("Forum Categories");
+        this.context.handlAactiveMenuSection("Hobbies");
 
-        this.getCategories();
+        this.getHobbies();
     };
 
     render() {
-        const { categories } = this.state;
+        const { hobbies } = this.state;
 
         return (
             <DashboardContainer>
-                <Header text="Forum Categories" />
+                <Header text="Hobbies List" />
 
-                <AddCategory addNewCategory={this.addNewCategory} />
+                <AddCategory addNewHobby={this.addNewHobby} />
 
-                <ForumCategoryList
-                    categories={categories}
-                    handleCategoryBlock={this.handleCategoryBlock}
+                <HobbiesList
+                    hobbies={hobbies}
+                    handleHobbyBlock={this.handleHobbyBlock}
                 />
             </DashboardContainer>
         );
     }
 }
 
-ForumCategories.contextType = MainContext;
-export default ForumCategories;
+Hobbies.contextType = MainContext;
+export default Hobbies;

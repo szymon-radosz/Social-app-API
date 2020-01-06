@@ -75,6 +75,11 @@ Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesControll
 Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
 Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');
 
+Route::get('get-hobbies', 'Dashboard\DashboardHobbyController@getHobbies');
+Route::post('update-hobby', 'Dashboard\DashboardHobbyController@updateHobby');
+Route::post('block-hobby', 'Dashboard\DashboardHobbyController@blockHobby');
+Route::post('add-hobby', 'Dashboard\DashboardHobbyController@addHobby');
+
 Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations');
 Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
 Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');

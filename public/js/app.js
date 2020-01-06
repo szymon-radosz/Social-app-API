@@ -41801,9 +41801,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _History__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./History */ "./resources/js/components/History.tsx");
 /* harmony import */ var _utils_Dashboard_Users_Users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/Dashboard/Users/Users */ "./resources/js/components/utils/Dashboard/Users/Users.tsx");
 /* harmony import */ var _utils_Dashboard_ForumCategories_ForumCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./utils/Dashboard/ForumCategories/ForumCategories */ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategories.tsx");
-/* harmony import */ var _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/Dashboard/Translations/Translations */ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx");
-/* harmony import */ var _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/Dashboard/Register/Register */ "./resources/js/components/utils/Dashboard/Register/Register.tsx");
-/* harmony import */ var _utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/Alert/Alert */ "./resources/js/components/utils/Alert/Alert.tsx");
+/* harmony import */ var _utils_Dashboard_Hobbies_Hobbies__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/Dashboard/Hobbies/Hobbies */ "./resources/js/components/utils/Dashboard/Hobbies/Hobbies.tsx");
+/* harmony import */ var _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/Dashboard/Translations/Translations */ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx");
+/* harmony import */ var _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/Dashboard/Register/Register */ "./resources/js/components/utils/Dashboard/Register/Register.tsx");
+/* harmony import */ var _utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utils/Alert/Alert */ "./resources/js/components/utils/Alert/Alert.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -41817,6 +41818,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 
 
 
@@ -41884,14 +41886,19 @@ var Main = (function (_super) {
                 Component: _utils_Dashboard_ForumCategories_ForumCategories__WEBPACK_IMPORTED_MODULE_8__["default"]
             },
             {
+                path: "/hobbies",
+                name: "Hobbies",
+                Component: _utils_Dashboard_Hobbies_Hobbies__WEBPACK_IMPORTED_MODULE_9__["default"]
+            },
+            {
                 path: "/translations",
                 name: "Translations",
-                Component: _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_9__["default"]
+                Component: _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_10__["default"]
             },
             {
                 path: "/register",
                 name: "Register",
-                Component: _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_10__["default"]
+                Component: _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_11__["default"]
             }
         ];
         return _this;
@@ -41910,7 +41917,7 @@ var Main = (function (_super) {
                 handleShowLoader: this.handleShowLoader,
                 handleShowAlert: this.handleShowAlert
             } },
-            alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_11__["default"], { message: alertMessage, status: alertStatus })),
+            alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], { message: alertMessage, status: alertStatus })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_styledComponents_AppComponent__WEBPACK_IMPORTED_MODULE_2__["AppComponent"], null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["BrowserRouter"], { history: _History__WEBPACK_IMPORTED_MODULE_6__["default"] },
@@ -42308,39 +42315,6 @@ var ForumCategories = (function (_super) {
                 }
             });
         };
-        _this.handleCategoryChangeName = function (id, name) {
-            _this.context.handleShowLoader(true);
-            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                var data;
-                var _this = this;
-                return __generator(this, function (_a) {
-                    try {
-                        data = JSON.stringify({
-                            id: id,
-                            name: name
-                        });
-                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
-                            .post(this.context.API_URL + "update-forum-category", data, {
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
-                        })
-                            .then(function (response) {
-                            _this.context.handleShowAlert("Successfully updated category", "success");
-                            resolve(response);
-                        });
-                    }
-                    catch (err) {
-                        this.context.handleShowAlert("Cannot update category", "danger");
-                        reject(err);
-                    }
-                    finally {
-                        this.context.handleShowLoader(false);
-                    }
-                    return [2];
-                });
-            }); });
-        };
         _this.handleCategoryBlock = function (id) {
             _this.context.handleShowLoader(true);
             return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
@@ -42434,7 +42408,7 @@ var ForumCategories = (function (_super) {
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Forum Categories" }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewCategory: this.addNewCategory }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryList_ForumCategoryList__WEBPACK_IMPORTED_MODULE_5__["default"], { handleCategoryChangeName: this.handleCategoryChangeName, categories: categories, handleCategoryBlock: this.handleCategoryBlock })));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryList_ForumCategoryList__WEBPACK_IMPORTED_MODULE_5__["default"], { categories: categories, handleCategoryBlock: this.handleCategoryBlock })));
     };
     return ForumCategories;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
@@ -42467,7 +42441,7 @@ var legends = [
     }
 ];
 var ForumCategoryList = function (_a) {
-    var categories = _a.categories, handleCategoryChangeName = _a.handleCategoryChangeName, handleCategoryBlock = _a.handleCategoryBlock;
+    var categories = _a.categories, handleCategoryBlock = _a.handleCategoryBlock;
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "table-responsive" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", { className: "table" },
@@ -42476,11 +42450,10 @@ var ForumCategoryList = function (_a) {
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "#"),
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Name"),
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Created At"),
-                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Update"),
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Blocked"))),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, categories &&
                     categories.map(function (category, i) {
-                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, category: category, i: i, handleCategoryChangeName: handleCategoryChangeName, handleCategoryBlock: handleCategoryBlock }));
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, category: category, i: i, handleCategoryBlock: handleCategoryBlock }));
                     })))),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__["default"], { legends: legends })));
 };
@@ -42502,20 +42475,317 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var ForumCategoryRow = function (_a) {
-    var category = _a.category, i = _a.i, handleCategoryChangeName = _a.handleCategoryChangeName, handleCategoryBlock = _a.handleCategoryBlock;
-    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(category.name), name = _b[0], setName = _b[1];
+    var category = _a.category, i = _a.i, handleCategoryBlock = _a.handleCategoryBlock;
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: category.blocked && "danger-row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Category name", value: name, onChange: function (e) { return setName(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, category.name),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, category.created_at && category.created_at),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleCategoryChangeName(category.id, name); }, className: "btn blue-btn" }, "Update")),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleCategoryBlock(category.id); }, className: "btn blue-btn" }, category.blocked ? "Unblock" : "Block"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (ForumCategoryRow);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Hobbies/AddCategory/AddCategory.tsx":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Hobbies/AddCategory/AddCategory.tsx ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var AddCategory = function (_a) {
+    var addNewHobby = _a.addNewHobby;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewHobby(name); } },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Hobby Name...", onChange: function (e) { return setName(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewHobby(name); }, className: "btn blue-btn" }, "Add New Hobby"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (AddCategory);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Hobbies/Hobbies.tsx":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Hobbies/Hobbies.tsx ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
+/* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../MainContext */ "./resources/js/components/MainContext.tsx");
+/* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _HobbiesList_HobbiesList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./HobbiesList/HobbiesList */ "./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbiesList.tsx");
+/* harmony import */ var _AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AddCategory/AddCategory */ "./resources/js/components/utils/Dashboard/Hobbies/AddCategory/AddCategory.tsx");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+var Hobbies = (function (_super) {
+    __extends(Hobbies, _super);
+    function Hobbies(props) {
+        var _this = _super.call(this, props) || this;
+        _this.getHobbies = function () {
+            return new Promise(function (resolve, reject) {
+                _this.context.handleShowLoader(true);
+                try {
+                    axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                        .get(_this.context.API_URL + "get-hobbies")
+                        .then(function (response) {
+                        var data = response.data;
+                        if (response.status === 200) {
+                            _this.setState({
+                                hobbies: data.result.hobbies
+                            });
+                        }
+                        resolve(response);
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                finally {
+                    _this.context.handleShowLoader(false);
+                }
+            });
+        };
+        _this.handleHobbyBlock = function (id) {
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            id: id
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "block-hobby", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            var newHobbiesState = _this.state.hobbies;
+                            newHobbiesState.map(function (hobby, i) {
+                                if (hobby.id === id) {
+                                    hobby.blocked = !hobby.blocked;
+                                }
+                            });
+                            _this.setState({ hobbies: newHobbiesState });
+                            _this.context.handleShowAlert("Successfully changed hobby status", "success");
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                        this.context.handleShowAlert("Cannot changed hobby status", "danger");
+                        reject(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
+        _this.addNewHobby = function (name) {
+            if (!name) {
+                _this.context.handleShowAlert("Please, provide hobby name", "danger");
+            }
+            else {
+                _this.context.handleShowLoader(true);
+                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var data;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        try {
+                            data = JSON.stringify({
+                                name: name
+                            });
+                            axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                                .post(this.context.API_URL + "add-hobby", data, {
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(function (response) {
+                                _this.getHobbies();
+                                _this.context.handleShowAlert("Successfully added new hobby", "success");
+                                resolve(response);
+                            });
+                        }
+                        catch (err) {
+                            console.log(err);
+                            this.context.handleShowAlert("Cannot added new hobby", "danger");
+                            reject(err);
+                        }
+                        finally {
+                            this.context.handleShowLoader(false);
+                        }
+                        return [2];
+                    });
+                }); });
+            }
+        };
+        _this.componentDidMount = function () {
+            _this.context.handlAactiveMenuSection("Hobbies");
+            _this.getHobbies();
+        };
+        _this.state = {
+            hobbies: []
+        };
+        return _this;
+    }
+    Hobbies.prototype.render = function () {
+        var hobbies = this.state.hobbies;
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Hobbies List" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewHobby: this.addNewHobby }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HobbiesList_HobbiesList__WEBPACK_IMPORTED_MODULE_5__["default"], { hobbies: hobbies, handleHobbyBlock: this.handleHobbyBlock })));
+    };
+    return Hobbies;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
+Hobbies.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
+/* harmony default export */ __webpack_exports__["default"] = (Hobbies);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbiesList.tsx":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbiesList.tsx ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _HobbyRow_HobbyRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HobbyRow/HobbyRow */ "./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbyRow/HobbyRow.tsx");
+/* harmony import */ var _utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../utils/TableLegend */ "./resources/js/components/utils/Dashboard/utils/TableLegend.tsx");
+
+
+
+var legends = [
+    {
+        text: "Blocked Hobbies",
+        color: "#ffd4d8"
+    }
+];
+var HobbiesList = function (_a) {
+    var hobbies = _a.hobbies, handleHobbyBlock = _a.handleHobbyBlock;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "table-responsive" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", { className: "table" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "#"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Name"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Created At"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Blocked"))),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, hobbies &&
+                    hobbies.map(function (hobby, i) {
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HobbyRow_HobbyRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, hobby: hobby, i: i, handleHobbyBlock: handleHobbyBlock }));
+                    })))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__["default"], { legends: legends })));
+};
+/* harmony default export */ __webpack_exports__["default"] = (HobbiesList);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbyRow/HobbyRow.tsx":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Hobbies/HobbiesList/HobbyRow/HobbyRow.tsx ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var HobbyRow = function (_a) {
+    var hobby = _a.hobby, i = _a.i, handleHobbyBlock = _a.handleHobbyBlock;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: hobby.blocked && "danger-row" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hobby.name),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hobby.created_at && hobby.created_at),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleHobbyBlock(hobby.id); }, className: "btn blue-btn" }, hobby.blocked ? "Unblock" : "Block"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (HobbyRow);
 
 
 /***/ }),
@@ -42661,9 +42931,8 @@ var TranslationListRow = function (_a) {
     var _g = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.zh), zh = _g[0], setZh = _g[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Translation name", value: name, onChange: function (e) { return setName(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, translation.blocked ? (translation.name) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Translation name", value: name, onChange: function (e) { return setName(e.target.value); } })))),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "En", value: en, onChange: function (e) { return setEn(e.target.value); } }))),
@@ -42683,8 +42952,7 @@ var TranslationListRow = function (_a) {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () {
                     return handleTranslationSave(translation.id, name, en, de, fr, es, zh);
                 }, className: "btn blue-btn" }, "Save")),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleTranslationRemove(translation.id); }, className: "btn red-btn" }, "Remove"))));
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, translation.blocked ? ("") : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleTranslationRemove(translation.id); }, className: "btn red-btn" }, "Remove")))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (TranslationListRow);
 
@@ -43518,6 +43786,19 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Forum Categories");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Forum Categories"))))),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+                    context.activeMenuSection === "Hobbies" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
+                            context.changePath("/hobbies");
+                            context.handlAactiveMenuSection("Hobbies");
+                        } },
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/ball.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Hobbies" })),
+                    context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
+                            context.changePath("/hobbies");
+                            context.handlAactiveMenuSection("Hobbies");
+                        } },
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Hobbies List"))))),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
                     context.activeMenuSection === "Translations" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),

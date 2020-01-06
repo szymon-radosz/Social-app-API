@@ -17,15 +17,19 @@ const TranslationListRow = ({
         <tr>
             <th scope="row">{i + 1}</th>
             <td>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Translation name"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                    />
-                </div>
+                {translation.blocked ? (
+                    translation.name
+                ) : (
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Translation name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                        />
+                    </div>
+                )}
             </td>
             <td>
                 <div className="form-group">
@@ -102,13 +106,17 @@ const TranslationListRow = ({
                 </button>
             </td>
             <td>
-                <button
-                    type="button"
-                    onClick={() => handleTranslationRemove(translation.id)}
-                    className="btn red-btn"
-                >
-                    Remove
-                </button>
+                {translation.blocked ? (
+                    ""
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => handleTranslationRemove(translation.id)}
+                        className="btn red-btn"
+                    >
+                        Remove
+                    </button>
+                )}
             </td>
         </tr>
     );

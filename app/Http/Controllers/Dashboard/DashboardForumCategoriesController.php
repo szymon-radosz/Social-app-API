@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ErrorLogTrait;
 use App\PostCategory;
+use App\Translation;
 use Illuminate\Http\Request;
 
 class DashboardForumCategoriesController extends Controller
@@ -21,23 +22,6 @@ class DashboardForumCategoriesController extends Controller
             $this->storeErrorLog("dashboard", '/get-forum-categories', $e->getMessage());
 
             return response()->json(['status' => 'ERR', 'result' => 'Cannot get forum categories']);
-        }
-    }
-
-    public function updateCategory(Request $request)
-    {
-        try {
-            $id = $request->input('id');
-            $name = $request->input('name');
-
-            $category = PostCategory::where('id', $id)
-                ->update(["name" => $name]);
-
-            return response()->json(['status' => 'OK', 'result' => ['category' => $category]]);
-        } catch (\Exception $e) {
-            $this->storeErrorLog("dashboard", '/update-category', $e->getMessage());
-
-            return response()->json(['status' => 'ERR', 'result' => 'Cannot get category']);
         }
     }
 
@@ -70,10 +54,14 @@ class DashboardForumCategoriesController extends Controller
             $name = $request->input('name');
 
             $category = new PostCategory();
-
             $category->name = $name;
-
             $category->save();
+
+            $translation = new Translation();
+            $translation->name = $name;
+            $translation->en = $name;
+            $translation->blocked = 1;
+            $translation->save();
 
             return response()->json(['status' => 'OK', 'result' => ['category' => $category]]);
         } catch (\Exception $e) {

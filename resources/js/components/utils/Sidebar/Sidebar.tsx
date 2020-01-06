@@ -113,6 +113,40 @@ const Sidebar = () => {
                 </li>
                 <li>
                     <div className="sidebar__item">
+                        {context.activeMenuSection === "Hobbies" && (
+                            <div className="active-sidebar-item"></div>
+                        )}
+                        <a
+                            href="#"
+                            onClick={() => {
+                                context.changePath("/hobbies");
+                                context.handlAactiveMenuSection("Hobbies");
+                            }}
+                        >
+                            <img
+                                className="sidebar-icon"
+                                src="/images/ball.png"
+                                alt="Icon made by Freepik from www.flaticon.com"
+                                title="Hobbies"
+                            />
+                        </a>
+                        {context.showSidebarText && (
+                            <a
+                                href="#"
+                                onClick={() => {
+                                    context.changePath("/hobbies");
+                                    context.handlAactiveMenuSection("Hobbies");
+                                }}
+                            >
+                                <p className="sidebar__item--text">
+                                    Hobbies List
+                                </p>
+                            </a>
+                        )}
+                    </div>
+                </li>
+                <li>
+                    <div className="sidebar__item">
                         {context.activeMenuSection === "Translations" && (
                             <div className="active-sidebar-item"></div>
                         )}

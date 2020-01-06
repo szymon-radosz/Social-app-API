@@ -15,7 +15,7 @@ class CreateTranslationsTable extends Migration
     {
         Schema::create('translations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->longText('en')->nullable();
             $table->longText('de')->nullable();
             $table->longText('fr')->nullable();
