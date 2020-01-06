@@ -16,7 +16,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         this.state = {
             redirectLogin: true,
             usersCount: 0,
-            productsCount: 0,
             ForumPostsCount: 0,
             ForumCommentsCount: 0
         };
@@ -37,33 +36,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 
                     resolve(response);
                 });
-            } catch (err) {
-                console.log(err);
-            } finally {
-                this.context.handleShowLoader(false);
-            }
-        });
-    };
-
-    getProducts = () => {
-        return new Promise(resolve => {
-            this.context.handleShowLoader(true);
-            try {
-                axios
-                    .get(`${this.context.API_URL}get-products`)
-                    .then(response => {
-                        console.log(["response", response, response.status]);
-
-                        const { data } = response;
-
-                        if (response.status === 200) {
-                            this.setState({
-                                productsCount: data.result.products
-                            });
-                        }
-
-                        resolve(response);
-                    });
             } catch (err) {
                 console.log(err);
             } finally {
@@ -128,7 +100,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 
     getStatsInfo = async () => {
         await this.getUsers();
-        await this.getProducts();
         await this.getForumPosts();
         await this.getForumComments();
     };
@@ -148,7 +119,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         const {
             redirectLogin,
             usersCount,
-            productsCount,
             ForumPostsCount,
             ForumCommentsCount
         } = this.state;
@@ -166,12 +136,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         icon="/images/group.png"
                         headerText="New Users"
                         number={usersCount}
-                    />
-
-                    <DashboardInfoRect
-                        icon="/images/product.png"
-                        headerText="New Products"
-                        number={productsCount}
                     />
 
                     <DashboardInfoRect

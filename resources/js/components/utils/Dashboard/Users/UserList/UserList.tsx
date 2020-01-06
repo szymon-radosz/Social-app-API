@@ -35,6 +35,7 @@ const UserList = ({ users, handleUserBlock }) => {
                             users.map((user, i) => {
                                 return (
                                     <UserRow
+                                        key={i}
                                         user={user}
                                         i={i}
                                         handleUserBlock={handleUserBlock}

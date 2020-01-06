@@ -79,7 +79,7 @@ class DashboardForumCategoriesController extends Controller
         } catch (\Exception $e) {
             $this->storeErrorLog("dashboard", '/add-forum-category', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Cannot get category']);
+            return response()->json(['status' => 'ERR', 'result' => 'Cannot save category']);
         }
     }
 

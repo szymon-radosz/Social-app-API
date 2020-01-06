@@ -9,7 +9,7 @@ const legends = [
     }
 ];
 
-const UserList = ({
+const ForumCategoryList = ({
     categories,
     handleCategoryChangeName,
     handleCategoryBlock
@@ -32,6 +32,7 @@ const UserList = ({
                             categories.map((category, i) => {
                                 return (
                                     <ForumCategoryRow
+                                        key={i}
                                         category={category}
                                         i={i}
                                         handleCategoryChangeName={
@@ -51,4 +52,4 @@ const UserList = ({
     );
 };
 
-export default UserList;
+export default ForumCategoryList;

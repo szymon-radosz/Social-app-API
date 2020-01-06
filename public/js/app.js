@@ -41801,10 +41801,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _History__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./History */ "./resources/js/components/History.tsx");
 /* harmony import */ var _utils_Dashboard_Users_Users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/Dashboard/Users/Users */ "./resources/js/components/utils/Dashboard/Users/Users.tsx");
 /* harmony import */ var _utils_Dashboard_ForumCategories_ForumCategories__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./utils/Dashboard/ForumCategories/ForumCategories */ "./resources/js/components/utils/Dashboard/ForumCategories/ForumCategories.tsx");
-/* harmony import */ var _utils_Dashboard_ProductCategories_ProductCategories__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/Dashboard/ProductCategories/ProductCategories */ "./resources/js/components/utils/Dashboard/ProductCategories/ProductCategories.tsx");
-/* harmony import */ var _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/Dashboard/Translations/Translations */ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx");
-/* harmony import */ var _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/Dashboard/Register/Register */ "./resources/js/components/utils/Dashboard/Register/Register.tsx");
-/* harmony import */ var _utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utils/Alert/Alert */ "./resources/js/components/utils/Alert/Alert.tsx");
+/* harmony import */ var _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/Dashboard/Translations/Translations */ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx");
+/* harmony import */ var _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/Dashboard/Register/Register */ "./resources/js/components/utils/Dashboard/Register/Register.tsx");
+/* harmony import */ var _utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/Alert/Alert */ "./resources/js/components/utils/Alert/Alert.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -41818,7 +41817,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
 
 
 
@@ -41886,19 +41884,14 @@ var Main = (function (_super) {
                 Component: _utils_Dashboard_ForumCategories_ForumCategories__WEBPACK_IMPORTED_MODULE_8__["default"]
             },
             {
-                path: "/product-categories",
-                name: "ProductCategories",
-                Component: _utils_Dashboard_ProductCategories_ProductCategories__WEBPACK_IMPORTED_MODULE_9__["default"]
-            },
-            {
                 path: "/translations",
                 name: "Translations",
-                Component: _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_10__["default"]
+                Component: _utils_Dashboard_Translations_Translations__WEBPACK_IMPORTED_MODULE_9__["default"]
             },
             {
                 path: "/register",
                 name: "Register",
-                Component: _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_11__["default"]
+                Component: _utils_Dashboard_Register_Register__WEBPACK_IMPORTED_MODULE_10__["default"]
             }
         ];
         return _this;
@@ -41917,7 +41910,7 @@ var Main = (function (_super) {
                 handleShowLoader: this.handleShowLoader,
                 handleShowAlert: this.handleShowAlert
             } },
-            alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], { message: alertMessage, status: alertStatus })),
+            alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_11__["default"], { message: alertMessage, status: alertStatus })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_styledComponents_AppComponent__WEBPACK_IMPORTED_MODULE_2__["AppComponent"], null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["BrowserRouter"], { history: _History__WEBPACK_IMPORTED_MODULE_6__["default"] },
@@ -42084,31 +42077,6 @@ var Dashboard = (function (_super) {
                 }
             });
         };
-        _this.getProducts = function () {
-            return new Promise(function (resolve) {
-                _this.context.handleShowLoader(true);
-                try {
-                    axios__WEBPACK_IMPORTED_MODULE_6___default.a
-                        .get(_this.context.API_URL + "get-products")
-                        .then(function (response) {
-                        console.log(["response", response, response.status]);
-                        var data = response.data;
-                        if (response.status === 200) {
-                            _this.setState({
-                                productsCount: data.result.products
-                            });
-                        }
-                        resolve(response);
-                    });
-                }
-                catch (err) {
-                    console.log(err);
-                }
-                finally {
-                    _this.context.handleShowLoader(false);
-                }
-            });
-        };
         _this.getForumPosts = function () {
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
@@ -42165,14 +42133,11 @@ var Dashboard = (function (_super) {
                     case 0: return [4, this.getUsers()];
                     case 1:
                         _a.sent();
-                        return [4, this.getProducts()];
+                        return [4, this.getForumPosts()];
                     case 2:
                         _a.sent();
-                        return [4, this.getForumPosts()];
-                    case 3:
-                        _a.sent();
                         return [4, this.getForumComments()];
-                    case 4:
+                    case 3:
                         _a.sent();
                         return [2];
                 }
@@ -42189,14 +42154,13 @@ var Dashboard = (function (_super) {
         _this.state = {
             redirectLogin: true,
             usersCount: 0,
-            productsCount: 0,
             ForumPostsCount: 0,
             ForumCommentsCount: 0
         };
         return _this;
     }
     Dashboard.prototype.render = function () {
-        var _a = this.state, redirectLogin = _a.redirectLogin, usersCount = _a.usersCount, productsCount = _a.productsCount, ForumPostsCount = _a.ForumPostsCount, ForumCommentsCount = _a.ForumCommentsCount;
+        var _a = this.state, redirectLogin = _a.redirectLogin, usersCount = _a.usersCount, ForumPostsCount = _a.ForumPostsCount, ForumCommentsCount = _a.ForumCommentsCount;
         if (!redirectLogin) {
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "/login" });
         }
@@ -42204,7 +42168,6 @@ var Dashboard = (function (_super) {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_4__["default"], { text: "Statistics - Current Week" }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "dashboard__rect-container row" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/group.png", headerText: "New Users", number: usersCount }),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/product.png", headerText: "New Products", number: productsCount }),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Posts", number: ForumPostsCount }),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Comments", number: ForumCommentsCount }))));
     };
@@ -42503,7 +42466,7 @@ var legends = [
         color: "#ffd4d8"
     }
 ];
-var UserList = function (_a) {
+var ForumCategoryList = function (_a) {
     var categories = _a.categories, handleCategoryChangeName = _a.handleCategoryChangeName, handleCategoryBlock = _a.handleCategoryBlock;
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "table-responsive" },
@@ -42517,11 +42480,11 @@ var UserList = function (_a) {
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Blocked"))),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, categories &&
                     categories.map(function (category, i) {
-                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__["default"], { category: category, i: i, handleCategoryChangeName: handleCategoryChangeName, handleCategoryBlock: handleCategoryBlock }));
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryRow_ForumCategoryRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, category: category, i: i, handleCategoryChangeName: handleCategoryChangeName, handleCategoryBlock: handleCategoryBlock }));
                     })))),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__["default"], { legends: legends })));
 };
-/* harmony default export */ __webpack_exports__["default"] = (UserList);
+/* harmony default export */ __webpack_exports__["default"] = (ForumCategoryList);
 
 
 /***/ }),
@@ -42553,59 +42516,6 @@ var ForumCategoryRow = function (_a) {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleCategoryBlock(category.id); }, className: "btn blue-btn" }, category.blocked ? "Unblock" : "Block"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (ForumCategoryRow);
-
-
-/***/ }),
-
-/***/ "./resources/js/components/utils/Dashboard/ProductCategories/ProductCategories.tsx":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/components/utils/Dashboard/ProductCategories/ProductCategories.tsx ***!
-  \*****************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
-/* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../MainContext */ "./resources/js/components/MainContext.tsx");
-/* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-
-var ProductCategories = (function (_super) {
-    __extends(ProductCategories, _super);
-    function ProductCategories(props) {
-        var _this = _super.call(this, props) || this;
-        _this.componentDidMount = function () {
-            _this.context.handlAactiveMenuSection("Product Categories");
-        };
-        _this.state = {};
-        return _this;
-    }
-    ProductCategories.prototype.render = function () {
-        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Product Categories" })));
-    };
-    return ProductCategories;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-ProductCategories.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
-/* harmony default export */ __webpack_exports__["default"] = (ProductCategories);
 
 
 /***/ }),
@@ -42663,6 +42573,124 @@ Register.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
 
 /***/ }),
 
+/***/ "./resources/js/components/utils/Dashboard/Translations/AddTranslation/AddTranslation.tsx":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Translations/AddTranslation/AddTranslation.tsx ***!
+  \************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var AddCategory = function (_a) {
+    var addNewTranslation = _a.addNewTranslation;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewTranslation(name); } },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Translation Name...", onChange: function (e) { return setName(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewTranslation(name); }, className: "btn blue-btn" }, "Add New Translation"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (AddCategory);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationList.tsx":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationList.tsx ***!
+  \**************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TranslationListRow_TranslationListRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TranslationListRow/TranslationListRow */ "./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationListRow/TranslationListRow.tsx");
+
+
+var TranslationList = function (_a) {
+    var translations = _a.translations, handleTranslationSave = _a.handleTranslationSave, handleTranslationRemove = _a.handleTranslationRemove;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "table-responsive" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", { className: "table" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "#"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Name"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "En"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "De"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Fr"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Es"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Zh"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }),
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }))),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, translations &&
+                    translations.map(function (translation, i) {
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TranslationListRow_TranslationListRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, translation: translation, i: i, handleTranslationSave: handleTranslationSave, handleTranslationRemove: handleTranslationRemove }));
+                    }))))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (TranslationList);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationListRow/TranslationListRow.tsx":
+/*!************************************************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationListRow/TranslationListRow.tsx ***!
+  \************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var TranslationListRow = function (_a) {
+    var translation = _a.translation, i = _a.i, handleTranslationSave = _a.handleTranslationSave, handleTranslationRemove = _a.handleTranslationRemove;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.name), name = _b[0], setName = _b[1];
+    var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.en), en = _c[0], setEn = _c[1];
+    var _d = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.de), de = _d[0], setDe = _d[1];
+    var _e = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.fr), fr = _e[0], setFr = _e[1];
+    var _f = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.es), es = _f[0], setEs = _f[1];
+    var _g = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.zh), zh = _g[0], setZh = _g[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Translation name", value: name, onChange: function (e) { return setName(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "En", value: en, onChange: function (e) { return setEn(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "De", value: de, onChange: function (e) { return setDe(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Fr", value: fr, onChange: function (e) { return setFr(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Es", value: es, onChange: function (e) { return setEs(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Zh", value: zh, onChange: function (e) { return setZh(e.target.value); } }))),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () {
+                    return handleTranslationSave(translation.id, name, en, de, fr, es, zh);
+                }, className: "btn blue-btn" }, "Save")),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleTranslationRemove(translation.id); }, className: "btn red-btn" }, "Remove"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (TranslationListRow);
+
+
+/***/ }),
+
 /***/ "./resources/js/components/utils/Dashboard/Translations/Translations.tsx":
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/utils/Dashboard/Translations/Translations.tsx ***!
@@ -42677,6 +42705,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
 /* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../MainContext */ "./resources/js/components/MainContext.tsx");
 /* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _TranslationList_TranslationList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TranslationList/TranslationList */ "./resources/js/components/utils/Dashboard/Translations/TranslationList/TranslationList.tsx");
+/* harmony import */ var _AddTranslation_AddTranslation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AddTranslation/AddTranslation */ "./resources/js/components/utils/Dashboard/Translations/AddTranslation/AddTranslation.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -42690,6 +42722,45 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
 
 
 
@@ -42698,15 +42769,159 @@ var Translations = (function (_super) {
     __extends(Translations, _super);
     function Translations(props) {
         var _this = _super.call(this, props) || this;
+        _this.getTranslations = function () {
+            console.log("getTranslations");
+            return new Promise(function (resolve, reject) {
+                _this.context.handleShowLoader(true);
+                try {
+                    axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                        .get(_this.context.API_URL + "get-translations")
+                        .then(function (response) {
+                        var data = response.data;
+                        if (response.status === 200) {
+                            _this.setState({
+                                translations: data.result.translations
+                            });
+                        }
+                        resolve(response);
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                finally {
+                    _this.context.handleShowLoader(false);
+                }
+            });
+        };
+        _this.handleTranslationSave = function (id, name, en, de, fr, es, zh) {
+            console.log("handleTranslationSave");
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            id: id,
+                            name: name,
+                            en: en,
+                            de: de,
+                            fr: fr,
+                            es: es,
+                            zh: zh
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "update-translation", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            _this.context.handleShowAlert("Successfully updated translation", "success");
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        this.context.handleShowAlert("Cannot update category", "danger");
+                        reject(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
+        _this.handleTranslationRemove = function (id) {
+            _this.context.handleShowLoader(true);
+            return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                var data;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    try {
+                        data = JSON.stringify({
+                            id: id
+                        });
+                        axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                            .post(this.context.API_URL + "remove-translation", data, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+                            .then(function (response) {
+                            _this.getTranslations();
+                            _this.context.handleShowAlert("Successfully removed translation", "success");
+                            resolve(response);
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                        this.context.handleShowAlert("Cannot remove translation", "danger");
+                        reject(err);
+                    }
+                    finally {
+                        this.context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        };
+        _this.addNewTranslation = function (name) {
+            if (!name) {
+                _this.context.handleShowAlert("Please, provide category name", "danger");
+            }
+            else {
+                _this.context.handleShowLoader(true);
+                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var data;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        try {
+                            data = JSON.stringify({
+                                name: name
+                            });
+                            axios__WEBPACK_IMPORTED_MODULE_4___default.a
+                                .post(this.context.API_URL + "add-translation", data, {
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(function (response) {
+                                _this.getTranslations();
+                                _this.context.handleShowAlert("Successfully added new translation", "success");
+                                resolve(response);
+                            });
+                        }
+                        catch (err) {
+                            console.log(err);
+                            this.context.handleShowAlert("Cannot added new translation", "danger");
+                            reject(err);
+                        }
+                        finally {
+                            this.context.handleShowLoader(false);
+                        }
+                        return [2];
+                    });
+                }); });
+            }
+        };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Translations");
+            _this.getTranslations();
         };
-        _this.state = {};
+        _this.state = {
+            translations: []
+        };
         return _this;
     }
     Translations.prototype.render = function () {
+        var translations = this.state.translations;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Translations" })));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Translations" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddTranslation_AddTranslation__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewTranslation: this.addNewTranslation }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TranslationList_TranslationList__WEBPACK_IMPORTED_MODULE_5__["default"], { translations: translations, handleTranslationSave: this.handleTranslationSave, handleTranslationRemove: this.handleTranslationRemove })));
     };
     return Translations;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
@@ -42759,7 +42974,7 @@ var UserList = function (_a) {
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "col" }, "Block User"))),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, users &&
                     users.map(function (user, i) {
-                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserRow_UserRow__WEBPACK_IMPORTED_MODULE_1__["default"], { user: user, i: i, handleUserBlock: handleUserBlock }));
+                        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserRow_UserRow__WEBPACK_IMPORTED_MODULE_1__["default"], { key: i, user: user, i: i, handleUserBlock: handleUserBlock }));
                     })))),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_TableLegend__WEBPACK_IMPORTED_MODULE_2__["default"], { legends: legends })));
 };
@@ -43303,19 +43518,6 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Forum Categories");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Forum Categories"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
-                    context.activeMenuSection === "Product Categories" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/product-categories");
-                            context.handlAactiveMenuSection("Product Categories");
-                        } },
-                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/product.png", alt: "Icon made by srip from www.flaticon.com", title: "Product Categories" })),
-                    context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/product-categories");
-                            context.handlAactiveMenuSection("Product Categories");
-                        } },
-                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Product Categories"))))),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
                     context.activeMenuSection === "Translations" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),

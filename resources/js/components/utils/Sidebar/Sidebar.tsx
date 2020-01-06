@@ -113,44 +113,6 @@ const Sidebar = () => {
                 </li>
                 <li>
                     <div className="sidebar__item">
-                        {context.activeMenuSection === "Product Categories" && (
-                            <div className="active-sidebar-item"></div>
-                        )}
-                        <a
-                            href="#"
-                            onClick={() => {
-                                context.changePath("/product-categories");
-                                context.handlAactiveMenuSection(
-                                    "Product Categories"
-                                );
-                            }}
-                        >
-                            <img
-                                className="sidebar-icon"
-                                src="/images/product.png"
-                                alt="Icon made by srip from www.flaticon.com"
-                                title="Product Categories"
-                            />
-                        </a>
-                        {context.showSidebarText && (
-                            <a
-                                href="#"
-                                onClick={() => {
-                                    context.changePath("/product-categories");
-                                    context.handlAactiveMenuSection(
-                                        "Product Categories"
-                                    );
-                                }}
-                            >
-                                <p className="sidebar__item--text">
-                                    Product Categories
-                                </p>
-                            </a>
-                        )}
-                    </div>
-                </li>
-                <li>
-                    <div className="sidebar__item">
                         {context.activeMenuSection === "Translations" && (
                             <div className="active-sidebar-item"></div>
                         )}

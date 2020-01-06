@@ -28,11 +28,6 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Conversation', 'conversation_user');
     }
 
-    public function products()
-    {
-        return $this->hasMany('App\Product', 'user_id');
-    }
-
     public function votes()
     {
         return $this->hasMany('App\Vote', 'user_id');

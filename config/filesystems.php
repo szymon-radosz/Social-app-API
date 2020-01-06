@@ -11,7 +11,7 @@ return [
     | by the framework. The "local" disk, as well as a variety of cloud
     | based disks are available to your application. Just store away!
     |
-    */
+     */
 
     'default' => env('FILESYSTEM_DRIVER', 'local'),
 
@@ -24,7 +24,7 @@ return [
     | reason, you may specify a default "cloud" driver here. This driver
     | will be bound as the Cloud disk implementation in the container.
     |
-    */
+     */
 
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
@@ -39,7 +39,7 @@ return [
     |
     | Supported Drivers: "local", "ftp", "sftp", "s3", "rackspace"
     |
-    */
+     */
 
     'disks' => [
 
@@ -51,21 +51,17 @@ return [
             'driver' => 'local',
             'root' => storage_path('app') . '/userPhotos',
         ],
-        'productPhotos' => [
-            'driver' => 'local',
-            'root' => storage_path('app') . '/productPhotos',
-        ],
 
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
         'userPhotos' => [
             'driver' => 'local',
-            'root'   => public_path() . '/userPhotos',
+            'root' => public_path() . '/userPhotos',
         ],
 
         's3' => [

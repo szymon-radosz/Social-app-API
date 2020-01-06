@@ -1,5 +1,7 @@
 interface TranslationsProps {}
 
-interface TranslationsState {}
+interface TranslationsState {
+    translations: any;
+}
 
 export { TranslationsProps, TranslationsState };

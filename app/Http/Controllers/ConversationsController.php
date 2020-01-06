@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Conversation;
 use App\Http\Traits\ErrorLogTrait;
 use App\Message;
-use App\Product;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
@@ -181,14 +180,7 @@ class ConversationsController extends Controller
                 ->with('messages')
                 ->first();
 
-            if ($conversation->product_id) {
-                $product = Product::where('id', $conversation->product_id)->first();
-
-                return response()->json(['status' => 'OK', 'result' => ['conversation' => $conversation, 'productOwnerId' => $product->user_id]]);
-            } else {
-                return response()->json(['status' => 'OK', 'result' => ['conversation' => $conversation, 'productOwnerId' => 0]]);
-            }
-
+            return response()->json(['status' => 'OK', 'result' => ['conversation' => $conversation, 'productOwnerId' => 0]]);
         } catch (\Exception $e) {
             $this->storeErrorLog(0, '/showConversationDetails', $e->getMessage());
 

@@ -25,19 +25,7 @@ Route::post('showConversationDetails', 'ConversationsController@showConversation
 Route::post('checkIfUsersBelongsToConversation', 'ConversationsController@checkIfUsersBelongsToConversation');
 Route::post('loadUserById', 'ConversationsController@loadUserById');
 
-Route::post('saveConversationProduct', 'ConversationsProductController@store');
-Route::post('checkIfUsersBelongsToProductConversation', 'ConversationsProductController@checkIfUsersBelongsToProductConversation');
-
 Route::post('saveVote', 'VotesController@store');
-
-Route::post('saveProduct', 'ProductController@store');
-Route::post('loadActiveProductBasedOnCoords', 'ProductController@loadActiveProductBasedOnCoords');
-Route::post('loadProductBasedOnId', 'ProductController@loadProductBasedOnId');
-Route::post('closeProduct', 'ProductController@closeProduct');
-Route::post('reactivateProduct', 'ProductController@reactivateProduct');
-Route::get('getCategories', 'ProductController@getCategories');
-Route::post('loadUserProductList', 'ProductController@loadUserProductList');
-Route::post('loadProductsFilter', 'ProductController@loadProductsFilter');
 
 Route::post('saveMessage', 'MessageController@store');
 
@@ -86,3 +74,8 @@ Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController
 Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@updateCategory');
 Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
 Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');
+
+Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations');
+Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
+Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');
+Route::post('remove-translation', 'Dashboard\DashboardTranslations@removeTranslation');
