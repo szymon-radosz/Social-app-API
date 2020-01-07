@@ -2,7 +2,11 @@ import React from "react";
 
 const UserRow = ({ user, i, handleUserBlock }) => {
     return (
-        <tr className={user.blocked && "danger-row"}>
+        <tr
+            className={
+                user.blocked ? "danger-row" : user.admin_role && "success-row"
+            }
+        >
             <th scope="row">{i + 1}</th>
             <td>{user.name && user.name}</td>
             <td>{user.nickname && user.nickname}</td>

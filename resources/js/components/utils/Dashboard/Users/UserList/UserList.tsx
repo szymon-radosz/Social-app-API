@@ -6,6 +6,10 @@ const legends = [
     {
         text: "Blocked Users",
         color: "#ffd4d8"
+    },
+    {
+        text: "Administrator Users",
+        color: "#d6fff0"
     }
 ];
 

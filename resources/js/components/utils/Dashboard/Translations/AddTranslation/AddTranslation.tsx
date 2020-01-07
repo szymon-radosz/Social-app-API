@@ -5,7 +5,12 @@ const AddCategory = ({ addNewTranslation }) => {
 
     return (
         <div className="user-search-box__container">
-            <form onSubmit={() => addNewTranslation(name)}>
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    addNewTranslation(name);
+                }}
+            >
                 <div className="form-group">
                     <input
                         type="string"

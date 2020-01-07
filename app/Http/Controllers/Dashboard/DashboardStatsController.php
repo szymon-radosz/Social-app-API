@@ -18,6 +18,7 @@ class DashboardStatsController extends Controller
         try {
             $users = User::where('created_at', '>', Carbon::now()->startOfWeek())
                 ->where('created_at', '<', Carbon::now()->endOfWeek())
+                ->where('admin_role', 0)
                 ->count();
 
             return response()->json(['status' => 'OK', 'result' => ['users' => $users]]);

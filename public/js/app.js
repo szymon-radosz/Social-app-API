@@ -42202,7 +42202,10 @@ var AddCategory = function (_a) {
     var addNewCategory = _a.addNewCategory;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewCategory(name); } },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
+                e.preventDefault();
+                addNewCategory(name);
+            } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Category Name...", onChange: function (e) { return setName(e.target.value); } })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewCategory(name); }, className: "btn blue-btn" }, "Add New Category"))));
@@ -42804,6 +42807,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
 /* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../../MainContext */ "./resources/js/components/MainContext.tsx");
 /* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
+/* harmony import */ var _RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RegisterForm/RegisterForm */ "./resources/js/components/utils/Dashboard/Register/RegisterForm/RegisterForm.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -42817,6 +42823,44 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
 
 
 
@@ -42828,17 +42872,93 @@ var Register = (function (_super) {
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Register");
         };
+        _this.addNewUser = function (name, email, password) {
+            if (!name || !email || !password) {
+                return _this.context.handleShowAlert("Cannot add new admin", "danger");
+            }
+            else {
+                _this.context.handleShowLoader(true);
+                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var data;
+                    var _this = this;
+                    return __generator(this, function (_a) {
+                        try {
+                            data = JSON.stringify({
+                                name: name,
+                                email: email,
+                                password: password
+                            });
+                            axios__WEBPACK_IMPORTED_MODULE_5___default.a
+                                .post(this.context.API_URL + "add-admin-user", data, {
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            })
+                                .then(function (response) {
+                                _this.context.handleShowAlert("Successfully added new admin", "success");
+                                resolve(response);
+                            });
+                        }
+                        catch (err) {
+                            console.log(err);
+                            this.context.handleShowAlert("Cannot add new admin", "danger");
+                            reject(err);
+                        }
+                        finally {
+                            this.context.handleShowLoader(false);
+                        }
+                        return [2];
+                    });
+                }); });
+            }
+        };
         _this.state = {};
         return _this;
     }
     Register.prototype.render = function () {
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Register" })));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Register" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_4__["default"], { addNewUser: this.addNewUser })));
     };
     return Register;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
 Register.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
 /* harmony default export */ __webpack_exports__["default"] = (Register);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Dashboard/Register/RegisterForm/RegisterForm.tsx":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/utils/Dashboard/Register/RegisterForm/RegisterForm.tsx ***!
+  \****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var RegisterForm = function (_a) {
+    var addNewUser = _a.addNewUser;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
+    var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), email = _c[0], setEmail = _c[1];
+    var _d = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), password = _d[0], setPassword = _d[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
+                e.preventDefault();
+                addNewUser(name, email, password);
+            } },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Name...", onChange: function (e) { return setName(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "email", className: "form-control", id: "email", placeholder: "Email...", onChange: function (e) { return setEmail(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "password", placeholder: "Password...", onChange: function (e) { return setPassword(e.target.value); } })),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewUser(name, email, password); }, className: "btn blue-btn" }, "Add New Admin"))));
+};
+/* harmony default export */ __webpack_exports__["default"] = (RegisterForm);
 
 
 /***/ }),
@@ -42859,7 +42979,10 @@ var AddCategory = function (_a) {
     var addNewTranslation = _a.addNewTranslation;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewTranslation(name); } },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
+                e.preventDefault();
+                addNewTranslation(name);
+            } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Translation Name...", onChange: function (e) { return setName(e.target.value); } })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewTranslation(name); }, className: "btn blue-btn" }, "Add New Translation"))));
@@ -43219,6 +43342,10 @@ var legends = [
     {
         text: "Blocked Users",
         color: "#ffd4d8"
+    },
+    {
+        text: "Administrator Users",
+        color: "#d6fff0"
     }
 ];
 var UserList = function (_a) {
@@ -43265,7 +43392,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var UserRow = function (_a) {
     var user = _a.user, i = _a.i, handleUserBlock = _a.handleUserBlock;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: user.blocked && "danger-row" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: user.blocked ? "danger-row" : user.admin_role && "success-row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.name && user.name),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.nickname && user.nickname),

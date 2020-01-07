@@ -84,3 +84,5 @@ Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations'
 Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
 Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');
 Route::post('remove-translation', 'Dashboard\DashboardTranslations@removeTranslation');
+
+Route::post('add-admin-user', 'Dashboard\DashboardRegisterController@addUser');
