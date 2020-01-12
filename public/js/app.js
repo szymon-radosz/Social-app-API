@@ -41835,6 +41835,9 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main(props) {
         var _this = _super.call(this, props) || this;
+        _this.setUserLoggedIn = function (status) {
+            _this.setState({ userLoggedIn: status });
+        };
         _this.handleShowAlert = function (message, status) {
             _this.setState({ alertMessage: message, alertStatus: status });
             setTimeout(function () {
@@ -41915,12 +41918,14 @@ var Main = (function (_super) {
                 API_URL: API_URL,
                 showLoader: showLoader,
                 handleShowLoader: this.handleShowLoader,
-                handleShowAlert: this.handleShowAlert
+                handleShowAlert: this.handleShowAlert,
+                setUserLoggedIn: this.setUserLoggedIn
             } },
             alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], { message: alertMessage, status: alertStatus })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_styledComponents_AppComponent__WEBPACK_IMPORTED_MODULE_2__["AppComponent"], null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["BrowserRouter"], { history: _History__WEBPACK_IMPORTED_MODULE_6__["default"] },
+                        userLoggedIn ? (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "dashboard" })) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "login" })),
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, this.routes.map(function (_a) {
                             var path = _a.path, name = _a.name, Component = _a.Component;
                             return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, key: name, path: path },
@@ -41957,7 +41962,8 @@ var MainContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
     API_URL: "",
     handleShowLoader: function (status) { },
     showLoader: false,
-    handleShowAlert: function (message, status) { }
+    handleShowAlert: function (message, status) { },
+    setUserLoggedIn: function (status) { }
 });
 
 
@@ -42879,30 +42885,46 @@ var Register = (function (_super) {
             else {
                 _this.context.handleShowLoader(true);
                 return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                    var data;
                     var _this = this;
                     return __generator(this, function (_a) {
                         try {
-                            data = JSON.stringify({
-                                name: name,
-                                email: email,
-                                password: password
-                            });
                             axios__WEBPACK_IMPORTED_MODULE_5___default.a
-                                .post(this.context.API_URL + "add-admin-user", data, {
-                                headers: {
-                                    "Content-Type": "application/json"
-                                }
+                                .post(this.context.API_URL + "checkIfEmailExists", {
+                                email: email
                             })
-                                .then(function (response) {
-                                _this.context.handleShowAlert("Successfully added new admin", "success");
-                                resolve(response);
-                            });
+                                .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
+                                var _this = this;
+                                return __generator(this, function (_a) {
+                                    if (response.data.status === "OK" &&
+                                        response.data.result === 1) {
+                                        this.context.handleShowAlert("User with given email already exists", "danger");
+                                    }
+                                    else {
+                                        axios__WEBPACK_IMPORTED_MODULE_5___default.a
+                                            .post(this.context.API_URL + "register", {
+                                            name: name,
+                                            email: email,
+                                            password: password,
+                                            admin_role: true
+                                        })
+                                            .then(function (response) {
+                                            if (response.data.status === "OK") {
+                                                _this.context.handleShowAlert("Account created", "success");
+                                            }
+                                            else {
+                                                _this.context.handleShowAlert("Invalid Data", "danger");
+                                            }
+                                        })
+                                            .catch(function (error) {
+                                            _this.context.handleShowAlert(error, "danger");
+                                        });
+                                    }
+                                    return [2];
+                                });
+                            }); });
                         }
-                        catch (err) {
-                            console.log(err);
-                            this.context.handleShowAlert("Cannot add new admin", "danger");
-                            reject(err);
+                        catch (error) {
+                            this.context.handleShowAlert(error, "danger");
                         }
                         finally {
                             this.context.handleShowLoader(false);
@@ -43825,6 +43847,10 @@ var DashboardContainer = function (_a) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _LoginForm_LoginForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LoginForm/LoginForm */ "./resources/js/components/utils/Login/LoginForm/LoginForm.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../MainContext */ "./resources/js/components/MainContext.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -43839,19 +43865,114 @@ var __extends = (undefined && undefined.__extends) || (function () {
     };
 })();
 
+
+
+
 var Login = (function (_super) {
     __extends(Login, _super);
     function Login(props) {
         var _this = _super.call(this, props) || this;
+        _this.handleLoginSubmit = function (email, password) {
+            console.log([email, password]);
+            if (email && !password) {
+                _this.context.handleShowAlert("Password required", "danger");
+            }
+            else if (!email && password) {
+                _this.context.handleShowAlert("Email required", "danger");
+            }
+            else if (!email && !password) {
+                _this.context.handleShowAlert("Email and password required", "danger");
+            }
+            else if (email && password) {
+                console.log(["API_URL", _this.context.API_URL]);
+                try {
+                    var API_URL = _this.context.API_URL;
+                    axios__WEBPACK_IMPORTED_MODULE_2___default.a
+                        .post(API_URL + "login", {
+                        email: email,
+                        password: password
+                    })
+                        .then(function (response) {
+                        var result = response.data.result;
+                        console.log(["data", result, response, response.data]);
+                        if (response.data.result.user_role === "admin") {
+                            var token = response.data.result.token;
+                            var config = {
+                                Authorization: "Bearer " + token,
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                Accept: "application/json"
+                            };
+                            axios__WEBPACK_IMPORTED_MODULE_2___default.a
+                                .get(_this.context.API_URL + "user", {
+                                headers: config
+                            })
+                                .then(function (response) {
+                                console.log([
+                                    "userData",
+                                    response.data.result
+                                ]);
+                                if (response.data.result.user.id) {
+                                    _this.context.setUserLoggedIn(true);
+                                    _this.context.changePath("/dashboard");
+                                }
+                            })
+                                .catch(function (error) {
+                                _this.context.handleShowAlert(error, "danger");
+                            });
+                        }
+                        else {
+                            console.log("Nie ma tokena");
+                            _this.context.handleShowAlert(response.data.result, "danger");
+                        }
+                    })
+                        .catch(function (error) {
+                        _this.context.handleShowAlert(error, "danger");
+                    });
+                }
+                catch (error) {
+                    _this.context.handleShowAlert("", "danger");
+                }
+            }
+        };
         _this.state = {};
         return _this;
     }
     Login.prototype.render = function () {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "login");
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "login-form__container" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_LoginForm_LoginForm__WEBPACK_IMPORTED_MODULE_1__["default"], { onLoginSubmit: this.handleLoginSubmit })));
     };
     return Login;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
+Login.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"];
 /* harmony default export */ __webpack_exports__["default"] = (Login);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/utils/Login/LoginForm/LoginForm.tsx":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/utils/Login/LoginForm/LoginForm.tsx ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var LoginForm = function (_a) {
+    var onLoginSubmit = _a.onLoginSubmit;
+    var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), email = _b[0], setEmail = _b[1];
+    var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), password = _c[0], setPassword = _c[1];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { className: "login-form" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "email", className: "form-control", placeholder: "Email", onChange: function (e) { return setEmail(e.target.value); } })),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "password", className: "form-control", placeholder: "Password", onChange: function (e) { return setPassword(e.target.value); } })),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return onLoginSubmit(email, password); }, className: "btn blue-btn" }, "Login")));
+};
+/* harmony default export */ __webpack_exports__["default"] = (LoginForm);
 
 
 /***/ }),

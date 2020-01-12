@@ -46,8 +46,10 @@ MAIL_FROM_NAME=
 2. composer install
 3. php artisan key:generate
 4. php artisan migrate
-5. php artisan passport:install
-6. php artisan vendor:publish --provider="Intervention\Image\ImageServiceProviderLaravel5"
+   //5. php artisan passport:install
+5. php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\JWTAuthServiceProvider"
+6. php artisan jwt:secret
+7. php artisan vendor:publish --provider="Intervention\Image\ImageServiceProviderLaravel5"
 
 create test environment:
 

@@ -248,6 +248,28 @@ body .alert {
   background-color: #d6fff0;
 }
 
+.login-form__container {
+  text-align: center;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.login-form__container .login-form {
+  max-width: 300px;
+  width: 90%;
+}
+
+.login-form__container .login-form button {
+  width: 100%;
+}
+
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors

@@ -9,5 +9,6 @@ export const MainContext = React.createContext({
     API_URL: "",
     handleShowLoader: (status: boolean) => {},
     showLoader: false,
-    handleShowAlert: (message: string, status: string) => {}
+    handleShowAlert: (message: string, status: string) => {},
+    setUserLoggedIn: (status: boolean) => {}
 });

@@ -96,17 +96,10 @@ class ConversationsController extends Controller
         $user_id = $request->user_id;
 
         try {
-            if ($request->has('showProductsConversations')) {
-                $userData = User::where('id', $user_id)
-                    ->with(['conversations' => function ($query) {
-                        $query->where('product_id', '!=', 0);
-                    }])->first();
-            } else {
-                $userData = User::where('id', $user_id)
-                    ->with(['conversations' => function ($query) {
-                        $query->where('product_id', '==', 0);
-                    }])->first();
-            }
+            $userData = User::where('id', $user_id)
+                ->with(['conversations' => function ($query) {
+                    $query->where('product_id', '==', 0);
+                }])->first();
 
             $conversationData = new Collection();
 
@@ -116,11 +109,11 @@ class ConversationsController extends Controller
                 //var_dump($singleConversation->product_id);
 
                 //get all messages for specific conversation
-                if ($request->has('showProductsConversations')) {
-                    $conversationMessages = Conversation::where([['id', $singleConversation->id], ['product_id', '!=', 0]])->with('messages')->get();
-                } else {
-                    $conversationMessages = Conversation::where([['id', $singleConversation->id], ['product_id', 0]])->with('messages')->get();
-                }
+                $conversationMessages = Conversation::where([
+                    ['id', $singleConversation->id],
+                    ['product_id', 0],
+                ])->with('messages')
+                    ->get();
 
                 //var_dump($singleMessage->product_id);
 

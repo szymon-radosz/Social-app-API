@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
@@ -19,15 +19,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->tinyInteger('verified')->default(0);
-            $table->string('email_token')->nullable();
             $table->string('password');
             $table->integer('age')->nullable();
-            //default coordinates of warsaw
             $table->double('lattitude')->nullable();
             $table->double('longitude')->nullable();
             $table->text('description')->nullable();
-            $table->longText('api_token')->nullable();
-            $table->rememberToken();
+            $table->string('photo_path')->default('');
             $table->timestamps();
         });
     }

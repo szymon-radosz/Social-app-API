@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect
+} from "react-router-dom";
 import { AppComponent } from "./../utils/styledComponents/AppComponent";
 import { MainProps, MainState } from "./Main.interface";
 import Dashboard from "./utils/Dashboard/Dashboard";
@@ -71,6 +76,10 @@ class Main extends Component<MainProps, MainState> {
         ];
     }
 
+    setUserLoggedIn = status => {
+        this.setState({ userLoggedIn: status });
+    };
+
     handleShowAlert = (message: string, status: string) => {
         this.setState({ alertMessage: message, alertStatus: status });
 
@@ -118,7 +127,8 @@ class Main extends Component<MainProps, MainState> {
                     API_URL: API_URL,
                     showLoader: showLoader,
                     handleShowLoader: this.handleShowLoader,
-                    handleShowAlert: this.handleShowAlert
+                    handleShowAlert: this.handleShowAlert,
+                    setUserLoggedIn: this.setUserLoggedIn
                 }}
             >
                 {alertMessage && alertStatus && (
@@ -127,6 +137,11 @@ class Main extends Component<MainProps, MainState> {
                 <div className="container-sm app__container">
                     <AppComponent>
                         <Router history={history}>
+                            {userLoggedIn ? (
+                                <Redirect to="dashboard" />
+                            ) : (
+                                <Redirect to="login" />
+                            )}
                             <Switch>
                                 {this.routes.map(
                                     ({ path, name, Component }) => {

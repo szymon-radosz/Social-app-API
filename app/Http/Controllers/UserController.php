@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\Hobby;
 use App\Http\Traits\CalculateDistanceDifferenceTrait;
 use App\Http\Traits\ErrorLogTrait;
-use App\Jobs\SendVerificationEmail;
 use App\Message;
 use App\Notification;
 use App\User;
 use Carbon\Carbon;
 use DateTime;
 use DB;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 
 class UserController extends Controller
@@ -24,115 +24,74 @@ class UserController extends Controller
     use ErrorLogTrait;
     use CalculateDistanceDifferenceTrait;
 
-    public $successStatus = 200;
-    /**
-     * login api
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function login()
+    public function authenticate(Request $request)
     {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            try {
-                $user = Auth::user();
-                $success['token'] = $user->createToken('myapp')->accessToken;
-                $user->api_token = $success['token'];
-                $user->save();
-                return response()->json(['status' => 'OK', 'user' => $success]);
-            } catch (\Exception $e) {
-                return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
-            }
-        } else {
-            $this->storeErrorLog($user->id, '/login', $e->getMessage());
+        $credentials = $request->only('email', 'password');
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['result' => 'invalid_credentials'], 401);
+            } else {
+                $user = User::where('email', $request->email)
+                    ->first();
+            }
+        } catch (JWTException $e) {
+            return response()->json(['result' => 'could_not_create_token'], 401);
         }
+
+        return response()->json(['result' => [
+            'token' => $token,
+            'user_role' => $user->admin_role ? "admin" : "customer",
+        ]], 200);
     }
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6'],
-        ]);
-    }
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function register(Request $request)
     {
-        try {
-            $this->validator($request->all())->validate();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
 
-            event(new Registered($user = $this->create($request->all())));
-
-            dispatch(new SendVerificationEmail($user));
-        } catch (\Exception $e) {
-            $this->storeErrorLog("", '/register', $e->getMessage());
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+        if ($validator->fails()) {
+            return response()->json(['result' => 'Invalid Data'], 401);
         }
-        return $user;
+
+        $user = User::create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($request->get('password')),
+            'nickname' => '',
+            'platform' => $request->get['platform'] ? $request->get['platform'] : "",
+            'age' => 0,
+            'lattitude' => 0,
+            'longitude' => 0,
+            'description' => '',
+            'admin_role' => $request->get('admin_role') ? $request->get('admin_role') : false,
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(['result' => compact('user', 'token')], 201);
     }
 
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param $token
-     * @return \Illuminate\Http\Response
-     */
-    public function verify($token)
-    {
-        $user = User::where('email_token', $token)->first();
-
-        $user->verified = 1;
-        $user->email_verified_at = Carbon::now();
-
-        if ($user->save()) {
-            return view('emailconfirm');
-        }
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
+    public function getAuthenticatedUser()
     {
         try {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'nickname' => '',
-                'platform' => $data['platform'],
-                'age' => 0,
-                'lattitude' => 0,
-                'longitude' => 0,
-                'description' => '',
-                'email_token' => base64_encode($data['email']),
-            ]);
-
-            $success['token'] = $user->createToken('myapp')->accessToken;
-            $success['name'] = $user->name;
-
-            return response()->json(['user' => $user, 'status' => 'OK']);
-        } catch (\Exception $e) {
-            $this->storeErrorLog($user->id, '/register', $e->getMessage());
-
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy tworzeniu uzytkownika.']);
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['result' => 'user_not_found'], 401);
+            }
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['result' => 'token_expired'], 401);
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['result' => 'token_invalid'], 401);
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['result' => 'token_absent'], 401);
         }
+
+        return response()->json(['result' => compact('user')], 201);
     }
+
     /*
      * details api
      *
@@ -175,11 +134,11 @@ class UserController extends Controller
             $userData->setAttribute('unreadedNotificationsAmount', $unreadedNotificationsAmount);
             $userData->setAttribute('storagePath', $storagePath);
 
-            return response()->json(['status' => 'OK', 'result' => $userData]);
+            return response()->json(['result' => $userData, 201]);
         } catch (\Exception $e) {
             $this->storeErrorLog(Auth::user()->id, '/userDetails', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd przy autentykacji uytkownika.']);
+            return response()->json(['result' => 'Błąd przy autentykacji uytkownika.', 401]);
         }
     }
 
@@ -190,13 +149,13 @@ class UserController extends Controller
 
             $user = User::where('email', $email)->count();
 
-            return response()->json(['status' => 'OK', 'result' => $user]);
+            return response()->json(['result' => $user, 201]);
         } catch (\Exception $e) {
             $user = User::where('email', $email)->get();
 
             $this->storeErrorLog($user->id, '/checkIfEmailExists', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            return response()->json(['result' => $e->getMessage()], 401);
         }
     }
 
@@ -224,14 +183,14 @@ class UserController extends Controller
             $user = DB::table('users')
                 ->where('email', $userEmail)->get();
 
-            return response()->json(['status' => 'OK', 'result' => $user]);
+            return response()->json(['result' => $user, 201]);
         } catch (\Exception $e) {
             $user = DB::table('users')
                 ->where('email', $userEmail)->get();
 
             $this->storeErrorLog($user->id, '/updatePhoto', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            return response()->json(['result' => $e->getMessage()], 401);
         }
     }
 
@@ -261,13 +220,13 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $user]);
+            return response()->json(['result' => $user], 201);
         } catch (\Exception $e) {
             $user = User::where('email', $userEmail)->first();
 
             $this->storeErrorLog($user->id, '/updateUserInfo', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => $e->getMessage()]);
+            return response()->json(['result' => $e->getMessage()], 401);
         }
     }
 
@@ -280,18 +239,18 @@ class UserController extends Controller
             $userByNickname = User::where([['nickname', $nickname], ['user_filled_info', 1]])->first();
 
             if ($userByNickname && $userByNickname->email === $userEmail) {
-                return response()->json(['status' => 'OK', 'result' => true]);
+                return response()->json(['result' => true], 201);
             } else if ($userByNickname === null) {
-                return response()->json(['status' => 'OK', 'result' => true]);
+                return response()->json(['result' => true], 201);
             } else {
-                return response()->json(['status' => 'ERR', 'result' => false]);
+                return response()->json(['result' => false], 201);
             }
         } catch (\Exception $e) {
             $user = User::where('email', $userEmail)->first();
 
             $this->storeErrorLog($user->id, '/checkAvailableNickname', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Problem ze sprawdzeniem nazwy.']);
+            return response()->json(['result' => 'Problem ze sprawdzeniem nazwy.'], 401);
         }
     }
 
@@ -313,13 +272,13 @@ class UserController extends Controller
                 ->with('notifications')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $user]);
+            return response()->json(['result' => $user], 201);
         } catch (\Exception $e) {
             $user = User::where('email', $userEmail);
 
             $this->storeErrorLog($user->id, '/setUserFilledInfo', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd z zapisem danych potwierdzonego użytkownika.']);
+            return response()->json(['result' => 'Błąd z zapisem danych potwierdzonego użytkownika.'], 401);
         }
     }
 
@@ -346,11 +305,11 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);
+            return response()->json(['result' => $userList], 201);
         } catch (\Exception $e) {
             $this->storeErrorLog(0, '/loadUsersNearCoords', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników z okolicy.']);
+            return response()->json(['result' => 'Błąd ze zwróceniem użytkowników z okolicy.'], 401);
         }
     }
 
@@ -380,10 +339,9 @@ class UserController extends Controller
         return response()
             ->json(
                 [
-                    'status' => 'OK',
                     'result' => ['userUnreadedMessages' => $userUnreadedMessages,
                         'userUnreadedMessagesCount' => $userUnreadedMessagesCount],
-                ]
+                ], 201
             );
     }
 
@@ -397,9 +355,8 @@ class UserController extends Controller
         return response()
             ->json(
                 [
-                    'status' => 'OK',
                     'result' => ['userNotifications' => $userNotifications],
-                ]
+                ], 201
             );
     }
 
@@ -414,9 +371,9 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);
+            return response()->json(['result' => $userList], 201);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);
+            return response()->json(['result' => 'Błąd ze zwróceniem użytkowników według nazwy.'], 401);
         }
     }
 
@@ -431,9 +388,9 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList]);
+            return response()->json(['result' => $userList], 201);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według nazwy.']);
+            return response()->json(['result' => 'Błąd ze zwróceniem użytkowników według nazwy.'], 401);
         }
     }
 
@@ -445,9 +402,9 @@ class UserController extends Controller
             $user = User::where('id', $id)
                 ->get(["name", "email", "photo_path"]);
 
-            return response()->json(['status' => 'OK', 'result' => $user]);
+            return response()->json(['result' => $user], 201);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkownika.']);
+            return response()->json(['result' => 'Błąd ze zwróceniem użytkownika.'], 401);
         }
     }
 
@@ -518,17 +475,17 @@ class UserController extends Controller
                 ->with('votes')
                 ->get();
 
-            return response()->json(['status' => 'OK', 'result' => $userList, 'resultParameters' => [
+            return response()->json(['result' => $userList, 'resultParameters' => [
                 ['name' => 'distance', 'value' => $distance, 'default' => $calculateDistanceDifference->getData()->distanceDefault],
                 ['name' => 'childAge', 'value' => $childAge, 'default' => $calculateChildAgeDifference->getData()->childAgeDefault],
                 ['name' => 'childGender', 'value' => $childGender, 'default' => $childGenderDefault],
                 ['name' => 'hobby', 'value' => $hobbyName, 'default' => $hobbyDefault],
-            ],
+            ], 201,
             ]);
         } catch (\Exception $e) {
             $this->storeErrorLog(0, '/loadUsersFilter', $e->getMessage());
 
-            return response()->json(['status' => 'ERR', 'result' => 'Błąd ze zwróceniem użytkowników według dystansu.']);
+            return response()->json(['result' => 'Błąd ze zwróceniem użytkowników według dystansu.'], 401);
         }
     }
 
@@ -582,7 +539,7 @@ class UserController extends Controller
                     'formattedStartDate' => $formattedStartDate,
                     'formattedEndDate' => $formattedEndDate,
                     'childAgeDefault' => $childAgeDefault,
-                ]
+                ], 201
             );
     }
 }

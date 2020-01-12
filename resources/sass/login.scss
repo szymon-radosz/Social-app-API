@@ -1,0 +1,18 @@
+.login-form__container {
+    text-align: center;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .login-form {
+        max-width: 300px;
+        width: 90%;
+
+        button {
+            width: 100%;
+        }
+    }
+}

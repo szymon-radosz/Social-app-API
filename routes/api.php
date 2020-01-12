@@ -1,6 +1,6 @@
 <?php
 
-Route::post('login', 'UserController@login');
+Route::post('login', 'UserController@authenticate');
 Route::post('register', 'UserController@register');
 Route::post('uploadUserPhoto', 'UserController@updatePhoto');
 Route::post('updateUserInfo', 'UserController@updateUserInfo');
@@ -61,28 +61,32 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 //DASHBOARD
-Route::get('get-users', 'Dashboard\DashboardStatsController@getUsers');
-Route::get('get-products', 'Dashboard\DashboardStatsController@getProducts');
-Route::get('get-forum-posts', 'Dashboard\DashboardStatsController@getForumPosts');
-Route::get('get-forum-comments', 'Dashboard\DashboardStatsController@getForumComments');
+Route::group(['middleware' => ['jwt.verify']], function () {
+    Route::get('user', 'UserController@getAuthenticatedUser');
 
-Route::get('get-users-list', 'Dashboard\DashboardUsersController@getUsers');
-Route::post('get-users-by-query', 'Dashboard\DashboardUsersController@getUsersByQuery');
-Route::post('block-user', 'Dashboard\DashboardUsersController@blockUser');
+    Route::get('get-users', 'Dashboard\DashboardStatsController@getUsers');
+    Route::get('get-products', 'Dashboard\DashboardStatsController@getProducts');
+    Route::get('get-forum-posts', 'Dashboard\DashboardStatsController@getForumPosts');
+    Route::get('get-forum-comments', 'Dashboard\DashboardStatsController@getForumComments');
 
-Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController@getCategories');
-Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@updateCategory');
-Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
-Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');
+    Route::get('get-users-list', 'Dashboard\DashboardUsersController@getUsers');
+    Route::post('get-users-by-query', 'Dashboard\DashboardUsersController@getUsersByQuery');
+    Route::post('block-user', 'Dashboard\DashboardUsersController@blockUser');
 
-Route::get('get-hobbies', 'Dashboard\DashboardHobbyController@getHobbies');
-Route::post('update-hobby', 'Dashboard\DashboardHobbyController@updateHobby');
-Route::post('block-hobby', 'Dashboard\DashboardHobbyController@blockHobby');
-Route::post('add-hobby', 'Dashboard\DashboardHobbyController@addHobby');
+    Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController@getCategories');
+    Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@updateCategory');
+    Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
+    Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');
 
-Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations');
-Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
-Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');
-Route::post('remove-translation', 'Dashboard\DashboardTranslations@removeTranslation');
+    Route::get('get-hobbies', 'Dashboard\DashboardHobbyController@getHobbies');
+    Route::post('update-hobby', 'Dashboard\DashboardHobbyController@updateHobby');
+    Route::post('block-hobby', 'Dashboard\DashboardHobbyController@blockHobby');
+    Route::post('add-hobby', 'Dashboard\DashboardHobbyController@addHobby');
 
-Route::post('add-admin-user', 'Dashboard\DashboardRegisterController@addUser');
+    Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations');
+    Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
+    Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');
+    Route::post('remove-translation', 'Dashboard\DashboardTranslations@removeTranslation');
+
+    Route::post('add-admin-user', 'Dashboard\DashboardRegisterController@addUser');
+});
