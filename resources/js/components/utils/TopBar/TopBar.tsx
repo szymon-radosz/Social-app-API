@@ -38,11 +38,17 @@ const TopBar = () => {
             >
                 <ul className="nav navbar-nav">
                     <li className="navbar-right">
-                        <img
-                            className="logout-icon"
-                            src="/images/logout.png"
-                            alt="Icon made by dmitri13 from www.flaticon.com"
-                        />
+                        <a
+                            href="#"
+                            onClick={() => context.setUserLoggedIn(false)}
+                            title="Logout"
+                        >
+                            <img
+                                className="logout-icon"
+                                src="/images/logout.png"
+                                alt="Icon made by dmitri13 from www.flaticon.com"
+                            />
+                        </a>
                     </li>
                 </ul>
             </div>

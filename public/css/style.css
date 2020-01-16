@@ -1,47 +1,4 @@
-/*-----------------------------------------------------------------------------------
-Template Name: Appy HTML5 Template,
-Template URI: http://www.themectg.com
-Description: This is html5 template
-Author: Ashekur Rahman Hridoy
-Author URI: http://www.facebook.com/ashekur.rahman.hridoy
-Version: 1.0
------------------------------------------------------------------------------------
-CSS INDEX
-===================
-1. Google font
-2. Theme Default CSS
-3. Button-Style
-4. Helper-Classes
-5. MainMenu-Area
-6. Page-Title
-7. Home-Area
-8. Progress-Area
-9. Video-Area
-10. Feature-Area
-11. Service-Box
-12. Testimonial-Area
-13. Gallery-Area
-14. Download-Area
-15. Price-Area
-16. Questions-area
-17. Subscribe-Form
-18. Footer-Area
-19. ScrollUp-Button
-20. Blog-Post
-21. Pagination
-22. Comment-Respond
-23. Form-Stype
------------------------------------------------------------------------------------*/
-
-/*-----------------
-1. Google font
-------------------*/
-
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700,800");
-
-/*-------------------
-2. Theme Default CSS
---------------------*/
 
 * {
     outline: none;
@@ -273,22 +230,18 @@ input:-webkit-autofill:focus {
     background: rgb(72, 44, 191);
     /* Old browsers */
     /* FF3.6-15 */
-    background: -webkit-llinear-gradient(
+    background: -webkit-linear-gradient(
         0deg,
-        rgba(189, 105, 33, 0.59) 0%,
-        rgb(255, 199, 146) 100%
+        rgba(33, 45, 189, 0.59) 0%,
+        #375aa9 100%
     );
     /* Chrome10-25,Safari5.1-6 */
     background: -o-linear-gradient(
         0deg,
-        rgba(189, 105, 33, 0.59) 0%,
-        rgb(255, 199, 146) 100%
+        rgba(33, 45, 189, 0.59) 0%,
+        #375aa9 100%
     );
-    background: linear-gradient(
-        0deg,
-        rgba(189, 105, 33, 0.59) 0%,
-        rgb(255, 199, 146) 100%
-    );
+    background: linear-gradient(0deg, rgba(33, 45, 189, 0.59) 0%, #375aa9 100%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#482cbf', endColorstr='#6ac6f0', GradientType=1);
     opacity: 0.8;
@@ -331,11 +284,11 @@ input:-webkit-autofill:focus {
 }
 
 .blue-color {
-    color: #f4a157;
+    color: #7d9ee2;
 }
 a:hover,
 a:focus {
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 .white-color {
@@ -368,23 +321,7 @@ a:focus {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgb(72, 44, 191);
-    background: -webkit-linear-gradient(
-        0deg,
-        rgba(241, 160, 91, 0.59) 0%,
-        rgb(255, 199, 146) 100%
-    );
-    background: -o-linear-gradient(
-        0deg,
-        rgba(241, 160, 91, 0.59) 0%,
-        rgb(255, 199, 146) 100%
-    );
-    background: linear-gradient(
-        0deg,
-        rgba(241, 160, 91, 0.59) 0%,
-        rgb(255, 199, 146) 100%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#482cbf', endColorstr='#6ac6f0', GradientType=1);
+    background: #5e88fc;
     z-index: -1;
     opacity: 0;
     -webkit-transition: 0.3s;
@@ -421,7 +358,7 @@ a:focus {
 
 .mainmenu-area .right-button a:hover {
     background-color: rgba(255, 255, 255, 1);
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 .mainmenu-area ul.mainmenu {
@@ -467,7 +404,7 @@ a:focus {
     display: inline-block;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: #f4a157;
+    color: #7d9ee2;
     font-weight: 600;
 }
 
@@ -551,7 +488,7 @@ a:focus {
 
 .feature-area {
     color: #ffffff;
-    background-color: #f4a157;
+    background-color: #7d9ee2;
     background-image: url("images/feature-bg.png");
     background-position: bottom -120px center;
     background-repeat: no-repeat;
@@ -564,7 +501,7 @@ a:focus {
 }
 
 .feature-area .mobile-image {
-    margin-bottom: -142px;
+    margin-bottom: -110px;
 }
 
 /*-- 11. Service-Box --*/
@@ -689,7 +626,7 @@ a:focus {
 }
 
 .team-box h4 {
-    color: #f4a157;
+    color: #7d9ee2;
     font-weight: 600;
     font-size: 20px;
 }
@@ -824,7 +761,7 @@ a:focus {
     border-radius: 5px;
     overflow: hidden;
     text-align: center;
-    color: #f4a157;
+    color: #7d9ee2;
     -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.1);
     -webkit-transition: 0.3s;
@@ -833,14 +770,14 @@ a:focus {
 }
 
 .price-box:hover {
-    -webkit-box-shadow: 0 0 50px -15px #f4a157;
-    box-shadow: 0 0 50px -15px #f4a157;
+    -webkit-box-shadow: 0 0 50px -15px #7d9ee2;
+    box-shadow: 0 0 50px -15px #7d9ee2;
 }
 
 .price-box .price-header {
     background-color: #f2f3fc;
     padding: 40px;
-    color: #f4a157;
+    color: #7d9ee2;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#482cbf+0,6ac6f0+100 */
     background: rgb(72, 44, 191);
     /* Old browsers */
@@ -1051,21 +988,21 @@ a:focus {
     background: rgb(72, 44, 191);
     /* Old browsers */
     /* FF3.6-15 */
-    background: -webkit-inear-gradient(
+    background: -webkit-linear-gradient(
         45deg,
-        rgb(191, 119, 44) 0%,
-        rgb(240, 199, 106) 100%
+        rgba(72, 44, 191, 1) 0%,
+        rgba(106, 198, 240, 1) 100%
     );
     /* Chrome10-25,Safari5.1-6 */
     background: -o-linear-gradient(
         45deg,
-        rgb(191, 119, 44) 0%,
-        rgb(240, 199, 106) 100%
+        rgba(72, 44, 191, 1) 0%,
+        rgba(106, 198, 240, 1) 100%
     );
     background: linear-gradient(
         45deg,
-        rgb(191, 119, 44) 0%,
-        rgb(240, 199, 106) 100%
+        rgba(72, 44, 191, 1) 0%,
+        rgba(106, 198, 240, 1) 100%
     );
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#482cbf', endColorstr='#6ac6f0', GradientType=1);
@@ -1093,7 +1030,7 @@ a:focus {
 }
 
 .footer-box:hover .box-icon {
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 .footer-box:hover .box-icon:before {
@@ -1103,7 +1040,7 @@ a:focus {
 .footer-bottom {
     padding: 20px 0;
     background-color: #f5f6ff;
-    border-top: 1px solid #f4a157;
+    border-top: 1px solid #7d9ee2;
 }
 
 .footer-bottom .footer-menu ul {
@@ -1123,7 +1060,7 @@ a:focus {
 }
 
 .footer-bottom .footer-menu ul li a:hover {
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 /*-- 19. ScrollUp-Button --*/
@@ -1136,7 +1073,7 @@ a:focus {
     text-align: center;
     line-height: 60px;
     font-size: 30px;
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 .preloader {
@@ -1352,7 +1289,7 @@ a:focus {
     letter-spacing: 2px;
     font-weight: 700;
     font-size: 14px;
-    color: #f4a157;
+    color: #7d9ee2;
 }
 
 .post-single .post-body .read-more:after {
@@ -1533,7 +1470,7 @@ a:focus {
 
 /* terms */
 .termsHeader {
-    color: #f4a157;
+    color: #7d9ee2;
     font-weight: 600;
 }
 .termsContent {
@@ -1546,18 +1483,19 @@ a:focus {
 
 /* reset password */
 .resetBtn {
-    background-color: #f4a157;
+    background-color: #7d9ee2;
     color: #fff;
     margin: 0 auto;
     padding: 15px 50px;
 }
 .affix:before {
-    background: rgb(255, 199, 146) !important;
+    background: #5881d6;
     opacity: 1 !important;
 }
 .headerIcon,
 ul.nav.navbar-nav.mainmenu > li {
     opacity: 0.7;
+    margin: 5px 0px;
 }
 .headerIcon:hover,
 ul.nav.navbar-nav.mainmenu > .active {
@@ -1584,8 +1522,17 @@ ul.nav.navbar-nav.mainmenu > .active {
 }
 
 @media (max-width: 480px) {
+    .headerRow {
+        text-align: center;
+    }
+    .headerIcon {
+        max-width: 100px;
+    }
+    .navbar-brand {
+        margin-top: 5px;
+    }
     .mainmenu-area:before {
-        background: rgb(255, 199, 146) !important;
+        background: #5e88fc;
         opacity: 1 !important;
     }
     h1 {

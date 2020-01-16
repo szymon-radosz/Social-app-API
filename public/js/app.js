@@ -44105,7 +44105,8 @@ var TopBar = function () {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "navbar-collapse collapse", id: "navbarSupportedContent" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", { className: "nav navbar-nav" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: "navbar-right" },
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "logout-icon", src: "/images/logout.png", alt: "Icon made by dmitri13 from www.flaticon.com" }))))));
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () { return context.setUserLoggedIn(false); }, title: "Logout" },
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "logout-icon", src: "/images/logout.png", alt: "Icon made by dmitri13 from www.flaticon.com" })))))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (TopBar);
 
