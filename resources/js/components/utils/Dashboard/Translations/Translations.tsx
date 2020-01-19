@@ -22,7 +22,11 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-translations`)
+                    .get(`${this.context.API_URL}get-translations`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         const { data } = response;
 
@@ -33,6 +37,9 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -62,7 +69,8 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                 axios
                     .post(`${this.context.API_URL}update-translation`, data, {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.context.token}`
                         }
                     })
                     .then(response => {
@@ -72,6 +80,9 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                         );
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 this.context.handleShowAlert(
@@ -96,7 +107,8 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                 axios
                     .post(`${this.context.API_URL}remove-translation`, data, {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.context.token}`
                         }
                     })
                     .then(response => {
@@ -108,6 +120,9 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                         );
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -139,7 +154,8 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                     axios
                         .post(`${this.context.API_URL}add-translation`, data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${this.context.token}`
                             }
                         })
                         .then(response => {
@@ -151,6 +167,11 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
                             );
 
                             resolve(response);
+                        })
+                        .catch(err => {
+                            this.context.checkTokenExpiration(
+                                err.response.status
+                            );
                         });
                 } catch (err) {
                     console.log(err);

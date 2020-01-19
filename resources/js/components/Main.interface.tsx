@@ -8,6 +8,7 @@ interface MainState {
     showLoader: boolean;
     alertMessage: string;
     alertStatus: string;
+    token: string;
 }
 
 export { MainProps, MainState };

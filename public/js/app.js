@@ -41835,8 +41835,15 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main(props) {
         var _this = _super.call(this, props) || this;
+        _this.setToken = function (token) {
+            _this.setState({ token: token });
+        };
         _this.setUserLoggedIn = function (status) {
             _this.setState({ userLoggedIn: status });
+        };
+        _this.handleLogout = function () {
+            localStorage.clear();
+            _this.setState({ userLoggedIn: false });
         };
         _this.handleShowAlert = function (message, status) {
             _this.setState({ alertMessage: message, alertStatus: status });
@@ -41857,6 +41864,22 @@ var Main = (function (_super) {
             if (state === void 0) { state = {}; }
             _this.history.push({ pathname: path, state: state });
         };
+        _this.componentDidMount = function () {
+            console.log(["did", localStorage.getItem("token")]);
+            if (localStorage.getItem("token")) {
+                _this.setState({
+                    token: localStorage.getItem("token"),
+                    userLoggedIn: true
+                });
+            }
+        };
+        _this.checkTokenExpiration = function (status) {
+            console.log(["checkTokenExpiration", status]);
+            if (status === 401) {
+                _this.handleShowAlert("Token invalid", "danger");
+                _this.handleLogout();
+            }
+        };
         _this.state = {
             userLoggedIn: false,
             showSidebarText: false,
@@ -41864,7 +41887,8 @@ var Main = (function (_super) {
             API_URL: "http://127.0.0.1:8000/api/",
             showLoader: false,
             alertMessage: "",
-            alertStatus: ""
+            alertStatus: "",
+            token: ""
         };
         _this.history = _History__WEBPACK_IMPORTED_MODULE_6__["default"];
         _this.routes = [
@@ -41907,7 +41931,7 @@ var Main = (function (_super) {
         return _this;
     }
     Main.prototype.render = function () {
-        var _a = this.state, userLoggedIn = _a.userLoggedIn, showSidebarText = _a.showSidebarText, activeMenuSection = _a.activeMenuSection, API_URL = _a.API_URL, showLoader = _a.showLoader, alertMessage = _a.alertMessage, alertStatus = _a.alertStatus;
+        var _a = this.state, userLoggedIn = _a.userLoggedIn, showSidebarText = _a.showSidebarText, activeMenuSection = _a.activeMenuSection, API_URL = _a.API_URL, showLoader = _a.showLoader, alertMessage = _a.alertMessage, alertStatus = _a.alertStatus, token = _a.token;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MainContext__WEBPACK_IMPORTED_MODULE_5__["MainContext"].Provider, { value: {
                 changePath: this.changePath,
                 userLoggedIn: userLoggedIn,
@@ -41919,7 +41943,11 @@ var Main = (function (_super) {
                 showLoader: showLoader,
                 handleShowLoader: this.handleShowLoader,
                 handleShowAlert: this.handleShowAlert,
-                setUserLoggedIn: this.setUserLoggedIn
+                setUserLoggedIn: this.setUserLoggedIn,
+                token: token,
+                setToken: this.setToken,
+                handleLogout: this.handleLogout,
+                checkTokenExpiration: this.checkTokenExpiration
             } },
             alertMessage && alertStatus && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Alert_Alert__WEBPACK_IMPORTED_MODULE_12__["default"], { message: alertMessage, status: alertStatus })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
@@ -41963,7 +41991,11 @@ var MainContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
     handleShowLoader: function (status) { },
     showLoader: false,
     handleShowAlert: function (message, status) { },
-    setUserLoggedIn: function (status) { }
+    setUserLoggedIn: function (status) { },
+    token: "",
+    setToken: function (token) { },
+    handleLogout: function () { },
+    checkTokenExpiration: function (err) { }
 });
 
 
@@ -42073,13 +42105,22 @@ var Dashboard = (function (_super) {
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
                 try {
-                    axios__WEBPACK_IMPORTED_MODULE_6___default.a.get(_this.context.API_URL + "get-users").then(function (response) {
+                    axios__WEBPACK_IMPORTED_MODULE_6___default.a
+                        .get(_this.context.API_URL + "get-users", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
+                        .then(function (response) {
                         console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({ usersCount: data.result.users });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -42095,7 +42136,11 @@ var Dashboard = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_6___default.a
-                        .get(_this.context.API_URL + "get-forum-posts")
+                        .get(_this.context.API_URL + "get-forum-posts", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         console.log(["response", response, response.status]);
                         var data = response.data;
@@ -42105,6 +42150,9 @@ var Dashboard = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -42120,7 +42168,11 @@ var Dashboard = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_6___default.a
-                        .get(_this.context.API_URL + "get-forum-comments")
+                        .get(_this.context.API_URL + "get-forum-comments", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         console.log(["response", response, response.status]);
                         var data = response.data;
@@ -42130,6 +42182,9 @@ var Dashboard = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -42304,7 +42359,11 @@ var ForumCategories = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_4___default.a
-                        .get(_this.context.API_URL + "get-forum-categories")
+                        .get(_this.context.API_URL + "get-forum-categories", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         var data = response.data;
                         if (response.status === 200) {
@@ -42313,6 +42372,9 @@ var ForumCategories = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -42337,7 +42399,8 @@ var ForumCategories = (function (_super) {
                         axios__WEBPACK_IMPORTED_MODULE_4___default.a
                             .post(this.context.API_URL + "block-forum-category", data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + this.context.token
                             }
                         })
                             .then(function (response) {
@@ -42350,6 +42413,9 @@ var ForumCategories = (function (_super) {
                             _this.setState({ categories: newCategoriesState });
                             _this.context.handleShowAlert("Successfully changed category status", "success");
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -42381,17 +42447,20 @@ var ForumCategories = (function (_super) {
                             axios__WEBPACK_IMPORTED_MODULE_4___default.a
                                 .post(this.context.API_URL + "add-forum-category", data, {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + this.context.token
                                 }
                             })
                                 .then(function (response) {
                                 _this.getCategories();
                                 _this.context.handleShowAlert("Successfully added new category", "success");
                                 resolve(response);
+                            })
+                                .catch(function (err) {
+                                _this.context.checkTokenExpiration(err.response.status);
                             });
                         }
                         catch (err) {
-                            console.log(err);
                             this.context.handleShowAlert("Cannot added new category", "danger");
                             reject(err);
                         }
@@ -42606,7 +42675,11 @@ var Hobbies = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_4___default.a
-                        .get(_this.context.API_URL + "get-hobbies")
+                        .get(_this.context.API_URL + "get-hobbies", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         var data = response.data;
                         if (response.status === 200) {
@@ -42615,10 +42688,12 @@ var Hobbies = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
-                    console.log(err);
                     reject(err);
                 }
                 finally {
@@ -42639,7 +42714,8 @@ var Hobbies = (function (_super) {
                         axios__WEBPACK_IMPORTED_MODULE_4___default.a
                             .post(this.context.API_URL + "block-hobby", data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + this.context.token
                             }
                         })
                             .then(function (response) {
@@ -42652,6 +42728,9 @@ var Hobbies = (function (_super) {
                             _this.setState({ hobbies: newHobbiesState });
                             _this.context.handleShowAlert("Successfully changed hobby status", "success");
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -42683,17 +42762,20 @@ var Hobbies = (function (_super) {
                             axios__WEBPACK_IMPORTED_MODULE_4___default.a
                                 .post(this.context.API_URL + "add-hobby", data, {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + this.context.token
                                 }
                             })
                                 .then(function (response) {
                                 _this.getHobbies();
                                 _this.context.handleShowAlert("Successfully added new hobby", "success");
                                 resolve(response);
+                            })
+                                .catch(function (err) {
+                                _this.context.checkTokenExpiration(err.response.status);
                             });
                         }
                         catch (err) {
-                            console.log(err);
                             this.context.handleShowAlert("Cannot added new hobby", "danger");
                             reject(err);
                         }
@@ -42891,6 +42973,10 @@ var Register = (function (_super) {
                             axios__WEBPACK_IMPORTED_MODULE_5___default.a
                                 .post(this.context.API_URL + "checkIfEmailExists", {
                                 email: email
+                            }, {
+                                headers: {
+                                    Authorization: "Bearer " + this.context.token
+                                }
                             })
                                 .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
                                 var _this = this;
@@ -42917,11 +43003,17 @@ var Register = (function (_super) {
                                         })
                                             .catch(function (error) {
                                             _this.context.handleShowAlert(error, "danger");
+                                        })
+                                            .catch(function (err) {
+                                            _this.context.checkTokenExpiration(err.response.status);
                                         });
                                     }
                                     return [2];
                                 });
-                            }); });
+                            }); })
+                                .catch(function (err) {
+                                _this.context.checkTokenExpiration(err.response.status);
+                            });
                         }
                         catch (error) {
                             this.context.handleShowAlert(error, "danger");
@@ -43188,7 +43280,11 @@ var Translations = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_4___default.a
-                        .get(_this.context.API_URL + "get-translations")
+                        .get(_this.context.API_URL + "get-translations", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         var data = response.data;
                         if (response.status === 200) {
@@ -43197,6 +43293,9 @@ var Translations = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -43228,12 +43327,16 @@ var Translations = (function (_super) {
                         axios__WEBPACK_IMPORTED_MODULE_4___default.a
                             .post(this.context.API_URL + "update-translation", data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + this.context.token
                             }
                         })
                             .then(function (response) {
                             _this.context.handleShowAlert("Successfully updated translation", "success");
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -43260,13 +43363,17 @@ var Translations = (function (_super) {
                         axios__WEBPACK_IMPORTED_MODULE_4___default.a
                             .post(this.context.API_URL + "remove-translation", data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + this.context.token
                             }
                         })
                             .then(function (response) {
                             _this.getTranslations();
                             _this.context.handleShowAlert("Successfully removed translation", "success");
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -43298,13 +43405,17 @@ var Translations = (function (_super) {
                             axios__WEBPACK_IMPORTED_MODULE_4___default.a
                                 .post(this.context.API_URL + "add-translation", data, {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + this.context.token
                                 }
                             })
                                 .then(function (response) {
                                 _this.getTranslations();
                                 _this.context.handleShowAlert("Successfully added new translation", "success");
                                 resolve(response);
+                            })
+                                .catch(function (err) {
+                                _this.context.checkTokenExpiration(err.response.status);
                             });
                         }
                         catch (err) {
@@ -43547,7 +43658,11 @@ var Users = (function (_super) {
                 _this.context.handleShowLoader(true);
                 try {
                     axios__WEBPACK_IMPORTED_MODULE_6___default.a
-                        .get(_this.context.API_URL + "get-users-list")
+                        .get(_this.context.API_URL + "get-users-list", {
+                        headers: {
+                            Authorization: "Bearer " + _this.context.token
+                        }
+                    })
                         .then(function (response) {
                         var data = response.data;
                         if (response.status === 200) {
@@ -43561,6 +43676,9 @@ var Users = (function (_super) {
                             });
                         }
                         resolve(response);
+                    })
+                        .catch(function (err) {
+                        _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
                 catch (err) {
@@ -43579,7 +43697,11 @@ var Users = (function (_super) {
                 return __generator(this, function (_a) {
                     try {
                         axios__WEBPACK_IMPORTED_MODULE_6___default.a
-                            .get(this.context.API_URL + "get-users-list?page=" + (data.selected + 1))
+                            .get(this.context.API_URL + "get-users-list?page=" + (data.selected + 1), {
+                            headers: {
+                                Authorization: "Bearer " + this.context.token
+                            }
+                        })
                             .then(function (response) {
                             var data = response.data;
                             if (response.status === 200) {
@@ -43593,6 +43715,9 @@ var Users = (function (_super) {
                                 });
                             }
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -43623,7 +43748,8 @@ var Users = (function (_super) {
                             axios__WEBPACK_IMPORTED_MODULE_6___default.a
                                 .post(this.context.API_URL + "get-users-by-query", data, {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + this.context.token
                                 }
                             })
                                 .then(function (response) {
@@ -43639,6 +43765,9 @@ var Users = (function (_super) {
                                     });
                                 }
                                 resolve(response);
+                            })
+                                .catch(function (err) {
+                                _this.context.checkTokenExpiration(err.response.status);
                             });
                         }
                         catch (err) {
@@ -43666,7 +43795,8 @@ var Users = (function (_super) {
                         axios__WEBPACK_IMPORTED_MODULE_6___default.a
                             .post(this.context.API_URL + "block-user", data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + this.context.token
                             }
                         })
                             .then(function (response) {
@@ -43679,6 +43809,9 @@ var Users = (function (_super) {
                             _this.setState({ users: newUsersState });
                             _this.context.handleShowAlert("Successfully changed user status", "success");
                             resolve(response);
+                        })
+                            .catch(function (err) {
+                            _this.context.checkTokenExpiration(err.response.status);
                         });
                     }
                     catch (err) {
@@ -43897,6 +44030,8 @@ var Login = (function (_super) {
                         console.log(["data", result, response, response.data]);
                         if (response.data.result.user_role === "admin") {
                             var token = response.data.result.token;
+                            _this.context.setToken(token);
+                            localStorage.setItem("token", token);
                             var config = {
                                 Authorization: "Bearer " + token,
                                 "Content-Type": "application/x-www-form-urlencoded",
@@ -43965,12 +44100,13 @@ var LoginForm = function (_a) {
     var onLoginSubmit = _a.onLoginSubmit;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), email = _b[0], setEmail = _b[1];
     var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), password = _c[0], setPassword = _c[1];
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { className: "login-form" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { className: "login-form", onSubmit: function () { return onLoginSubmit(email, password); } },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { src: "/images/logo-sq.png" }),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "email", className: "form-control", placeholder: "Email", onChange: function (e) { return setEmail(e.target.value); } })),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "password", className: "form-control", placeholder: "Password", onChange: function (e) { return setPassword(e.target.value); } })),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return onLoginSubmit(email, password); }, className: "btn blue-btn" }, "Login")));
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "submit", onClick: function () { return onLoginSubmit(email, password); }, className: "btn blue-btn" }, "Login")));
 };
 /* harmony default export */ __webpack_exports__["default"] = (LoginForm);
 
@@ -43994,9 +44130,11 @@ __webpack_require__.r(__webpack_exports__);
 var Sidebar = function () {
     var context = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_MainContext__WEBPACK_IMPORTED_MODULE_1__["MainContext"]);
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar" },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", { className: "list-active-" + context.activeMenuSection },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Dashboard"
+                    ? "sidebar__item sidebar__item--1 sidebar__item--active sidebar__item--active--1"
+                    : "sidebar__item sidebar__item--1" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Dashboard" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/dashboard");
@@ -44008,8 +44146,10 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Dashboard");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Dashboard"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Users"
+                    ? "sidebar__item sidebar__item--2 sidebar__item--active sidebar__item--active--2"
+                    : "sidebar__item sidebar__item--2" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Users" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/users");
@@ -44021,8 +44161,10 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Users");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Users"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Forum Categories"
+                    ? "sidebar__item sidebar__item--3 sidebar__item--active sidebar__item--active--3"
+                    : "sidebar__item sidebar__item--3" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Forum Categories" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/forum-categories");
@@ -44034,8 +44176,10 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Forum Categories");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Forum Categories"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Hobbies"
+                    ? "sidebar__item sidebar__item--4 sidebar__item--active sidebar__item--active--4"
+                    : "sidebar__item sidebar__item--4" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Hobbies" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/hobbies");
@@ -44047,8 +44191,10 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Hobbies");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Hobbies List"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Translations"
+                    ? "sidebar__item sidebar__item--5 sidebar__item--active sidebar__item--active--5"
+                    : "sidebar__item sidebar__item--5" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Translations" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/translations");
@@ -44060,8 +44206,10 @@ var Sidebar = function () {
                             context.handlAactiveMenuSection("Translations");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Translations"))))),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null,
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: context.activeMenuSection === "Register"
+                    ? "sidebar__item sidebar__item--6 sidebar__item--active sidebar__item--active--6"
+                    : "sidebar__item sidebar__item--6" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Register" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
                             context.changePath("/register");
@@ -44072,7 +44220,9 @@ var Sidebar = function () {
                             context.changePath("/register");
                             context.handlAactiveMenuSection("Register");
                         } },
-                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Register"))))))));
+                        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Register"))))),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: "sidebar__item sidebar__item--7" },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" })))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (Sidebar);
 
@@ -44105,7 +44255,7 @@ var TopBar = function () {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "navbar-collapse collapse", id: "navbarSupportedContent" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", { className: "nav navbar-nav" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", { className: "navbar-right" },
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () { return context.setUserLoggedIn(false); }, title: "Logout" },
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () { return context.handleLogout(); }, title: "Logout" },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "logout-icon", src: "/images/logout.png", alt: "Icon made by dmitri13 from www.flaticon.com" })))))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (TopBar);

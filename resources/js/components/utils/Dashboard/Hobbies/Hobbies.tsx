@@ -21,7 +21,11 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-hobbies`)
+                    .get(`${this.context.API_URL}get-hobbies`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         const { data } = response;
 
@@ -32,9 +36,11 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
-                console.log(err);
                 reject(err);
             } finally {
                 this.context.handleShowLoader(false);
@@ -53,7 +59,8 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
                 axios
                     .post(`${this.context.API_URL}block-hobby`, data, {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.context.token}`
                         }
                     })
                     .then(response => {
@@ -72,6 +79,9 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
                             "success"
                         );
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -103,7 +113,8 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
                     axios
                         .post(`${this.context.API_URL}add-hobby`, data, {
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${this.context.token}`
                             }
                         })
                         .then(response => {
@@ -115,9 +126,13 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
                             );
 
                             resolve(response);
+                        })
+                        .catch(err => {
+                            this.context.checkTokenExpiration(
+                                err.response.status
+                            );
                         });
                 } catch (err) {
-                    console.log(err);
                     this.context.handleShowAlert(
                         "Cannot added new hobby",
                         "danger"

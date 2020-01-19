@@ -40,7 +40,7 @@ const TopBar = () => {
                     <li className="navbar-right">
                         <a
                             href="#"
-                            onClick={() => context.setUserLoggedIn(false)}
+                            onClick={() => context.handleLogout()}
                             title="Logout"
                         >
                             <img

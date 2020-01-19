@@ -5,7 +5,11 @@ const LoginForm = ({ onLoginSubmit }) => {
     const [password, setPassword] = useState("");
 
     return (
-        <form className="login-form">
+        <form
+            className="login-form"
+            onSubmit={() => onLoginSubmit(email, password)}
+        >
+            <img src="/images/logo-sq.png" />
             <div className="form-group">
                 <input
                     type="email"
@@ -23,7 +27,7 @@ const LoginForm = ({ onLoginSubmit }) => {
                 />
             </div>
             <button
-                type="button"
+                type="submit"
                 onClick={() => onLoginSubmit(email, password)}
                 className="btn blue-btn"
             >

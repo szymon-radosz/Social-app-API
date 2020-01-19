@@ -14,15 +14,8 @@
         <link rel="shortcut icon" src="image/ico" href="{{ asset('/images/favicon.png') }}" />
 
         <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/css/owl.carousel.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/css/linearicons.css') }}">
-        <link rel="stylesheet" href="{{ asset('/css/magnific-popup.css') }}">
-        <link rel="stylesheet" href="{{ asset('/css/animate.css') }}">
-
-        <link rel="stylesheet" href="{{ asset('/css/normalize.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('/css/responsive.css') }}">
-        <script href="{{ asset('/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     </head>
     <body data-spy="scroll" data-target=".mainmenu-area">
 
@@ -166,9 +159,6 @@
 
                         <div class="col-xs-12 col-sm-12">
                             <div class="footer-box">
-                                <a href="mailto:contact@social-app.com" title="Write a message"><div class="box-icon">
-                                    <span class="lnr lnr-envelope"></span>
-                                </div></a>
                                 <a href="mailto:contact@social-app.com" title="Write a message"><p>contact@social-app.com</p></a>
                             </div>
                         </div>
@@ -203,12 +193,5 @@
         <script src="{{ URL::asset('/js/vendor/jquery-1.12.4.min.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/jquery-ui.js') }}"></script>
         <script src="{{ URL::asset('/js/vendor/bootstrap.min.js') }}"></script>
-        <script src="{{ URL::asset('/js/owl.carousel.min.js') }}"></script>
-        <script src="{{ URL::asset('/js/contact-form.js') }}"></script>
-        <script src="{{ URL::asset('/js/ajaxchimp.js') }}"></script>
-        <script src="{{ URL::asset('/js/scrollUp.min.js') }}"></script>
-        <script src="{{ URL::asset('/js/magnific-popup.min.js') }}"></script>
-        <script src="{{ URL::asset('/js/wow.min.js') }}"></script>
-        <script src="{{ URL::asset('/js/main.js') }}"></script>
     </body>
 </html>

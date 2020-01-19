@@ -28,9 +28,17 @@ class Register extends Component<RegisterProps, RegisterState> {
             return new Promise(async (resolve, reject) => {
                 try {
                     axios
-                        .post(this.context.API_URL + "checkIfEmailExists", {
-                            email: email
-                        })
+                        .post(
+                            this.context.API_URL + "checkIfEmailExists",
+                            {
+                                email: email
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${this.context.token}`
+                                }
+                            }
+                        )
                         .then(async response => {
                             if (
                                 response.data.status === "OK" &&
@@ -69,8 +77,18 @@ class Register extends Component<RegisterProps, RegisterState> {
                                             error,
                                             "danger"
                                         );
+                                    })
+                                    .catch(err => {
+                                        this.context.checkTokenExpiration(
+                                            err.response.status
+                                        );
                                     });
                             }
+                        })
+                        .catch(err => {
+                            this.context.checkTokenExpiration(
+                                err.response.status
+                            );
                         });
                 } catch (error) {
                     this.context.handleShowAlert(error, "danger");

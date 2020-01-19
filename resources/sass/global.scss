@@ -1,5 +1,5 @@
 body {
-    background-color: #f1f4fa !important;
+    background-color: #fff !important;
 
     ul {
         list-style-type: none;
@@ -13,6 +13,7 @@ body {
         border-color: $blue;
         border-radius: $borderRadius;
         color: #fff;
+        min-width: 90px;
     }
     .blue-btn:hover {
         background-color: $darkBlue;
@@ -69,7 +70,7 @@ body {
             margin: 0;
             padding-bottom: 20px;
             color: $dark;
-            font-size: 16px;
+            font-size: 22px;
         }
     }
     .legend__container {

@@ -27,7 +27,11 @@ class ForumCategories extends Component<
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-forum-categories`)
+                    .get(`${this.context.API_URL}get-forum-categories`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         const { data } = response;
 
@@ -38,6 +42,9 @@ class ForumCategories extends Component<
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -59,7 +66,8 @@ class ForumCategories extends Component<
                 axios
                     .post(`${this.context.API_URL}block-forum-category`, data, {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.context.token}`
                         }
                     })
                     .then(response => {
@@ -78,6 +86,9 @@ class ForumCategories extends Component<
                             "success"
                         );
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -112,7 +123,8 @@ class ForumCategories extends Component<
                             data,
                             {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${this.context.token}`
                                 }
                             }
                         )
@@ -125,9 +137,13 @@ class ForumCategories extends Component<
                             );
 
                             resolve(response);
+                        })
+                        .catch(err => {
+                            this.context.checkTokenExpiration(
+                                err.response.status
+                            );
                         });
                 } catch (err) {
-                    console.log(err);
                     this.context.handleShowAlert(
                         "Cannot added new category",
                         "danger"

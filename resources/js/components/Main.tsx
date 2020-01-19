@@ -32,7 +32,8 @@ class Main extends Component<MainProps, MainState> {
             API_URL: "http://127.0.0.1:8000/api/",
             showLoader: false,
             alertMessage: "",
-            alertStatus: ""
+            alertStatus: "",
+            token: ""
         };
 
         this.history = history;
@@ -76,8 +77,17 @@ class Main extends Component<MainProps, MainState> {
         ];
     }
 
+    setToken = token => {
+        this.setState({ token });
+    };
+
     setUserLoggedIn = status => {
         this.setState({ userLoggedIn: status });
+    };
+
+    handleLogout = () => {
+        localStorage.clear();
+        this.setState({ userLoggedIn: false });
     };
 
     handleShowAlert = (message: string, status: string) => {
@@ -104,6 +114,24 @@ class Main extends Component<MainProps, MainState> {
         this.history.push({ pathname: path, state: state });
     };
 
+    componentDidMount = () => {
+        console.log(["did", localStorage.getItem("token")]);
+        if (localStorage.getItem("token")) {
+            this.setState({
+                token: localStorage.getItem("token"),
+                userLoggedIn: true
+            });
+        }
+    };
+
+    checkTokenExpiration = status => {
+        console.log(["checkTokenExpiration", status]);
+        if (status === 401) {
+            this.handleShowAlert("Token invalid", "danger");
+            this.handleLogout();
+        }
+    };
+
     render() {
         const {
             userLoggedIn,
@@ -112,7 +140,8 @@ class Main extends Component<MainProps, MainState> {
             API_URL,
             showLoader,
             alertMessage,
-            alertStatus
+            alertStatus,
+            token
         } = this.state;
 
         return (
@@ -128,7 +157,11 @@ class Main extends Component<MainProps, MainState> {
                     showLoader: showLoader,
                     handleShowLoader: this.handleShowLoader,
                     handleShowAlert: this.handleShowAlert,
-                    setUserLoggedIn: this.setUserLoggedIn
+                    setUserLoggedIn: this.setUserLoggedIn,
+                    token: token,
+                    setToken: this.setToken,
+                    handleLogout: this.handleLogout,
+                    checkTokenExpiration: this.checkTokenExpiration
                 }}
             >
                 {alertMessage && alertStatus && (

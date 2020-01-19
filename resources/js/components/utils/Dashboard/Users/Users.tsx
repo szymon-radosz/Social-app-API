@@ -28,7 +28,11 @@ class Users extends Component<UsersProps, UsersState> {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-users-list`)
+                    .get(`${this.context.API_URL}get-users-list`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         const { data } = response;
 
@@ -44,6 +48,9 @@ class Users extends Component<UsersProps, UsersState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -62,7 +69,12 @@ class Users extends Component<UsersProps, UsersState> {
                     .get(
                         `${
                             this.context.API_URL
-                        }get-users-list?page=${data.selected + 1}`
+                        }get-users-list?page=${data.selected + 1}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${this.context.token}`
+                            }
+                        }
                     )
                     .then(response => {
                         const { data } = response;
@@ -79,6 +91,9 @@ class Users extends Component<UsersProps, UsersState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -106,7 +121,8 @@ class Users extends Component<UsersProps, UsersState> {
                             data,
                             {
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${this.context.token}`
                                 }
                             }
                         )
@@ -125,6 +141,11 @@ class Users extends Component<UsersProps, UsersState> {
                             }
 
                             resolve(response);
+                        })
+                        .catch(err => {
+                            this.context.checkTokenExpiration(
+                                err.response.status
+                            );
                         });
                 } catch (err) {
                     console.log(err);
@@ -147,7 +168,8 @@ class Users extends Component<UsersProps, UsersState> {
                 axios
                     .post(`${this.context.API_URL}block-user`, data, {
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${this.context.token}`
                         }
                     })
                     .then(response => {
@@ -166,6 +188,9 @@ class Users extends Component<UsersProps, UsersState> {
                             "success"
                         );
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);

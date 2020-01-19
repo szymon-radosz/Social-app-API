@@ -25,17 +25,26 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         return new Promise(resolve => {
             this.context.handleShowLoader(true);
             try {
-                axios.get(`${this.context.API_URL}get-users`).then(response => {
-                    console.log(["response", response, response.status]);
+                axios
+                    .get(`${this.context.API_URL}get-users`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
+                    .then(response => {
+                        console.log(["response", response, response.status]);
 
-                    const { data } = response;
+                        const { data } = response;
 
-                    if (response.status === 200) {
-                        this.setState({ usersCount: data.result.users });
-                    }
+                        if (response.status === 200) {
+                            this.setState({ usersCount: data.result.users });
+                        }
 
-                    resolve(response);
-                });
+                        resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
+                    });
             } catch (err) {
                 console.log(err);
             } finally {
@@ -49,7 +58,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-forum-posts`)
+                    .get(`${this.context.API_URL}get-forum-posts`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         console.log(["response", response, response.status]);
 
@@ -62,6 +75,9 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);
@@ -76,7 +92,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             this.context.handleShowLoader(true);
             try {
                 axios
-                    .get(`${this.context.API_URL}get-forum-comments`)
+                    .get(`${this.context.API_URL}get-forum-comments`, {
+                        headers: {
+                            Authorization: `Bearer ${this.context.token}`
+                        }
+                    })
                     .then(response => {
                         console.log(["response", response, response.status]);
 
@@ -89,6 +109,9 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         }
 
                         resolve(response);
+                    })
+                    .catch(err => {
+                        this.context.checkTokenExpiration(err.response.status);
                     });
             } catch (err) {
                 console.log(err);

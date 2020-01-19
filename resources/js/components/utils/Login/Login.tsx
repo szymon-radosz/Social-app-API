@@ -42,6 +42,10 @@ class Login extends Component<LoginProps, LoginState> {
                             //console.log(["response.data.user", response.data]);
                             let token = response.data.result.token;
 
+                            this.context.setToken(token);
+
+                            localStorage.setItem("token", token);
+
                             const config = {
                                 Authorization: `Bearer ${token}`,
                                 "Content-Type":

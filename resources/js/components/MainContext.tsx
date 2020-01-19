@@ -10,5 +10,9 @@ export const MainContext = React.createContext({
     handleShowLoader: (status: boolean) => {},
     showLoader: false,
     handleShowAlert: (message: string, status: string) => {},
-    setUserLoggedIn: (status: boolean) => {}
+    setUserLoggedIn: (status: boolean) => {},
+    token: "",
+    setToken: (token: string) => {},
+    handleLogout: () => {},
+    checkTokenExpiration: (err: { status: string }) => {}
 });
