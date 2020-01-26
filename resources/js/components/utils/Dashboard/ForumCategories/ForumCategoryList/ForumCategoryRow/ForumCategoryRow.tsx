@@ -2,7 +2,11 @@ import React from "react";
 
 const ForumCategoryRow = ({ category, i, handleCategoryBlock }) => {
     return (
-        <tr className={category.blocked && "danger-row"}>
+        <tr
+            className={
+                category.blocked ? "danger-row category__row" : "category__row"
+            }
+        >
             <th scope="row">{i + 1}</th>
             <td>{category.name}</td>
             <td>{category.created_at && category.created_at}</td>

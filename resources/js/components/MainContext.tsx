@@ -1,18 +1,18 @@
 import React from "react";
 export const MainContext = React.createContext({
-    changePath: (path: string) => {},
+    handleChangePath: path => {},
+    handleShowSidebarText: () => {},
+    handlAactiveMenuSection: text => {},
+    handleShowLoader: status => {},
+    handleShowAlert: (message, status) => {},
+    setUserLoggedIn: status => {},
+    setToken: token => {},
+    handleLogout: () => {},
+    checkTokenExpiration: err => {},
     userLoggedIn: false,
     showSidebarText: false,
-    handleShowSidebarText: () => {},
     activeMenuSection: "",
-    handlAactiveMenuSection: (text: string) => {},
     API_URL: "",
-    handleShowLoader: (status: boolean) => {},
     showLoader: false,
-    handleShowAlert: (message: string, status: string) => {},
-    setUserLoggedIn: (status: boolean) => {},
-    token: "",
-    setToken: (token: string) => {},
-    handleLogout: () => {},
-    checkTokenExpiration: (err: { status: string }) => {}
+    token: ""
 });

@@ -1,41 +1,29 @@
-import React, { Component } from "react";
-import { RegisterProps, RegisterState } from "./Register.interface";
+import React, { useContext, useEffect } from "react";
 import DashboardContainer from "./../../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../../MainContext";
 import Header from "./../utils/Header";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import axios from "axios";
 
-class Register extends Component<RegisterProps, RegisterState> {
-    constructor(props: RegisterProps) {
-        super(props);
+const Register = () => {
+    const context = useContext(MainContext);
 
-        this.state = {};
-    }
-
-    componentDidMount = () => {
-        this.context.handlAactiveMenuSection("Register");
-    };
-
-    addNewUser = (name, email, password) => {
+    const handleRegisterUser = (name, email, password) => {
         if (!name || !email || !password) {
-            return this.context.handleShowAlert(
-                "Cannot add new admin",
-                "danger"
-            );
+            return context.handleShowAlert("Cannot add new admin", "danger");
         } else {
-            this.context.handleShowLoader(true);
+            context.handleShowLoader(true);
             return new Promise(async (resolve, reject) => {
                 try {
                     axios
                         .post(
-                            this.context.API_URL + "checkIfEmailExists",
+                            context.API_URL + "checkIfEmailExists",
                             {
                                 email: email
                             },
                             {
                                 headers: {
-                                    Authorization: `Bearer ${this.context.token}`
+                                    Authorization: `Bearer ${context.token}`
                                 }
                             }
                         )
@@ -44,70 +32,66 @@ class Register extends Component<RegisterProps, RegisterState> {
                                 response.data.status === "OK" &&
                                 response.data.result === 1
                             ) {
-                                //console.log(["checkIfEmailExists", response.data.result]);
-
-                                this.context.handleShowAlert(
+                                context.handleShowAlert(
                                     "User with given email already exists",
                                     "danger"
                                 );
                             } else {
                                 axios
-                                    .post(this.context.API_URL + "register", {
+                                    .post(context.API_URL + "register", {
                                         name: name,
                                         email: email,
                                         password: password,
                                         admin_role: true
                                     })
                                     .then(response => {
-                                        //console.log(response.data);
-                                        if (response.data.status === "OK") {
-                                            this.context.handleShowAlert(
+                                        if (response.data.token) {
+                                            context.handleShowAlert(
                                                 "Account created",
                                                 "success"
                                             );
                                         } else {
-                                            this.context.handleShowAlert(
+                                            context.handleShowAlert(
                                                 "Invalid Data",
                                                 "danger"
                                             );
                                         }
                                     })
                                     .catch(error => {
-                                        this.context.handleShowAlert(
+                                        context.handleShowAlert(
                                             error,
                                             "danger"
                                         );
-                                    })
-                                    .catch(err => {
-                                        this.context.checkTokenExpiration(
-                                            err.response.status
+
+                                        context.checkTokenExpiration(
+                                            error.response.status
                                         );
                                     });
                             }
                         })
                         .catch(err => {
-                            this.context.checkTokenExpiration(
-                                err.response.status
-                            );
+                            context.checkTokenExpiration(err.response.status);
                         });
                 } catch (error) {
-                    this.context.handleShowAlert(error, "danger");
+                    context.handleShowAlert(error, "danger");
                 } finally {
-                    this.context.handleShowLoader(false);
+                    context.handleShowLoader(false);
                 }
             });
         }
     };
 
-    render() {
-        return (
-            <DashboardContainer>
-                <Header text="Register" />
+    useEffect(() => {
+        context.handlAactiveMenuSection("Register");
+    }, []);
 
-                <RegisterForm addNewUser={this.addNewUser} />
-            </DashboardContainer>
-        );
-    }
-}
+    return (
+        <DashboardContainer>
+            <Header text="Register" />
+
+            <RegisterForm handleRegisterUser={handleRegisterUser} />
+        </DashboardContainer>
+    );
+};
 Register.contextType = MainContext;
 export default Register;

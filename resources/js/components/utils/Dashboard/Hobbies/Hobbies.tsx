@@ -96,7 +96,7 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
         });
     };
 
-    addNewHobby = name => {
+    handleAddNewHobby = name => {
         if (!name) {
             this.context.handleShowAlert(
                 "Please, provide hobby name",
@@ -148,7 +148,9 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
     componentDidMount = () => {
         this.context.handlAactiveMenuSection("Hobbies");
 
-        this.getHobbies();
+        if (this.context.token) {
+            this.getHobbies();
+        }
     };
 
     render() {
@@ -158,7 +160,7 @@ class Hobbies extends Component<HobbiesProps, HobbiesState> {
             <DashboardContainer>
                 <Header text="Hobbies List" />
 
-                <AddCategory addNewHobby={this.addNewHobby} />
+                <AddCategory handleAddNewHobby={this.handleAddNewHobby} />
 
                 <HobbiesList
                     hobbies={hobbies}

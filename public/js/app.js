@@ -41860,9 +41860,16 @@ var Main = (function (_super) {
         _this.handlAactiveMenuSection = function (text) {
             _this.setState({ activeMenuSection: text });
         };
-        _this.changePath = function (path, state) {
+        _this.handleChangePath = function (path, state) {
             if (state === void 0) { state = {}; }
             _this.history.push({ pathname: path, state: state });
+        };
+        _this.checkTokenExpiration = function (status) {
+            console.log(["checkTokenExpiration", status]);
+            if (status === 401) {
+                _this.handleShowAlert("Token invalid", "danger");
+                _this.handleLogout();
+            }
         };
         _this.componentDidMount = function () {
             console.log(["did", localStorage.getItem("token")]);
@@ -41871,13 +41878,6 @@ var Main = (function (_super) {
                     token: localStorage.getItem("token"),
                     userLoggedIn: true
                 });
-            }
-        };
-        _this.checkTokenExpiration = function (status) {
-            console.log(["checkTokenExpiration", status]);
-            if (status === 401) {
-                _this.handleShowAlert("Token invalid", "danger");
-                _this.handleLogout();
             }
         };
         _this.state = {
@@ -41933,7 +41933,7 @@ var Main = (function (_super) {
     Main.prototype.render = function () {
         var _a = this.state, userLoggedIn = _a.userLoggedIn, showSidebarText = _a.showSidebarText, activeMenuSection = _a.activeMenuSection, API_URL = _a.API_URL, showLoader = _a.showLoader, alertMessage = _a.alertMessage, alertStatus = _a.alertStatus, token = _a.token;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MainContext__WEBPACK_IMPORTED_MODULE_5__["MainContext"].Provider, { value: {
-                changePath: this.changePath,
+                handleChangePath: this.handleChangePath,
                 userLoggedIn: userLoggedIn,
                 showSidebarText: showSidebarText,
                 handleShowSidebarText: this.handleShowSidebarText,
@@ -41953,7 +41953,7 @@ var Main = (function (_super) {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "container-sm app__container" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_styledComponents_AppComponent__WEBPACK_IMPORTED_MODULE_2__["AppComponent"], null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["BrowserRouter"], { history: _History__WEBPACK_IMPORTED_MODULE_6__["default"] },
-                        userLoggedIn ? (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "dashboard" })) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "login" })),
+                        userLoggedIn && token ? (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "dashboard" })) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "login" })),
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, this.routes.map(function (_a) {
                             var path = _a.path, name = _a.name, Component = _a.Component;
                             return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, key: name, path: path },
@@ -41981,21 +41981,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var MainContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext({
-    changePath: function (path) { },
-    userLoggedIn: false,
-    showSidebarText: false,
+    handleChangePath: function (path) { },
     handleShowSidebarText: function () { },
-    activeMenuSection: "",
     handlAactiveMenuSection: function (text) { },
-    API_URL: "",
     handleShowLoader: function (status) { },
-    showLoader: false,
     handleShowAlert: function (message, status) { },
     setUserLoggedIn: function (status) { },
-    token: "",
     setToken: function (token) { },
     handleLogout: function () { },
-    checkTokenExpiration: function (err) { }
+    checkTokenExpiration: function (err) { },
+    userLoggedIn: false,
+    showSidebarText: false,
+    activeMenuSection: "",
+    API_URL: "",
+    showLoader: false,
+    token: ""
 });
 
 
@@ -42034,13 +42034,12 @@ var Alert = function (_a) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
-/* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../MainContext */ "./resources/js/components/MainContext.tsx");
-/* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
-/* harmony import */ var _utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/DashboardInfoRect */ "./resources/js/components/utils/Dashboard/utils/DashboardInfoRect.tsx");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../DashboardContainer/DashboardContainer */ "./resources/js/components/utils/DashboardContainer/DashboardContainer.tsx");
+/* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../MainContext */ "./resources/js/components/MainContext.tsx");
+/* harmony import */ var _utils_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/Header */ "./resources/js/components/utils/Dashboard/utils/Header.tsx");
+/* harmony import */ var _utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/DashboardInfoRect */ "./resources/js/components/utils/Dashboard/utils/DashboardInfoRect.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -42096,16 +42095,16 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
 var Dashboard = (function (_super) {
     __extends(Dashboard, _super);
     function Dashboard(props) {
         var _this = _super.call(this, props) || this;
         _this.getUsers = function () {
+            console.log(["this.context.token", _this.context.token]);
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
                 try {
-                    axios__WEBPACK_IMPORTED_MODULE_6___default.a
+                    axios__WEBPACK_IMPORTED_MODULE_5___default.a
                         .get(_this.context.API_URL + "get-users", {
                         headers: {
                             Authorization: "Bearer " + _this.context.token
@@ -42120,6 +42119,11 @@ var Dashboard = (function (_super) {
                         resolve(response);
                     })
                         .catch(function (err) {
+                        console.log([
+                            "checkTokenExpiration",
+                            err.response,
+                            _this.context.token
+                        ]);
                         _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
@@ -42135,7 +42139,7 @@ var Dashboard = (function (_super) {
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
                 try {
-                    axios__WEBPACK_IMPORTED_MODULE_6___default.a
+                    axios__WEBPACK_IMPORTED_MODULE_5___default.a
                         .get(_this.context.API_URL + "get-forum-posts", {
                         headers: {
                             Authorization: "Bearer " + _this.context.token
@@ -42167,7 +42171,7 @@ var Dashboard = (function (_super) {
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
                 try {
-                    axios__WEBPACK_IMPORTED_MODULE_6___default.a
+                    axios__WEBPACK_IMPORTED_MODULE_5___default.a
                         .get(_this.context.API_URL + "get-forum-comments", {
                         headers: {
                             Authorization: "Bearer " + _this.context.token
@@ -42198,7 +42202,9 @@ var Dashboard = (function (_super) {
         _this.getStatsInfo = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.getUsers()];
+                    case 0:
+                        if (!this.context.token) return [3, 4];
+                        return [4, this.getUsers()];
                     case 1:
                         _a.sent();
                         return [4, this.getForumPosts()];
@@ -42207,16 +42213,13 @@ var Dashboard = (function (_super) {
                         return [4, this.getForumComments()];
                     case 3:
                         _a.sent();
-                        return [2];
+                        _a.label = 4;
+                    case 4: return [2];
                 }
             });
         }); };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Dashboard");
-            if (_this.context && !_this.context.userLoggedIn) {
-                console.log(_this.context.userLoggedIn);
-                _this.setState({ redirectLogin: true });
-            }
             _this.getStatsInfo();
         };
         _this.state = {
@@ -42229,19 +42232,16 @@ var Dashboard = (function (_super) {
     }
     Dashboard.prototype.render = function () {
         var _a = this.state, redirectLogin = _a.redirectLogin, usersCount = _a.usersCount, ForumPostsCount = _a.ForumPostsCount, ForumCommentsCount = _a.ForumCommentsCount;
-        if (!redirectLogin) {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Redirect"], { to: "/login" });
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_2__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_4__["default"], { text: "Statistics - Current Week" }),
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Statistics - Current Week" }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "dashboard__rect-container row" },
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/group.png", headerText: "New Users", number: usersCount }),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Posts", number: ForumPostsCount }),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_5__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Comments", number: ForumCommentsCount }))));
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_4__["default"], { icon: "/images/group.png", headerText: "New Users", number: usersCount }),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_4__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Posts", number: ForumPostsCount }),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_DashboardInfoRect__WEBPACK_IMPORTED_MODULE_4__["default"], { icon: "/images/forum-icon.png", headerText: "New Forum Comments", number: ForumCommentsCount }))));
     };
     return Dashboard;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-Dashboard.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"];
+Dashboard.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
 /* harmony default export */ __webpack_exports__["default"] = (Dashboard);
 
 
@@ -42260,16 +42260,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var AddCategory = function (_a) {
-    var addNewCategory = _a.addNewCategory;
+    var handleAddNewCategory = _a.handleAddNewCategory;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
                 e.preventDefault();
-                addNewCategory(name);
+                handleAddNewCategory(name);
             } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Category Name...", onChange: function (e) { return setName(e.target.value); } })),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewCategory(name); }, className: "btn blue-btn" }, "Add New Category"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleAddNewCategory(name); }, className: "btn blue-btn" }, "Add New Category"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (AddCategory);
 
@@ -42430,7 +42430,7 @@ var ForumCategories = (function (_super) {
                 });
             }); });
         };
-        _this.addNewCategory = function (name) {
+        _this.handleAddNewCategory = function (name) {
             if (!name) {
                 _this.context.handleShowAlert("Please, provide category name", "danger");
             }
@@ -42474,7 +42474,9 @@ var ForumCategories = (function (_super) {
         };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Forum Categories");
-            _this.getCategories();
+            if (_this.context.token) {
+                _this.getCategories();
+            }
         };
         _this.state = {
             categories: []
@@ -42485,7 +42487,7 @@ var ForumCategories = (function (_super) {
         var categories = this.state.categories;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Forum Categories" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewCategory: this.addNewCategory }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { handleAddNewCategory: this.handleAddNewCategory }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ForumCategoryList_ForumCategoryList__WEBPACK_IMPORTED_MODULE_5__["default"], { categories: categories, handleCategoryBlock: this.handleCategoryBlock })));
     };
     return ForumCategories;
@@ -42554,7 +42556,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ForumCategoryRow = function (_a) {
     var category = _a.category, i = _a.i, handleCategoryBlock = _a.handleCategoryBlock;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: category.blocked && "danger-row" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: category.blocked ? "danger-row category__row" : "category__row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, category.name),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, category.created_at && category.created_at),
@@ -42579,13 +42581,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var AddCategory = function (_a) {
-    var addNewHobby = _a.addNewHobby;
+    var handleAddNewHobby = _a.handleAddNewHobby;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return addNewHobby(name); } },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
+                e.preventDefault();
+                handleAddNewHobby(name);
+            } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Hobby Name...", onChange: function (e) { return setName(e.target.value); } })),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewHobby(name); }, className: "btn blue-btn" }, "Add New Hobby"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleAddNewHobby(name); }, className: "btn blue-btn" }, "Add New Hobby"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (AddCategory);
 
@@ -42745,7 +42750,7 @@ var Hobbies = (function (_super) {
                 });
             }); });
         };
-        _this.addNewHobby = function (name) {
+        _this.handleAddNewHobby = function (name) {
             if (!name) {
                 _this.context.handleShowAlert("Please, provide hobby name", "danger");
             }
@@ -42789,7 +42794,9 @@ var Hobbies = (function (_super) {
         };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Hobbies");
-            _this.getHobbies();
+            if (_this.context.token) {
+                _this.getHobbies();
+            }
         };
         _this.state = {
             hobbies: []
@@ -42800,7 +42807,7 @@ var Hobbies = (function (_super) {
         var hobbies = this.state.hobbies;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Hobbies List" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewHobby: this.addNewHobby }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddCategory_AddCategory__WEBPACK_IMPORTED_MODULE_6__["default"], { handleAddNewHobby: this.handleAddNewHobby }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HobbiesList_HobbiesList__WEBPACK_IMPORTED_MODULE_5__["default"], { hobbies: hobbies, handleHobbyBlock: this.handleHobbyBlock })));
     };
     return Hobbies;
@@ -42869,7 +42876,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var HobbyRow = function (_a) {
     var hobby = _a.hobby, i = _a.i, handleHobbyBlock = _a.handleHobbyBlock;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: hobby.blocked && "danger-row" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: hobby.blocked ? "danger-row hobby__row" : "hobby__row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hobby.name),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hobby.created_at && hobby.created_at),
@@ -42898,19 +42905,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RegisterForm/RegisterForm */ "./resources/js/components/utils/Dashboard/Register/RegisterForm/RegisterForm.tsx");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42953,89 +42947,77 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var Register = (function (_super) {
-    __extends(Register, _super);
-    function Register(props) {
-        var _this = _super.call(this, props) || this;
-        _this.componentDidMount = function () {
-            _this.context.handlAactiveMenuSection("Register");
-        };
-        _this.addNewUser = function (name, email, password) {
-            if (!name || !email || !password) {
-                return _this.context.handleShowAlert("Cannot add new admin", "danger");
-            }
-            else {
-                _this.context.handleShowLoader(true);
-                return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        try {
-                            axios__WEBPACK_IMPORTED_MODULE_5___default.a
-                                .post(this.context.API_URL + "checkIfEmailExists", {
-                                email: email
-                            }, {
-                                headers: {
-                                    Authorization: "Bearer " + this.context.token
+var Register = function () {
+    var context = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"]);
+    var handleRegisterUser = function (name, email, password) {
+        if (!name || !email || !password) {
+            return context.handleShowAlert("Cannot add new admin", "danger");
+        }
+        else {
+            context.handleShowLoader(true);
+            return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    try {
+                        axios__WEBPACK_IMPORTED_MODULE_5___default.a
+                            .post(context.API_URL + "checkIfEmailExists", {
+                            email: email
+                        }, {
+                            headers: {
+                                Authorization: "Bearer " + context.token
+                            }
+                        })
+                            .then(function (response) { return __awaiter(void 0, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                if (response.data.status === "OK" &&
+                                    response.data.result === 1) {
+                                    context.handleShowAlert("User with given email already exists", "danger");
                                 }
-                            })
-                                .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
-                                var _this = this;
-                                return __generator(this, function (_a) {
-                                    if (response.data.status === "OK" &&
-                                        response.data.result === 1) {
-                                        this.context.handleShowAlert("User with given email already exists", "danger");
-                                    }
-                                    else {
-                                        axios__WEBPACK_IMPORTED_MODULE_5___default.a
-                                            .post(this.context.API_URL + "register", {
-                                            name: name,
-                                            email: email,
-                                            password: password,
-                                            admin_role: true
-                                        })
-                                            .then(function (response) {
-                                            if (response.data.status === "OK") {
-                                                _this.context.handleShowAlert("Account created", "success");
-                                            }
-                                            else {
-                                                _this.context.handleShowAlert("Invalid Data", "danger");
-                                            }
-                                        })
-                                            .catch(function (error) {
-                                            _this.context.handleShowAlert(error, "danger");
-                                        })
-                                            .catch(function (err) {
-                                            _this.context.checkTokenExpiration(err.response.status);
-                                        });
-                                    }
-                                    return [2];
-                                });
-                            }); })
-                                .catch(function (err) {
-                                _this.context.checkTokenExpiration(err.response.status);
+                                else {
+                                    axios__WEBPACK_IMPORTED_MODULE_5___default.a
+                                        .post(context.API_URL + "register", {
+                                        name: name,
+                                        email: email,
+                                        password: password,
+                                        admin_role: true
+                                    })
+                                        .then(function (response) {
+                                        if (response.data.token) {
+                                            context.handleShowAlert("Account created", "success");
+                                        }
+                                        else {
+                                            context.handleShowAlert("Invalid Data", "danger");
+                                        }
+                                    })
+                                        .catch(function (error) {
+                                        context.handleShowAlert(error, "danger");
+                                        context.checkTokenExpiration(error.response.status);
+                                    });
+                                }
+                                return [2];
                             });
-                        }
-                        catch (error) {
-                            this.context.handleShowAlert(error, "danger");
-                        }
-                        finally {
-                            this.context.handleShowLoader(false);
-                        }
-                        return [2];
-                    });
-                }); });
-            }
-        };
-        _this.state = {};
-        return _this;
-    }
-    Register.prototype.render = function () {
-        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Register" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_4__["default"], { addNewUser: this.addNewUser })));
+                        }); })
+                            .catch(function (err) {
+                            context.checkTokenExpiration(err.response.status);
+                        });
+                    }
+                    catch (error) {
+                        context.handleShowAlert(error, "danger");
+                    }
+                    finally {
+                        context.handleShowLoader(false);
+                    }
+                    return [2];
+                });
+            }); });
+        }
     };
-    return Register;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+        context.handlAactiveMenuSection("Register");
+    }, []);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Register" }),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RegisterForm_RegisterForm__WEBPACK_IMPORTED_MODULE_4__["default"], { handleRegisterUser: handleRegisterUser })));
+};
 Register.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_2__["MainContext"];
 /* harmony default export */ __webpack_exports__["default"] = (Register);
 
@@ -43055,14 +43037,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var RegisterForm = function (_a) {
-    var addNewUser = _a.addNewUser;
+    var handleRegisterUser = _a.handleRegisterUser;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), email = _c[0], setEmail = _c[1];
     var _d = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), password = _d[0], setPassword = _d[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
                 e.preventDefault();
-                addNewUser(name, email, password);
+                handleRegisterUser(name, email, password);
             } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Name...", onChange: function (e) { return setName(e.target.value); } })),
@@ -43070,7 +43052,7 @@ var RegisterForm = function (_a) {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "email", className: "form-control", id: "email", placeholder: "Email...", onChange: function (e) { return setEmail(e.target.value); } })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "password", placeholder: "Password...", onChange: function (e) { return setPassword(e.target.value); } })),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewUser(name, email, password); }, className: "btn blue-btn" }, "Add New Admin"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleRegisterUser(name, email, password); }, className: "btn blue-btn" }, "Add New Admin"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (RegisterForm);
 
@@ -43090,16 +43072,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 var AddCategory = function (_a) {
-    var addNewTranslation = _a.addNewTranslation;
+    var handleAddNewTranslation = _a.handleAddNewTranslation;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), name = _b[0], setName = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
                 e.preventDefault();
-                addNewTranslation(name);
+                handleAddNewTranslation(name);
             } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "name", placeholder: "Translation Name...", onChange: function (e) { return setName(e.target.value); } })),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return addNewTranslation(name); }, className: "btn blue-btn" }, "Add New Translation"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return handleAddNewTranslation(name); }, className: "btn blue-btn" }, "Add New Translation"))));
 };
 /* harmony default export */ __webpack_exports__["default"] = (AddCategory);
 
@@ -43166,7 +43148,7 @@ var TranslationListRow = function (_a) {
     var _e = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.fr), fr = _e[0], setFr = _e[1];
     var _f = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.es), es = _f[0], setEs = _f[1];
     var _g = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(translation.zh), zh = _g[0], setZh = _g[1];
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: "tranlation__row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, translation.blocked ? (translation.name) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Translation name", value: name, onChange: function (e) { return setName(e.target.value); } })))),
@@ -43388,9 +43370,9 @@ var Translations = (function (_super) {
                 });
             }); });
         };
-        _this.addNewTranslation = function (name) {
+        _this.handleAddNewTranslation = function (name) {
             if (!name) {
-                _this.context.handleShowAlert("Please, provide category name", "danger");
+                _this.context.handleShowAlert("Please, provide translation", "danger");
             }
             else {
                 _this.context.handleShowLoader(true);
@@ -43433,7 +43415,9 @@ var Translations = (function (_super) {
         };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Translations");
-            _this.getTranslations();
+            if (_this.context.token) {
+                _this.getTranslations();
+            }
         };
         _this.state = {
             translations: []
@@ -43444,7 +43428,7 @@ var Translations = (function (_super) {
         var translations = this.state.translations;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Translations" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddTranslation_AddTranslation__WEBPACK_IMPORTED_MODULE_6__["default"], { addNewTranslation: this.addNewTranslation }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_AddTranslation_AddTranslation__WEBPACK_IMPORTED_MODULE_6__["default"], { handleAddNewTranslation: this.handleAddNewTranslation }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TranslationList_TranslationList__WEBPACK_IMPORTED_MODULE_5__["default"], { translations: translations, handleTranslationSave: this.handleTranslationSave, handleTranslationRemove: this.handleTranslationRemove })));
     };
     return Translations;
@@ -43525,7 +43509,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var UserRow = function (_a) {
     var user = _a.user, i = _a.i, handleUserBlock = _a.handleUserBlock;
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: user.blocked ? "danger-row" : user.admin_role && "success-row" },
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", { className: user.blocked
+            ? "user__row danger-row"
+            : user.admin_role && "user__row success-row" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", { scope: "row" }, i + 1),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.name && user.name),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, user.nickname && user.nickname),
@@ -43562,7 +43548,10 @@ var UserSearchBox = function (_a) {
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), query = _b[0], setQuery = _b[1];
     return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "user-search-box__container" },
         query && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Find by query: " + query),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function () { return getUserByQuery(query); } },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { onSubmit: function (e) {
+                e.preventDefault();
+                getUserByQuery(query);
+            } },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "string", className: "form-control", id: "query", placeholder: "Find user by nickname or email...", onChange: function (e) { return setQuery(e.target.value); } })),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "button", onClick: function () { return getUserByQuery(query); }, className: "btn blue-btn" }, "Search"))));
@@ -43828,7 +43817,9 @@ var Users = (function (_super) {
         };
         _this.componentDidMount = function () {
             _this.context.handlAactiveMenuSection("Users");
-            _this.getUsers();
+            if (_this.context.token) {
+                _this.getUsers();
+            }
         };
         _this.state = {
             users: [],
@@ -43984,101 +43975,79 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _MainContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../MainContext */ "./resources/js/components/MainContext.tsx");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+
+
+
+
+var Login = function () {
+    var context = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"]);
+    var handleLoginSubmit = function (email, password) {
+        console.log([email, password]);
+        if (email && !password) {
+            context.handleShowAlert("Password required", "danger");
+        }
+        else if (!email && password) {
+            context.handleShowAlert("Email required", "danger");
+        }
+        else if (!email && !password) {
+            context.handleShowAlert("Email and password required", "danger");
+        }
+        else if (email && password) {
+            console.log(["API_URL", context.API_URL]);
+            try {
+                var API_URL = context.API_URL;
+                axios__WEBPACK_IMPORTED_MODULE_2___default.a
+                    .post(API_URL + "login", {
+                    email: email,
+                    password: password
+                })
+                    .then(function (response) {
+                    var result = response.data.result;
+                    console.log(["data", result, response, response.data]);
+                    if (response.data.result.user_role === "admin") {
+                        var token = response.data.result.token;
+                        context.setToken(token);
+                        localStorage.setItem("token", token);
+                        var config = {
+                            Authorization: "Bearer " + token,
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            Accept: "application/json"
+                        };
+                        axios__WEBPACK_IMPORTED_MODULE_2___default.a
+                            .get(context.API_URL + "user", {
+                            headers: config
+                        })
+                            .then(function (response) {
+                            console.log([
+                                "userData",
+                                response.data.result
+                            ]);
+                            if (response.data.result.user.id) {
+                                context.setUserLoggedIn(true);
+                                context.handleChangePath("/dashboard");
+                            }
+                        })
+                            .catch(function (error) {
+                            context.handleShowAlert(error, "danger");
+                        });
+                    }
+                    else {
+                        console.log("Nie ma tokena");
+                        context.handleShowAlert(response.data.result, "danger");
+                    }
+                })
+                    .catch(function (error) {
+                    context.handleShowAlert(error, "danger");
+                });
+            }
+            catch (error) {
+                context.handleShowAlert("", "danger");
+            }
+        }
     };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-
-var Login = (function (_super) {
-    __extends(Login, _super);
-    function Login(props) {
-        var _this = _super.call(this, props) || this;
-        _this.handleLoginSubmit = function (email, password) {
-            console.log([email, password]);
-            if (email && !password) {
-                _this.context.handleShowAlert("Password required", "danger");
-            }
-            else if (!email && password) {
-                _this.context.handleShowAlert("Email required", "danger");
-            }
-            else if (!email && !password) {
-                _this.context.handleShowAlert("Email and password required", "danger");
-            }
-            else if (email && password) {
-                console.log(["API_URL", _this.context.API_URL]);
-                try {
-                    var API_URL = _this.context.API_URL;
-                    axios__WEBPACK_IMPORTED_MODULE_2___default.a
-                        .post(API_URL + "login", {
-                        email: email,
-                        password: password
-                    })
-                        .then(function (response) {
-                        var result = response.data.result;
-                        console.log(["data", result, response, response.data]);
-                        if (response.data.result.user_role === "admin") {
-                            var token = response.data.result.token;
-                            _this.context.setToken(token);
-                            localStorage.setItem("token", token);
-                            var config = {
-                                Authorization: "Bearer " + token,
-                                "Content-Type": "application/x-www-form-urlencoded",
-                                Accept: "application/json"
-                            };
-                            axios__WEBPACK_IMPORTED_MODULE_2___default.a
-                                .get(_this.context.API_URL + "user", {
-                                headers: config
-                            })
-                                .then(function (response) {
-                                console.log([
-                                    "userData",
-                                    response.data.result
-                                ]);
-                                if (response.data.result.user.id) {
-                                    _this.context.setUserLoggedIn(true);
-                                    _this.context.changePath("/dashboard");
-                                }
-                            })
-                                .catch(function (error) {
-                                _this.context.handleShowAlert(error, "danger");
-                            });
-                        }
-                        else {
-                            console.log("Nie ma tokena");
-                            _this.context.handleShowAlert(response.data.result, "danger");
-                        }
-                    })
-                        .catch(function (error) {
-                        _this.context.handleShowAlert(error, "danger");
-                    });
-                }
-                catch (error) {
-                    _this.context.handleShowAlert("", "danger");
-                }
-            }
-        };
-        _this.state = {};
-        return _this;
-    }
-    Login.prototype.render = function () {
-        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "login-form__container" },
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_LoginForm_LoginForm__WEBPACK_IMPORTED_MODULE_1__["default"], { onLoginSubmit: this.handleLoginSubmit })));
-    };
-    return Login;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-Login.contextType = _MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"];
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "login-form__container" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_LoginForm_LoginForm__WEBPACK_IMPORTED_MODULE_1__["default"], { onLoginSubmit: handleLoginSubmit })));
+};
 /* harmony default export */ __webpack_exports__["default"] = (Login);
 
 
@@ -44100,13 +44069,13 @@ var LoginForm = function (_a) {
     var onLoginSubmit = _a.onLoginSubmit;
     var _b = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), email = _b[0], setEmail = _b[1];
     var _c = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""), password = _c[0], setPassword = _c[1];
-    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { className: "login-form", onSubmit: function () { return onLoginSubmit(email, password); } },
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { src: "/images/logo-sq.png" }),
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", { className: "login-form", onSubmit: function () { return onLoginSubmit(email, password); }, "data-testid": "form" },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { src: "/images/logo-sq.png", "data-testid": "logo" }),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "email", className: "form-control", placeholder: "Email", onChange: function (e) { return setEmail(e.target.value); } })),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "form-group" },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { type: "password", className: "form-control", placeholder: "Password", onChange: function (e) { return setPassword(e.target.value); } })),
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "submit", onClick: function () { return onLoginSubmit(email, password); }, className: "btn blue-btn" }, "Login")));
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", { type: "submit", onClick: function () { return onLoginSubmit(email, password); }, className: "btn blue-btn", "data-testid": "button" }, "Login")));
 };
 /* harmony default export */ __webpack_exports__["default"] = (LoginForm);
 
@@ -44137,12 +44106,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Dashboard" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/dashboard");
+                            context.handleChangePath("/dashboard");
                             context.handlAactiveMenuSection("Dashboard");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/stats.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Dashboard" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/dashboard");
+                            context.handleChangePath("/dashboard");
                             context.handlAactiveMenuSection("Dashboard");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Dashboard"))))),
@@ -44152,12 +44121,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Users" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/users");
+                            context.handleChangePath("/users");
                             context.handlAactiveMenuSection("Users");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/group.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Users" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/users");
+                            context.handleChangePath("/users");
                             context.handlAactiveMenuSection("Users");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Users"))))),
@@ -44167,12 +44136,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Forum Categories" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/forum-categories");
+                            context.handleChangePath("/forum-categories");
                             context.handlAactiveMenuSection("Forum Categories");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/forum-icon.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Forum Categories" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/forum-categories");
+                            context.handleChangePath("/forum-categories");
                             context.handlAactiveMenuSection("Forum Categories");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Forum Categories"))))),
@@ -44182,12 +44151,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Hobbies" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/hobbies");
+                            context.handleChangePath("/hobbies");
                             context.handlAactiveMenuSection("Hobbies");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/ball.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Hobbies" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/hobbies");
+                            context.handleChangePath("/hobbies");
                             context.handlAactiveMenuSection("Hobbies");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Hobbies List"))))),
@@ -44197,12 +44166,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Translations" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/translations");
+                            context.handleChangePath("/translations");
                             context.handlAactiveMenuSection("Translations");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/translator.png", alt: "Icon made by Freepik from www.flaticon.com", title: "Translations" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/translations");
+                            context.handleChangePath("/translations");
                             context.handlAactiveMenuSection("Translations");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Translations"))))),
@@ -44212,12 +44181,12 @@ var Sidebar = function () {
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "sidebar__item--wrapper" },
                     context.activeMenuSection === "Register" && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "active-sidebar-item" })),
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/register");
+                            context.handleChangePath("/register");
                             context.handlAactiveMenuSection("Register");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", { className: "sidebar-icon", src: "/images/avatar.png", alt: "Icon made by Gregor Cresnar from www.flaticon.com", title: "Register" })),
                     context.showSidebarText && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", { href: "#", onClick: function () {
-                            context.changePath("/register");
+                            context.handleChangePath("/register");
                             context.handlAactiveMenuSection("Register");
                         } },
                         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", { className: "sidebar__item--text" }, "Register"))))),

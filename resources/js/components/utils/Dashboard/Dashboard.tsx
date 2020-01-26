@@ -32,8 +32,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         }
                     })
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -64,8 +62,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         }
                     })
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -98,8 +94,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
                         }
                     })
                     .then(response => {
-                        console.log(["response", response, response.status]);
-
                         const { data } = response;
 
                         if (response.status === 200) {
@@ -122,33 +116,21 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     };
 
     getStatsInfo = async () => {
-        await this.getUsers();
-        await this.getForumPosts();
-        await this.getForumComments();
+        if (this.context.token) {
+            await this.getUsers();
+            await this.getForumPosts();
+            await this.getForumComments();
+        }
     };
 
     componentDidMount = () => {
         this.context.handlAactiveMenuSection("Dashboard");
 
-        if (this.context && !this.context.userLoggedIn) {
-            console.log(this.context.userLoggedIn);
-            this.setState({ redirectLogin: true });
-        }
-
         this.getStatsInfo();
     };
 
     render() {
-        const {
-            redirectLogin,
-            usersCount,
-            ForumPostsCount,
-            ForumCommentsCount
-        } = this.state;
-
-        if (!redirectLogin) {
-            return <Redirect to="/login" />;
-        }
+        const { usersCount, ForumPostsCount, ForumCommentsCount } = this.state;
 
         return (
             <DashboardContainer>

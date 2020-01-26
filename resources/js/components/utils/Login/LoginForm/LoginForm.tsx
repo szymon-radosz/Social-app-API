@@ -8,8 +8,9 @@ const LoginForm = ({ onLoginSubmit }) => {
         <form
             className="login-form"
             onSubmit={() => onLoginSubmit(email, password)}
+            data-testid="form"
         >
-            <img src="/images/logo-sq.png" />
+            <img src="/images/logo-sq.png" data-testid="logo" />
             <div className="form-group">
                 <input
                     type="email"
@@ -30,6 +31,7 @@ const LoginForm = ({ onLoginSubmit }) => {
                 type="submit"
                 onClick={() => onLoginSubmit(email, password)}
                 className="btn blue-btn"
+                data-testid="button"
             >
                 Login
             </button>

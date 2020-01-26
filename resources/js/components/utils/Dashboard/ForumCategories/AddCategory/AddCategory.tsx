@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddCategory = ({ addNewCategory }) => {
+const AddCategory = ({ handleAddNewCategory }) => {
     const [name, setName] = useState("");
 
     return (
@@ -8,7 +8,7 @@ const AddCategory = ({ addNewCategory }) => {
             <form
                 onSubmit={e => {
                     e.preventDefault();
-                    addNewCategory(name);
+                    handleAddNewCategory(name);
                 }}
             >
                 <div className="form-group">
@@ -22,7 +22,7 @@ const AddCategory = ({ addNewCategory }) => {
                 </div>
                 <button
                     type="button"
-                    onClick={() => addNewCategory(name)}
+                    onClick={() => handleAddNewCategory(name)}
                     className="btn blue-btn"
                 >
                     Add New Category

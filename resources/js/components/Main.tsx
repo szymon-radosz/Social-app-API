@@ -110,25 +110,23 @@ class Main extends Component<MainProps, MainState> {
         this.setState({ activeMenuSection: text });
     };
 
-    changePath = (path: string, state = {}) => {
+    handleChangePath = (path: string, state = {}) => {
         this.history.push({ pathname: path, state: state });
     };
 
+    checkTokenExpiration = status => {
+        if (status === 401) {
+            this.handleShowAlert("Token invalid", "danger");
+            this.handleLogout();
+        }
+    };
+
     componentDidMount = () => {
-        console.log(["did", localStorage.getItem("token")]);
         if (localStorage.getItem("token")) {
             this.setState({
                 token: localStorage.getItem("token"),
                 userLoggedIn: true
             });
-        }
-    };
-
-    checkTokenExpiration = status => {
-        console.log(["checkTokenExpiration", status]);
-        if (status === 401) {
-            this.handleShowAlert("Token invalid", "danger");
-            this.handleLogout();
         }
     };
 
@@ -147,7 +145,7 @@ class Main extends Component<MainProps, MainState> {
         return (
             <MainContext.Provider
                 value={{
-                    changePath: this.changePath,
+                    handleChangePath: this.handleChangePath,
                     userLoggedIn: userLoggedIn,
                     showSidebarText: showSidebarText,
                     handleShowSidebarText: this.handleShowSidebarText,
@@ -170,7 +168,7 @@ class Main extends Component<MainProps, MainState> {
                 <div className="container-sm app__container">
                     <AppComponent>
                         <Router history={history}>
-                            {userLoggedIn ? (
+                            {userLoggedIn && token ? (
                                 <Redirect to="dashboard" />
                             ) : (
                                 <Redirect to="login" />

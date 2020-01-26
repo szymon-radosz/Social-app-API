@@ -21,7 +21,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/dashboard");
+                                context.handleChangePath("/dashboard");
                                 context.handlAactiveMenuSection("Dashboard");
                             }}
                         >
@@ -36,7 +36,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/dashboard");
+                                    context.handleChangePath("/dashboard");
                                     context.handlAactiveMenuSection(
                                         "Dashboard"
                                     );
@@ -61,7 +61,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/users");
+                                context.handleChangePath("/users");
                                 context.handlAactiveMenuSection("Users");
                             }}
                         >
@@ -76,7 +76,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/users");
+                                    context.handleChangePath("/users");
                                     context.handlAactiveMenuSection("Users");
                                 }}
                             >
@@ -99,7 +99,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/forum-categories");
+                                context.handleChangePath("/forum-categories");
                                 context.handlAactiveMenuSection(
                                     "Forum Categories"
                                 );
@@ -116,7 +116,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/forum-categories");
+                                    context.handleChangePath("/forum-categories");
                                     context.handlAactiveMenuSection(
                                         "Forum Categories"
                                     );
@@ -143,7 +143,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/hobbies");
+                                context.handleChangePath("/hobbies");
                                 context.handlAactiveMenuSection("Hobbies");
                             }}
                         >
@@ -158,7 +158,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/hobbies");
+                                    context.handleChangePath("/hobbies");
                                     context.handlAactiveMenuSection("Hobbies");
                                 }}
                             >
@@ -183,7 +183,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/translations");
+                                context.handleChangePath("/translations");
                                 context.handlAactiveMenuSection("Translations");
                             }}
                         >
@@ -198,7 +198,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/translations");
+                                    context.handleChangePath("/translations");
                                     context.handlAactiveMenuSection(
                                         "Translations"
                                     );
@@ -225,7 +225,7 @@ const Sidebar = () => {
                         <a
                             href="#"
                             onClick={() => {
-                                context.changePath("/register");
+                                context.handleChangePath("/register");
                                 context.handlAactiveMenuSection("Register");
                             }}
                         >
@@ -240,7 +240,7 @@ const Sidebar = () => {
                             <a
                                 href="#"
                                 onClick={() => {
-                                    context.changePath("/register");
+                                    context.handleChangePath("/register");
                                     context.handlAactiveMenuSection("Register");
                                 }}
                             >

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const RegisterForm = ({ addNewUser }) => {
+const RegisterForm = ({ handleRegisterUser }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -10,7 +10,7 @@ const RegisterForm = ({ addNewUser }) => {
             <form
                 onSubmit={e => {
                     e.preventDefault();
-                    addNewUser(name, email, password);
+                    handleRegisterUser(name, email, password);
                 }}
             >
                 <div className="form-group">
@@ -42,7 +42,7 @@ const RegisterForm = ({ addNewUser }) => {
                 </div>
                 <button
                     type="button"
-                    onClick={() => addNewUser(name, email, password)}
+                    onClick={() => handleRegisterUser(name, email, password)}
                     className="btn blue-btn"
                 >
                     Add New Admin

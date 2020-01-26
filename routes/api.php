@@ -73,20 +73,20 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('get-users-by-query', 'Dashboard\DashboardUsersController@getUsersByQuery');
     Route::post('block-user', 'Dashboard\DashboardUsersController@blockUser');
 
-    Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController@getCategories');
-    Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@updateCategory');
+    Route::get('get-forum-categories', 'Dashboard\DashboardForumCategoriesController@index');
+    Route::post('update-forum-category', 'Dashboard\DashboardForumCategoriesController@update');
     Route::post('block-forum-category', 'Dashboard\DashboardForumCategoriesController@blockCategory');
-    Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@addCategory');
+    Route::post('add-forum-category', 'Dashboard\DashboardForumCategoriesController@store');
 
-    Route::get('get-hobbies', 'Dashboard\DashboardHobbyController@getHobbies');
-    Route::post('update-hobby', 'Dashboard\DashboardHobbyController@updateHobby');
+    Route::get('get-hobbies', 'Dashboard\DashboardHobbyController@index');
+    Route::post('update-hobby', 'Dashboard\DashboardHobbyController@update');
     Route::post('block-hobby', 'Dashboard\DashboardHobbyController@blockHobby');
-    Route::post('add-hobby', 'Dashboard\DashboardHobbyController@addHobby');
+    Route::post('add-hobby', 'Dashboard\DashboardHobbyController@store');
 
-    Route::get('get-translations', 'Dashboard\DashboardTranslations@getTranslations');
-    Route::post('update-translation', 'Dashboard\DashboardTranslations@updateTranslation');
-    Route::post('add-translation', 'Dashboard\DashboardTranslations@addTranslation');
-    Route::post('remove-translation', 'Dashboard\DashboardTranslations@removeTranslation');
+    Route::get('get-translations', 'Dashboard\DashboardTranslations@index');
+    Route::post('update-translation', 'Dashboard\DashboardTranslations@update');
+    Route::post('add-translation', 'Dashboard\DashboardTranslations@store');
+    Route::post('remove-translation', 'Dashboard\DashboardTranslations@remove');
 
     Route::post('add-admin-user', 'Dashboard\DashboardRegisterController@addUser');
 });

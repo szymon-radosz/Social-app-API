@@ -12,7 +12,7 @@ class DashboardHobbyController extends Controller
 {
     use ErrorLogTrait;
 
-    public function getHobbies()
+    public function index()
     {
         try {
             $hobbies = Hobby::get();
@@ -48,7 +48,7 @@ class DashboardHobbyController extends Controller
         }
     }
 
-    public function addHobby(Request $request)
+    public function store(Request $request)
     {
         try {
             $name = $request->input('name');

@@ -17,7 +17,6 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
     }
 
     getTranslations = () => {
-        console.log("getTranslations");
         return new Promise((resolve, reject) => {
             this.context.handleShowLoader(true);
             try {
@@ -51,8 +50,6 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
     };
 
     handleTranslationSave = (id, name, en, de, fr, es, zh) => {
-        console.log("handleTranslationSave");
-
         this.context.handleShowLoader(true);
         return new Promise(async (resolve, reject) => {
             try {
@@ -137,10 +134,10 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
         });
     };
 
-    addNewTranslation = name => {
+    handleAddNewTranslation = name => {
         if (!name) {
             this.context.handleShowAlert(
-                "Please, provide category name",
+                "Please, provide translation",
                 "danger"
             );
         } else {
@@ -190,7 +187,9 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
     componentDidMount = () => {
         this.context.handlAactiveMenuSection("Translations");
 
-        this.getTranslations();
+        if (this.context.token) {
+            this.getTranslations();
+        }
     };
 
     render() {
@@ -199,7 +198,9 @@ class Translations extends Component<TranslationsProps, TranslationsState> {
             <DashboardContainer>
                 <Header text="Translations" />
 
-                <AddTranslation addNewTranslation={this.addNewTranslation} />
+                <AddTranslation
+                    handleAddNewTranslation={this.handleAddNewTranslation}
+                />
 
                 <TranslationList
                     translations={translations}

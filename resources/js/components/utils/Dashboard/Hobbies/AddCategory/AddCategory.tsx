@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 
-const AddCategory = ({ addNewHobby }) => {
+const AddCategory = ({ handleAddNewHobby }) => {
     const [name, setName] = useState("");
 
     return (
         <div className="user-search-box__container">
-            <form onSubmit={() => addNewHobby(name)}>
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    handleAddNewHobby(name);
+                }}
+            >
                 <div className="form-group">
                     <input
                         type="string"
@@ -17,7 +22,7 @@ const AddCategory = ({ addNewHobby }) => {
                 </div>
                 <button
                     type="button"
-                    onClick={() => addNewHobby(name)}
+                    onClick={() => handleAddNewHobby(name)}
                     className="btn blue-btn"
                 >
                     Add New Hobby

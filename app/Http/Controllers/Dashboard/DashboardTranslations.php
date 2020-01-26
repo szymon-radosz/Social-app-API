@@ -11,7 +11,7 @@ class DashboardTranslations extends Controller
 {
     use ErrorLogTrait;
 
-    public function getTranslations()
+    public function index()
     {
         try {
             $translations = Translation::get();
@@ -24,7 +24,26 @@ class DashboardTranslations extends Controller
         }
     }
 
-    public function updateTranslation(Request $request)
+    public function store(Request $request)
+    {
+        try {
+            $name = $request->input('name');
+
+            $translation = new Translation();
+
+            $translation->name = $name;
+
+            $translation->save();
+
+            return response()->json(['status' => 'OK', 'result' => ['translation' => $translation]]);
+        } catch (\Exception $e) {
+            $this->storeErrorLog("dashboard", '/add-translation', $e->getMessage());
+
+            return response()->json(['status' => 'ERR', 'result' => 'Cannot save translation']);
+        }
+    }
+
+    public function update(Request $request)
     {
         try {
             $id = $request->input('id');
@@ -53,26 +72,7 @@ class DashboardTranslations extends Controller
         }
     }
 
-    public function addTranslation(Request $request)
-    {
-        try {
-            $name = $request->input('name');
-
-            $translation = new Translation();
-
-            $translation->name = $name;
-
-            $translation->save();
-
-            return response()->json(['status' => 'OK', 'result' => ['translation' => $translation]]);
-        } catch (\Exception $e) {
-            $this->storeErrorLog("dashboard", '/add-translation', $e->getMessage());
-
-            return response()->json(['status' => 'ERR', 'result' => 'Cannot save translation']);
-        }
-    }
-
-    public function removeTranslation(Request $request)
+    public function remove(Request $request)
     {
         try {
             $id = $request->input('id');

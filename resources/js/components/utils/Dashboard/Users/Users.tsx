@@ -208,7 +208,9 @@ class Users extends Component<UsersProps, UsersState> {
     componentDidMount = () => {
         this.context.handlAactiveMenuSection("Users");
 
-        this.getUsers();
+        if (this.context.token) {
+            this.getUsers();
+        }
     };
 
     render() {

@@ -103,7 +103,7 @@ class ForumCategories extends Component<
         });
     };
 
-    addNewCategory = name => {
+    handleAddNewCategory = name => {
         if (!name) {
             this.context.handleShowAlert(
                 "Please, provide category name",
@@ -159,7 +159,9 @@ class ForumCategories extends Component<
     componentDidMount = () => {
         this.context.handlAactiveMenuSection("Forum Categories");
 
-        this.getCategories();
+        if (this.context.token) {
+            this.getCategories();
+        }
     };
 
     render() {
@@ -169,7 +171,7 @@ class ForumCategories extends Component<
             <DashboardContainer>
                 <Header text="Forum Categories" />
 
-                <AddCategory addNewCategory={this.addNewCategory} />
+                <AddCategory handleAddNewCategory={this.handleAddNewCategory} />
 
                 <ForumCategoryList
                     categories={categories}

@@ -12,7 +12,7 @@ class DashboardForumCategoriesController extends Controller
 {
     use ErrorLogTrait;
 
-    public function getCategories()
+    public function index()
     {
         try {
             $categories = PostCategory::get();
@@ -48,7 +48,7 @@ class DashboardForumCategoriesController extends Controller
         }
     }
 
-    public function addCategory(Request $request)
+    public function store(Request $request)
     {
         try {
             $name = $request->input('name');

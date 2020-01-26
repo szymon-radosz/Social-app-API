@@ -4,7 +4,9 @@ const UserRow = ({ user, i, handleUserBlock }) => {
     return (
         <tr
             className={
-                user.blocked ? "danger-row" : user.admin_role && "success-row"
+                user.blocked
+                    ? "user__row danger-row"
+                    : user.admin_role && "user__row success-row"
             }
         >
             <th scope="row">{i + 1}</th>

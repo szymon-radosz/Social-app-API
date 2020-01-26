@@ -6,7 +6,12 @@ const UserSearchBox = ({ getUserByQuery }) => {
     return (
         <div className="user-search-box__container">
             {query && <p>{`Find by query: ${query}`}</p>}
-            <form onSubmit={() => getUserByQuery(query)}>
+            <form
+                onSubmit={e => {
+                    e.preventDefault();
+                    getUserByQuery(query);
+                }}
+            >
                 <div className="form-group">
                     <input
                         type="string"

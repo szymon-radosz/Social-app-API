@@ -14,7 +14,8 @@ class DashboardUsersController extends Controller
     public function getUsers()
     {
         try {
-            $users = User::paginate(10);
+            $users = User::latest()
+                ->paginate(10);
 
             return response()->json(['status' => 'OK', 'result' => ['users' => $users]]);
         } catch (\Exception $e) {

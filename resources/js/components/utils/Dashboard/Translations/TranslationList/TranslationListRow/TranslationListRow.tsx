@@ -14,7 +14,7 @@ const TranslationListRow = ({
     const [zh, setZh] = useState(translation.zh);
 
     return (
-        <tr>
+        <tr className="tranlation__row">
             <th scope="row">{i + 1}</th>
             <td>
                 {translation.blocked ? (
