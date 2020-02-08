@@ -8,8 +8,6 @@ use App\Http\Traits\ErrorLogTrait;
 use App\Message;
 use App\Notification;
 use App\User;
-use Carbon\Carbon;
-use DateTime;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,8 +59,8 @@ class UserController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
-            'nickname' => '',
-            'platform' => $request->get['platform'] ? $request->get['platform'] : "",
+            'nickname' => $request->get('nickname') ? $request->get('nickname') : "",
+            'platform' => $request->get('platform') ? $request->get('platform') : "",
             'age' => 0,
             'lattitude' => 0,
             'longitude' => 0,
@@ -411,39 +409,18 @@ class UserController extends Controller
     public function loadUsersFilter(Request $request)
     {
         $distance = $request->distance ? $request->distance : "";
-        $childAge = $request->childAge ? $request->childAge : "";
-        $childGender = $request->childGender ? $request->childGender : "";
         $hobbyName = $request->hobbyName ? $request->hobbyName : "";
         $currentUserLat = $request->currentUserLat;
         $currentUserLng = $request->currentUserLng;
 
-        $childGenderQueryValue;
-        $childGenderDefault;
         $hobbyDefault;
         $hobbyId;
 
         //var_dump($distance);
 
-        $calculateDistanceDifference = $this->calculateDistanceDifference($distance, $currentUserLat, $currentUserLng);
-        $calculateChildAgeDifference = $this->calculateChildAgeDifference($childAge);
-
-        //var_dump($calculateDistanceDifference, $calculateChildAgeDifference);
-
-        if ($childGender === "dziewczynka") {
-            $childGenderQueryValue = "female";
-            $childGenderDefault = false;
-        } else if ($childGender === "chłopiec") {
-            $childGenderQueryValue = "male";
-            $childGenderDefault = false;
-        } else {
-            $childGenderQueryValue = "";
-            $childGenderDefault = true;
-        }
-        //var_dump([$calculateDistanceDifference, $calculateChildAgeDifference, $childGender]);
-
         // if user send some data then we return json with default => false
         // then in mobile app you can loop through all data from response
-        // and if default => false for specific field, e.g. distance, childAge
+        // and if default => false for specific field, e.g. distance
         // then we setState with value from response and show active filters
         if ($hobbyName) {
             $hobbyRow = Hobby::where('name', $hobbyName)->first();
@@ -467,7 +444,6 @@ class UserController extends Controller
                 ->whereHas('hobbies', function ($query) use ($hobbyId) {
                     //var_dump($hobbyId);
                     if ($hobbyId != 0) {
-                        //var_dump([$calculateChildAgeDifference->getData()->formattedStartDate, $calculateChildAgeDifference->getData()->formattedEndDate, $childGender, $childGenderQueryValue]);
                         $query->where('hobby_id', '=', $hobbyId);
                     }
                 })
@@ -477,8 +453,6 @@ class UserController extends Controller
 
             return response()->json(['result' => $userList, 'resultParameters' => [
                 ['name' => 'distance', 'value' => $distance, 'default' => $calculateDistanceDifference->getData()->distanceDefault],
-                ['name' => 'childAge', 'value' => $childAge, 'default' => $calculateChildAgeDifference->getData()->childAgeDefault],
-                ['name' => 'childGender', 'value' => $childGender, 'default' => $childGenderDefault],
                 ['name' => 'hobby', 'value' => $hobbyName, 'default' => $hobbyDefault],
             ], 201,
             ]);
@@ -487,59 +461,5 @@ class UserController extends Controller
 
             return response()->json(['result' => 'Błąd ze zwróceniem użytkowników według dystansu.'], 401);
         }
-    }
-
-    public function calculateChildAgeDifference($childAge)
-    {
-        //e.g. 1975-12-25
-        $todayDate = Carbon::now()->toDateString();
-        $timeStart = new DateTime($todayDate);
-        $timeEnd = new DateTime($todayDate);
-        $childAgeDefault;
-
-        //var_dump($childAge);
-
-        if ($childAge === "0-6 miesięcy") {
-            $formattedStartDate = $timeStart->modify('-6 months')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "7-12 miesięcy") {
-            $formattedStartDate = $timeStart->modify('-1 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-6 months')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "1-2 lat") {
-            $formattedStartDate = $timeStart->modify('-2 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-1 year')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "2-4 lat") {
-            $formattedStartDate = $timeStart->modify('-4 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-2 year')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "4-8 lat") {
-            $formattedStartDate = $timeStart->modify('-8 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-4 year')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "8-12 lat") {
-            $formattedStartDate = $timeStart->modify('-12 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-8 year')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "12-16 lat") {
-            $formattedStartDate = $timeStart->modify('-16 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->modify('-12 year')->format('Y-m-d');
-            $childAgeDefault = false;
-        } else if ($childAge === "") {
-            $formattedStartDate = $timeStart->modify('-100 year')->format('Y-m-d');
-            $formattedEndDate = $timeEnd->format('Y-m-d');
-            $childAgeDefault = true;
-        }
-
-        return response()
-            ->json(
-                [
-                    'formattedStartDate' => $formattedStartDate,
-                    'formattedEndDate' => $formattedEndDate,
-                    'childAgeDefault' => $childAgeDefault,
-                ], 201
-            );
     }
 }

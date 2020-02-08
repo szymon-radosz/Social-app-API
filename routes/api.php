@@ -60,6 +60,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('details', 'UserController@details');
 });
 
+Route::get('get-translations', 'Dashboard\DashboardTranslations@index');
+
 //DASHBOARD
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('user', 'UserController@getAuthenticatedUser');
@@ -83,7 +85,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('block-hobby', 'Dashboard\DashboardHobbyController@blockHobby');
     Route::post('add-hobby', 'Dashboard\DashboardHobbyController@store');
 
-    Route::get('get-translations', 'Dashboard\DashboardTranslations@index');
     Route::post('update-translation', 'Dashboard\DashboardTranslations@update');
     Route::post('add-translation', 'Dashboard\DashboardTranslations@store');
     Route::post('remove-translation', 'Dashboard\DashboardTranslations@remove');

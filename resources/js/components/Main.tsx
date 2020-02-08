@@ -29,7 +29,7 @@ class Main extends Component<MainProps, MainState> {
             userLoggedIn: false,
             showSidebarText: false,
             activeMenuSection: "",
-            API_URL: "http://127.0.0.1:8000/api/",
+            API_URL: "http://127.0.0.1:8080/api/",
             showLoader: false,
             alertMessage: "",
             alertStatus: "",

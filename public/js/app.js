@@ -41865,14 +41865,12 @@ var Main = (function (_super) {
             _this.history.push({ pathname: path, state: state });
         };
         _this.checkTokenExpiration = function (status) {
-            console.log(["checkTokenExpiration", status]);
             if (status === 401) {
                 _this.handleShowAlert("Token invalid", "danger");
                 _this.handleLogout();
             }
         };
         _this.componentDidMount = function () {
-            console.log(["did", localStorage.getItem("token")]);
             if (localStorage.getItem("token")) {
                 _this.setState({
                     token: localStorage.getItem("token"),
@@ -41884,7 +41882,7 @@ var Main = (function (_super) {
             userLoggedIn: false,
             showSidebarText: false,
             activeMenuSection: "",
-            API_URL: "http://127.0.0.1:8000/api/",
+            API_URL: "http://127.0.0.1:8080/api/",
             showLoader: false,
             alertMessage: "",
             alertStatus: "",
@@ -42100,7 +42098,6 @@ var Dashboard = (function (_super) {
     function Dashboard(props) {
         var _this = _super.call(this, props) || this;
         _this.getUsers = function () {
-            console.log(["this.context.token", _this.context.token]);
             return new Promise(function (resolve) {
                 _this.context.handleShowLoader(true);
                 try {
@@ -42111,7 +42108,6 @@ var Dashboard = (function (_super) {
                         }
                     })
                         .then(function (response) {
-                        console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({ usersCount: data.result.users });
@@ -42119,11 +42115,6 @@ var Dashboard = (function (_super) {
                         resolve(response);
                     })
                         .catch(function (err) {
-                        console.log([
-                            "checkTokenExpiration",
-                            err.response,
-                            _this.context.token
-                        ]);
                         _this.context.checkTokenExpiration(err.response.status);
                     });
                 }
@@ -42146,7 +42137,6 @@ var Dashboard = (function (_super) {
                         }
                     })
                         .then(function (response) {
-                        console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({
@@ -42178,7 +42168,6 @@ var Dashboard = (function (_super) {
                         }
                     })
                         .then(function (response) {
-                        console.log(["response", response, response.status]);
                         var data = response.data;
                         if (response.status === 200) {
                             _this.setState({
@@ -42231,7 +42220,7 @@ var Dashboard = (function (_super) {
         return _this;
     }
     Dashboard.prototype.render = function () {
-        var _a = this.state, redirectLogin = _a.redirectLogin, usersCount = _a.usersCount, ForumPostsCount = _a.ForumPostsCount, ForumCommentsCount = _a.ForumCommentsCount;
+        var _a = this.state, usersCount = _a.usersCount, ForumPostsCount = _a.ForumPostsCount, ForumCommentsCount = _a.ForumCommentsCount;
         return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DashboardContainer_DashboardContainer__WEBPACK_IMPORTED_MODULE_1__["default"], null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_utils_Header__WEBPACK_IMPORTED_MODULE_3__["default"], { text: "Statistics - Current Week" }),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "dashboard__rect-container row" },
@@ -43257,7 +43246,6 @@ var Translations = (function (_super) {
     function Translations(props) {
         var _this = _super.call(this, props) || this;
         _this.getTranslations = function () {
-            console.log("getTranslations");
             return new Promise(function (resolve, reject) {
                 _this.context.handleShowLoader(true);
                 try {
@@ -43290,7 +43278,6 @@ var Translations = (function (_super) {
             });
         };
         _this.handleTranslationSave = function (id, name, en, de, fr, es, zh) {
-            console.log("handleTranslationSave");
             _this.context.handleShowLoader(true);
             return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                 var data;
@@ -43982,7 +43969,6 @@ __webpack_require__.r(__webpack_exports__);
 var Login = function () {
     var context = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_MainContext__WEBPACK_IMPORTED_MODULE_3__["MainContext"]);
     var handleLoginSubmit = function (email, password) {
-        console.log([email, password]);
         if (email && !password) {
             context.handleShowAlert("Password required", "danger");
         }
@@ -43993,7 +43979,6 @@ var Login = function () {
             context.handleShowAlert("Email and password required", "danger");
         }
         else if (email && password) {
-            console.log(["API_URL", context.API_URL]);
             try {
                 var API_URL = context.API_URL;
                 axios__WEBPACK_IMPORTED_MODULE_2___default.a
@@ -44003,7 +43988,6 @@ var Login = function () {
                 })
                     .then(function (response) {
                     var result = response.data.result;
-                    console.log(["data", result, response, response.data]);
                     if (response.data.result.user_role === "admin") {
                         var token = response.data.result.token;
                         context.setToken(token);
@@ -44018,10 +44002,6 @@ var Login = function () {
                             headers: config
                         })
                             .then(function (response) {
-                            console.log([
-                                "userData",
-                                response.data.result
-                            ]);
                             if (response.data.result.user.id) {
                                 context.setUserLoggedIn(true);
                                 context.handleChangePath("/dashboard");
@@ -44032,7 +44012,6 @@ var Login = function () {
                         });
                     }
                     else {
-                        console.log("Nie ma tokena");
                         context.handleShowAlert(response.data.result, "danger");
                     }
                 })
