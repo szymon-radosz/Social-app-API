@@ -5,6 +5,7 @@ interface MainState {
     showSidebarText: boolean;
     activeMenuSection: string;
     API_URL: string;
+    APP_URL: string;
     showLoader: boolean;
     alertMessage: string;
     alertStatus: string;

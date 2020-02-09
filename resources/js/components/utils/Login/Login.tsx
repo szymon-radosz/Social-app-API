@@ -42,9 +42,15 @@ const Login = () => {
                                     headers: config
                                 })
                                 .then(response => {
+                                    console.log(['res', response])
                                     if (response.data.result.user.id) {
                                         context.setUserLoggedIn(true);
                                         context.handleChangePath("/dashboard");
+                                    }else{
+                                        context.handleShowAlert(
+                                            "Cannot login",
+                                            "danger"
+                                        );
                                     }
                                 })
                                 .catch(error => {
@@ -58,7 +64,7 @@ const Login = () => {
                         }
                     })
                     .catch(error => {
-                        context.handleShowAlert(error, "danger");
+                        context.handleShowAlert("Cannot login", "danger");
                     });
             } catch (error) {
                 context.handleShowAlert("", "danger");

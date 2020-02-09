@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { DashboardProps, DashboardState } from "./Dashboard.interface";
-import { Redirect } from "react-router-dom";
 import DashboardContainer from "./../DashboardContainer/DashboardContainer";
 import { MainContext } from "./../../MainContext";
 import Header from "./utils/Header";

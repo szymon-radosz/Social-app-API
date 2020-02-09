@@ -17,6 +17,8 @@ import Hobbies from "./utils/Dashboard/Hobbies/Hobbies";
 import Translations from "./utils/Dashboard/Translations/Translations";
 import Register from "./utils/Dashboard/Register/Register";
 import Alert from "./utils/Alert/Alert";
+import RegisterAdmin from "./utils/RegisterAdmin/RegisterAdmin"
+import Home from "./utils/Home/Home"
 
 class Main extends Component<MainProps, MainState> {
     history: any;
@@ -29,6 +31,7 @@ class Main extends Component<MainProps, MainState> {
             userLoggedIn: false,
             showSidebarText: false,
             activeMenuSection: "",
+            APP_URL: "http://127.0.0.1:8080",
             API_URL: "http://127.0.0.1:8080/api/",
             showLoader: false,
             alertMessage: "",
@@ -48,6 +51,11 @@ class Main extends Component<MainProps, MainState> {
                 path: "/login",
                 name: "Login",
                 Component: Login
+            },
+            {
+                path: "/register-dashboard",
+                name: "RegisterAdmin",
+                Component: RegisterAdmin
             },
             {
                 path: "/users",
@@ -73,6 +81,11 @@ class Main extends Component<MainProps, MainState> {
                 path: "/register",
                 name: "Register",
                 Component: Register
+            },
+            {
+                path: "/",
+                name: "Home",
+                Component: Home
             }
         ];
     }
@@ -130,17 +143,24 @@ class Main extends Component<MainProps, MainState> {
         }
     };
 
+    getUrlLastSegment = () =>{
+        return window.location.pathname.split("/").pop();
+    }
+
     render() {
         const {
             userLoggedIn,
             showSidebarText,
             activeMenuSection,
             API_URL,
+            APP_URL,
             showLoader,
             alertMessage,
             alertStatus,
             token
         } = this.state;
+
+        const lastUrlSegment = this.getUrlLastSegment();
 
         return (
             <MainContext.Provider
@@ -152,6 +172,7 @@ class Main extends Component<MainProps, MainState> {
                     activeMenuSection: activeMenuSection,
                     handlAactiveMenuSection: this.handlAactiveMenuSection,
                     API_URL: API_URL,
+                    APP_URL: APP_URL,
                     showLoader: showLoader,
                     handleShowLoader: this.handleShowLoader,
                     handleShowAlert: this.handleShowAlert,
@@ -170,8 +191,11 @@ class Main extends Component<MainProps, MainState> {
                         <Router history={history}>
                             {userLoggedIn && token ? (
                                 <Redirect to="dashboard" />
-                            ) : (
-                                <Redirect to="login" />
+                            ) : (lastUrlSegment === "login" ? 
+                                <Redirect to="login" /> : 
+                                lastUrlSegment === "register-dashboard" ? 
+                                <Redirect to="register-dashboard" /> : 
+                                <Redirect to="/" />
                             )}
                             <Switch>
                                 {this.routes.map(

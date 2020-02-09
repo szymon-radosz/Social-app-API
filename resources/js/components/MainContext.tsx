@@ -12,6 +12,7 @@ export const MainContext = React.createContext({
     userLoggedIn: false,
     showSidebarText: false,
     activeMenuSection: "",
+    APP_URL: "",
     API_URL: "",
     showLoader: false,
     token: ""
